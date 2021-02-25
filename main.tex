@@ -1,0 +1,130 @@
+%% Package and Class "uiucthesis2018" for use with LaTeX2e.
+\documentclass[edeposit,fullpage,11pt]{uiucthesis2018}
+
+
+\usepackage[acronym,toc]{glossaries}
+\makeglossaries
+\include{acros}
+
+\usepackage{xspace}
+\usepackage{graphics}
+\graphicspath{{images/}}
+
+\usepackage{placeins}
+\usepackage{booktabs} % nice rules (thick lines) for tables
+\usepackage{microtype} % improves typography for PDF
+
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hhline}
+\usepackage{amsmath}
+\allowdisplaybreaks
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{siunitx}
+\usepackage{booktabs}
+
+\usepackage{threeparttable, tablefootnote}
+
+
+\usepackage{environ}
+\makeatletter
+
+\usepackage{tabularx}
+
+\usepackage{cleveref}
+\usepackage{datatool}
+\usepackage[numbers]{natbib}
+\usepackage{notoccite}
+\usepackage{tikz}
+
+
+\title{Development of a High-Resolution Multiphysics Simulation Tool for Molten
+Salt Reactor Safety Analysis}
+\author{Sun Myung Park}
+\department{Nuclear, Plasma \& Radiological Engineering}
+\advisor{Kathryn D. Huff}
+\degreeyear{2021}
+\committee{Assistant Professor Kathryn D. Huff, Advisor \\ TBC}
+
+
+\begin{document}
+\maketitle
+
+\frontmatter
+%% Create an abstract that can also be used for the ProQuest abstract.
+%% Note that ProQuest truncates their abstracts at 350 words.
+\begin{abstract}
+
+%\input{abstract}
+
+\end{abstract}
+
+\chapter*{Acknowledgments}
+
+%\input{acks}
+
+%% The thesis format requires the Table of Contents to come
+%% before any other major sections, all of these sections after
+%% the Table of Contents must be listed therein (i.e., use \chapter,
+%% not \chapter*).  Common sections to have between the Table of
+%% Contents and the main text are:
+%%
+%% List of Tables
+%% List of Figures
+%% List Symbols and/or Abbreviations
+%% etc.
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+%% Create a List of Abbreviations. The left column
+%% is 1 inch wide and left-justified
+\printglossary[title=List of Abbreviations,type=\acronymtype,nonumberlist,
+nogroupskip=true]
+%% Create a List of Symbols. The left column
+%% is 0.7 inch wide and centered
+
+\pagebreak
+\mainmatter
+\glsresetall
+
+\chapter{Introduction}
+\label{chap:intro}
+\input{introduction}
+
+%\chapter{Literature Review}
+%\label{chap:lit}
+%\input{lit}
+%
+%\chapter{Preliminary Work}
+%\label{chap:pw}
+%\input{pw}
+%
+%\chapter{Benchmarking Results}
+%\label{chap:benchmark}
+%\input{benchmark}
+%
+%\chapter{Future Work}
+%\label{chap:future}
+%\input{future}
+%
+%\chapter{Conclusion}
+%\label{chap:conclusion}
+%\input{conclusion}
+%
+%\chapter*{Appendix}
+%\label{chap:appendix}
+%\input{appendix}
+
+\backmatter
+
+%\bibliographystyle{ieeetr}
+%\bibliography{bibliography}
+
+\end{document}
+\endinput
+%%
