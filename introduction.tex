@@ -12,37 +12,29 @@ excessively high generation costs. An interdisciplinary study from \gls{MIT}
 arising from the excess energy storage capacity needed when trying to meet low
 carbon emission goals without nuclear energy. Unlike solar or wind power,
 nuclear energy provides consistent and reliable base-load power independent of
-weather conditions. Nuclear 
-
-Greenhouse gas emission from human activities is the main cause of climate
-change, which has dire
-consequences on human health and safety due to extreme weather events and the
-overall impact on food production \cite{mcmichael_global_2004}.
-Electricity generation from burning fossil fuels represents the
-greatest source of CO$_2$ emissions (38\% in 2018 \cite{iea_global_2019});
-replacing it with low-carbon
-alternatives would curb a significant fraction of emissions. Nuclear power is
-a viable low-carbon replacement for burning fossil fuels and it provides
-consistent base-load power independent of weather and geographical location
-\cite{petti_future_2018}. Furthermore, employing a diverse mix of nuclear
-power and renewable sources ensures energy security and reliability in our
-transition towards a low-carbon future \cite{petti_future_2018}.
+weather conditions. Beyond the electricity sector, nuclear energy also has the
+potential to replace fossil fuels to meet energy demands from industrial
+process heat applications and transportation (ref iaea).
+Advanced reactors such as \glspl{MSR} and \glspl{HTGR} operate at sufficiently
+high temperatures for chemical, petrochemical, steel, and other industries.
+These include hydrogen and ammonia production, two carbon-free candidates for
+replacing fossil fuel consumption in the aviation and marine sectors.
 
 The world would have to ramp up the current rate of reactor deployments to
 displace a portion of the presently large share of energy production from
-fossil
-fuel power plants. However, several obstacles stand in the way of mass reactor
-deployments. These obstacles include perceived safety risks, sustainability
-concerns, nuclear proliferation
+fossil fuels. However, several obstacles stand in the way of mass
+reactor deployments. These obstacles include perceived safety risks,
+sustainability concerns, nuclear proliferation
 risks, and the ability to compete economically with other sources of energy
 \cite{massachusetts_institute_of_technology_future_2003}. A potential solution
 to the aforementioned issues is the \gls{MSR} concept, one of six advanced
 reactor designs selected by the Generation IV International Forum
 \cite{gif_technology_2002} for continued research and development.
 
-The primary coolants in MSRs consist of molten salt mixtures
-with fissile and/or fertile material dissolved directly in the coolants.
-MSRs possess an inherently robust safety feature in the strongly negative fuel
+``\glspl{MSR}'' refer to all reactor designs that use molten salt as the
+primary coolant. Liquid-fueled variants, which have fissile and/or fertile
+materials dissolved directly in the coolants.,
+possess an inherently robust safety feature in the strongly negative fuel
 temperature coefficient of reactivity. Some designs can also incorporate the
 thorium fuel cycle for improved sustainability arising from the use of
 abundant natural thorium resources and reduced transuranic waste. The
@@ -54,12 +46,14 @@ reduces reactor downtime during reactor operation.
 
 However, the liquid fuel form also brings about novel computational
 challenges in simulating the transient behavior of \glspl{MSR}; the
-interactions between neutronics and thermal-hydraulics are stronger due
-to greater fuel material expansion. Furthermore, fissile material and
-\glspl{DNP} in \glspl{MSR} can flow freely within the primary coolant
+neutronics and thermal-hydraulics are more strongly coupled due
+to greater thermal expansion of the liquid fuel. Furthermore, fissile material
+and \glspl{DNP} in \glspl{MSR} flow freely within the primary coolant
 loop as opposed to being held in place in a solid fuel matrix. Therefore,
-the choice of coupling methods for each set of physics requires careful
-consideration. 
+the choice of coupling method to model both sets of physics requires careful
+consideration.
+
+(Discussion on single physics codes vs multiphysics codes and coupling methods)
 
 Most reactor analysis applications are usually reactor-specific by
 design such as TRACE \cite{nrc_trace_nodate} for \glspl{LWR}, and
