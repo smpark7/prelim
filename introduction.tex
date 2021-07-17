@@ -1,75 +1,122 @@
-\section{Background and Motivation}
+\section{Introduction}
+
+\subsection{Background \& Motivation}
 
 Greenhouse gas emission from human activities is the main cause of climate
 change, which has dire consequences on human health and safety due to extreme
 weather events and the overall impact on food production
-\cite{mcmichael_global_2004}. Thus, many countries have pledged to meet the
-net zero carbon emissions goal by 2050 to limit the rise in global temperatures
-to 1.5$^{\circ}$C (ref iea). In this low-carbon future, we expect to see
-renewable energy sources such as solar \gls{PV} and wind making up the bulk of
-electricity production capacity and a mass electrification of the transport
-industry through either adopting the use of battery-powered vehicles or
-substituting fossil fuels with hydrogen-based fuels produced from low-carbon
-energy sources or biomass. While solar \gls{PV} and wind have low levelized
-cost of electricity at good geographical locations, they are non-dispatchable
-energy sources since they depend on favorable weather conditions. According to
-an interdisciplinary study from \gls{MIT} \cite{petti_future_2018}, without
-sufficient dispatchable electricity sources to cover for periods when demand
-outstrips supply, electricity generation costs will increase significantly
-arising from the excess electricity storage capacity required to maintain
-electricity supply when solar and wind outputs fall. Solar \gls{PV}
-and wind are also ill-suited for meeting heat demand such as district heating
-and industrial heat applications.
+\cite{mcmichael_global_2004}. Poor people are especially vulnerable because
+they do not have the resources to manage or mitigate the impacts of climate
+change. For instance, they are more affected by local disruptions in food
+supply and natural disasters, have poorer access to healthcare and financial
+resources to recover from setbacks \cite{hallegatte_shock_2016}. Many countries
+have since pledged to meet the net-zero carbon emissions goal by 2050 and limit
+the rise in global temperatures to 1.5$^{\circ}$C \cite{iea_net_2021}.
 
-Nuclear power, especially from advanced reactor designs, can complement
-renewable energy by addressing the aforementioned shortfalls. Unlike solar or
-wind power, nuclear energy is a dispatchable energy source; it provides
-consistent and reliable base-load power independent of weather conditions.
-Beyond the electricity sector, nuclear energy also has the
-potential to replace fossil fuels to meet energy demands from industrial
-process heat applications and transportation (ref iaea).
-Advanced reactors such as \glspl{MSR} and \glspl{HTGR} operate at sufficiently
+The transition to a carbon-free economy requires drastic changes in the way
+every sector produces or consumes energy in the form of electricity or heat.
+The \gls{IEA} published a report, titled ``Net Zero by 2050 - A Roadmap for the
+Global Energy Sector'', to set out guidelines to inform policy makers how the
+\gls{NZE} could be reached. In the \gls{NZE} roadmap,
+solar \gls{PV} and wind are projected to make up just under 70\% of
+electricity generated globally in 2050 (Figure \ref{fig:2050-elec-source}).
+The remaining share largely consists of dispatchable sources such as
+hydropower, carbon-neutral biofuel, and nuclear since solar \gls{PV} and wind
+are non-dispatchable sources which experience daily and seasonal variations in
+electricity production \cite{forsberg_market_2020}. Figure
+\ref{fig:2050-elec-source} also shows that nuclear power continues
+to play an important role in reducing carbon emissions with electricity
+generation in 2050 projected to be double the output in 2020 while maintaining
+a ~10\% share in electricity generation as global energy demand rises. A
+interdisciplinary study from \gls{MIT} reports that attempting to limit carbon
+emissions without nuclear power would cause electricity generation costs to
+increase significantly due to the disproportionately large excess capacity in
+solar \gls{PV}, wind, and battery storage required to maintain electricity
+security during periods of adverse weather conditions.
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.8\columnwidth]{2050-elec-source}
+	\caption{Projected global electricity generation by source in the
+	\gls{NZE}. Retrieved from \cite{iea_net_2021}.}
+	\label{fig:2050-elec-source}
+\end{figure}
+
+Unlike solar or wind power, nuclear power is a dispatchable energy source; it
+provides consistent and reliable power independent of weather conditions.
+Beyond the electricity sector, nuclear power also has the potential to replace
+fossil fuels to meet energy demands from industrial process heat applications
+and transportation \cite{forsberg_market_2020}. Solar \gls{PV} and
+wind are ill-suited for meeting heat demand such as district heating and
+industrial heat applications at economically competitive rates. Some advanced
+reactors such as \glspl{MSR} and \glspl{HTGR} operate at sufficiently
 high temperatures for chemical, petrochemical, steel, and other industries.
-These include hydrogen and ammonia production, two carbon-free candidates for
-replacing fossil fuel consumption in the aviation and marine sectors.
+These industries include hydrogen and ammonia production, two hydrogen-based
+fuel candidates for replacing fossil fuel consumption in the aviation and
+marine sectors to reduce carbon emissions.
 
 The world would have to ramp up the current rate of reactor deployments to
-displace a portion of the presently large share of energy production from
-fossil fuels. However, several obstacles stand in the way of mass
-reactor deployments. These obstacles include perceived safety risks,
-sustainability concerns, nuclear proliferation
+replace aging reactors and displace a portion of the presently large share of
+energy production from fossil fuels. However, several obstacles stand in the
+way of kickstarting new reactor deployments. These obstacles include perceived
+safety risks, sustainability concerns, nuclear proliferation
 risks, and the ability to compete economically with other sources of energy
 \cite{massachusetts_institute_of_technology_future_2003}. A potential solution
 to the aforementioned issues is the \gls{MSR} concept, one of six advanced
 reactor designs selected by the Generation IV International Forum
 \cite{gif_technology_2002} for continued research and development.
 
-``\glspl{MSR}'' refer to all reactor designs that use molten salt as the
-primary coolant. Liquid-fueled variants, which have fissile and/or fertile
-materials dissolved directly in the coolants.,
-possess an inherently robust safety feature in the strongly negative fuel
-temperature coefficient of reactivity. Some designs can also incorporate the
-thorium fuel cycle for improved sustainability arising from the use of
-abundant natural thorium resources and reduced transuranic waste. The
-latter also reduces economical costs
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.8\columnwidth]{msr}
+	\caption{Schematic diagram of the \gls{MSR} concept. Retrieved from
+	\cite{doe_technology_2002}.}
+	\label{fig:msr}
+\end{figure}
+
+``\glspl{MSR}'' generally refer to all reactor designs that use molten salt as
+the primary coolant. In practice, the term usually refers to liquid-fueled
+designs which have fissile and/or fertile materials dissolved directly in the
+molten salt coolant, whereas solid-fueled designs are commonly referred to as
+\glspl{FHR}. Figure \ref{fig:msr} shows a schematic diagram of a liquid
+fuel \gls{MSR} which has fissile and/or fertile materials dissolved directly in
+the coolants. Liquid fuel \gls{MSR} designs possess an inherently robust
+safety feature in the strongly negative fuel temperature coefficient of
+reactivity \cite{elsheikh_safety_2013}. This reactivity coefficient limits the
+maximum temperature that the reactor core would experience in an accident
+scenario such as an unprotected reactivity insertion because the subsequent
+rise in core temperatures induces a significant drop in reactivity which
+quickly neutralizes the initial reactivity insertion. \glspl{MSR} also
+operate at a large thermal margin to boiling and can rely on natural
+circulation in the event of a pump failure. As a last resort, some \gls{MSR}
+designs incorporate a drain plug consisting of air-cooled frozen salt which
+melts when the core temperatures exceed a safety threshold. The hot molten salt
+in the core flows down to drain tanks designed to hold the fuel-filled salt in
+a subcritical configuration to halt any further chain fission reactions.
+Some designs are envisioned to
+incorporate the thorium fuel cycle for improved sustainability arising from the
+use of abundant natural thorium resources and reduced transuranic waste
+\cite{heuer_towards_2014}. The latter consequence also reduces economical costs
 associated with long-term nuclear waste storage. In addition, the ability to
 operate at near atmospheric pressures eliminates the need for a thick pressure
 vessel and drives down construction costs, while online fuel reprocessing
 reduces reactor downtime during reactor operation.
 
-However, the liquid fuel form also brings about novel computational
-challenges in simulating the transient behavior of \glspl{MSR}; the
-neutronics and thermal-hydraulics are more strongly coupled due
-to greater thermal expansion of the liquid fuel. Furthermore, fissile material
+However, the liquid fuel form also brings about new computational
+challenges in simulating the transient behavior of \glspl{MSR}. \glspl{MSR}
+feature strong negative reactivity feedback in the primary coolant which holds
+the dissolved fissile material. The feedback causes strong and
+near-instantaneous interactions between reactor power and thermal hydraulic
+temperature profile. Furthermore, fissile material
 and \glspl{DNP} in \glspl{MSR} flow freely within the primary coolant
-loop as opposed to being held in place in a solid fuel matrix. Therefore,
-the choice of coupling method to model both sets of physics requires careful
-consideration.
-
-(Discussion on single physics codes vs multiphysics codes and coupling methods)
+loop as opposed to being held in place in solid-fuel reactors. The movement of
+\glspl{DNP} impacts the effective delayed neutron fraction in the core and
+consequently also impacts the transient behavior of the reactor. Therefore,
+\gls{MSR} computational models require robust coupling techniques to accurately
+capture the strong multiphysics interactions.
 
 Most reactor analysis applications are usually reactor-specific by
-design such as TRACE \cite{nrc_trace_nodate} for \glspl{LWR}, and
+design such as TRACE \cite{nrc_trace_2007} for \glspl{LWR}, and
 SAS4A/SASSYS-1 \cite{fanning_sas4a/sassys-1_2017} for
 liquid metal cooled reactors. Thus, these applications would disregard
 \gls{MSR}-specific phenomena and are inappropriate for \gls{MSR}
