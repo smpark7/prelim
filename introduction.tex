@@ -20,10 +20,15 @@ Global Energy Sector'', to set out guidelines to inform policy makers how the
 \gls{NZE} could be reached. In the \gls{NZE} roadmap,
 solar \gls{PV} and wind are projected to make up just under 70\% of
 electricity generated globally in 2050 (Figure \ref{fig:2050-elec-source}).
-The remaining share largely consists of dispatchable sources such as
-hydropower, carbon-neutral biofuel, and nuclear since solar \gls{PV} and wind
+The remaining share largely consists of dispatchable sources, such as
+hydropower, carbon-neutral biofuel, and nuclear, since solar \gls{PV} and wind
 are non-dispatchable sources which experience daily and seasonal variations in
-electricity production \cite{forsberg_market_2020}. Figure
+electricity production. These variations are already causing major shifts in
+the electricity markets today. California, a region with high renewable energy
+penetration, experienced negative electricity prices during the midday (Figure
+\ref{fig:cali-prices}) due to the excess electricity generation from solar
+\glspl{PV} and base-load suppliers paying to keep their power plants online to
+ramp up for the evening demand spike \cite{forsberg_market_2020}. Figure
 \ref{fig:2050-elec-source} also shows that nuclear power continues
 to play an important role in reducing carbon emissions with electricity
 generation in 2050 projected to be double the output in 2020 while maintaining
@@ -33,6 +38,14 @@ emissions without nuclear power would cause electricity generation costs to
 increase significantly due to the disproportionately large excess capacity in
 solar \gls{PV}, wind, and battery storage required to maintain electricity
 security during periods of adverse weather conditions.
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.8\columnwidth]{california-prices}
+	\caption{Wholesale electricity prices over 24 hours from the second Sundays
+	in April in 2012 and 2017. Retrieved from \cite{forsberg_market_2020}.}
+	\label{fig:cali-prices}
+\end{figure}
 
 \begin{figure}[htb!]
 	\centering
@@ -55,10 +68,12 @@ These industries include hydrogen and ammonia production, two hydrogen-based
 fuel candidates for replacing fossil fuel consumption in the aviation and
 marine sectors to reduce carbon emissions.
 
+
+
 The world would have to ramp up the current rate of reactor deployments to
 replace aging reactors and displace a portion of the presently large share of
 energy production from fossil fuels. However, several obstacles stand in the
-way of kickstarting new reactor deployments. These obstacles include perceived
+way of new reactor deployments. These obstacles include perceived
 safety risks, sustainability concerns, nuclear proliferation
 risks, and the ability to compete economically with other sources of energy
 \cite{massachusetts_institute_of_technology_future_2003}. A potential solution
@@ -78,9 +93,9 @@ reactor designs selected by the Generation IV International Forum
 the primary coolant. In practice, the term usually refers to liquid-fueled
 designs which have fissile and/or fertile materials dissolved directly in the
 molten salt coolant, whereas solid-fueled designs are commonly referred to as
-\glspl{FHR}. Figure \ref{fig:msr} shows a schematic diagram of a liquid
-fuel \gls{MSR} which has fissile and/or fertile materials dissolved directly in
-the coolants. Liquid fuel \gls{MSR} designs possess an inherently robust
+\glspl{FHR}. In this work, I will also use the term ``\gls{MSR}'' to refer to
+liquid-fueled designs. Figure \ref{fig:msr} shows a schematic diagram of a
+typical \gls{MSR}. \glspl{MSR} possess an inherently robust
 safety feature in the strongly negative fuel temperature coefficient of
 reactivity \cite{elsheikh_safety_2013}. This reactivity coefficient limits the
 maximum temperature that the reactor core would experience in an accident
@@ -93,14 +108,15 @@ designs incorporate a drain plug consisting of air-cooled frozen salt which
 melts when the core temperatures exceed a safety threshold. The hot molten salt
 in the core flows down to drain tanks designed to hold the fuel-filled salt in
 a subcritical configuration to halt any further chain fission reactions.
-Some designs are envisioned to
+
+Some \glspl{MSR} can
 incorporate the thorium fuel cycle for improved sustainability arising from the
 use of abundant natural thorium resources and reduced transuranic waste
 \cite{heuer_towards_2014}. The latter consequence also reduces economical costs
 associated with long-term nuclear waste storage. In addition, the ability to
 operate at near atmospheric pressures eliminates the need for a thick pressure
 vessel and drives down construction costs, while online fuel reprocessing
-reduces reactor downtime during reactor operation.
+reduces reactor downtime during reactor operation \cite{dolan_1_2017}.
 
 However, the liquid fuel form also brings about new computational
 challenges in simulating the transient behavior of \glspl{MSR}. \glspl{MSR}
