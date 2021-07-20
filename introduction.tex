@@ -17,8 +17,10 @@ The transition to a carbon-free economy requires drastic changes in the way
 every sector produces or consumes energy in the form of electricity or heat.
 The \gls{IEA} published a report, titled ``Net Zero by 2050 - A Roadmap for the
 Global Energy Sector'', to set out guidelines to inform policy makers how the
-\gls{NZE} could be reached. In the \gls{NZE} roadmap,
-solar \gls{PV} and wind are projected to make up just under 70\% of
+\gls{NZE} could be reached in a way that ``maximizes technical feasibility,
+cost-effectiveness and social acceptance, while ensuring continued economic
+growth and secure energy supplies''. The \gls{NZE} roadmap projects that
+solar \gls{PV} and wind has to make up just under 70\% of
 electricity generated globally in 2050 (Figure \ref{fig:2050-elec-source}).
 The remaining share largely consists of dispatchable sources, such as
 hydropower, carbon-neutral biofuel, and nuclear, since solar \gls{PV} and wind
@@ -28,24 +30,7 @@ the electricity markets today. California, a region with high renewable energy
 penetration, experienced negative electricity prices during the midday (Figure
 \ref{fig:cali-prices}) due to the excess electricity generation from solar
 \glspl{PV} and base-load suppliers paying to keep their power plants online to
-ramp up for the evening demand spike \cite{forsberg_market_2020}. Figure
-\ref{fig:2050-elec-source} also shows that nuclear power continues
-to play an important role in reducing carbon emissions with electricity
-generation in 2050 projected to be double the output in 2020 while maintaining
-a ~10\% share in electricity generation as global energy demand rises. A
-interdisciplinary study from \gls{MIT} reports that attempting to limit carbon
-emissions without nuclear power would cause electricity generation costs to
-increase significantly due to the disproportionately large excess capacity in
-solar \gls{PV}, wind, and battery storage required to maintain electricity
-security during periods of adverse weather conditions.
-
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width=.8\columnwidth]{california-prices}
-	\caption{Wholesale electricity prices over 24 hours from the second Sundays
-	in April in 2012 and 2017. Retrieved from \cite{forsberg_market_2020}.}
-	\label{fig:cali-prices}
-\end{figure}
+ramp up for the evening demand spike \cite{forsberg_market_2020}.
 
 \begin{figure}[htb!]
 	\centering
@@ -55,8 +40,27 @@ security during periods of adverse weather conditions.
 	\label{fig:2050-elec-source}
 \end{figure}
 
-Unlike solar or wind power, nuclear power is a dispatchable energy source; it
-provides consistent and reliable power independent of weather conditions.
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.7\columnwidth]{california-prices}
+	\caption{Wholesale electricity prices over 24 hours from the second Sundays
+	in April in 2012 and 2017. Retrieved from \cite{forsberg_market_2020}.}
+	\label{fig:cali-prices}
+\end{figure}
+
+Unlike solar or wind power, nuclear power provides consistent and reliable
+power independent of weather conditions. The \gls{NZE} roadmap acknowledges the
+need for nuclear power as one of the various dispatchable energy sources;
+Figure \ref{fig:2050-elec-source}, taken from the \gls{IEA} \gls{NZE} report,
+shows that nuclear power will continue to play an important role in reducing
+carbon emissions with electricity generation in 2050 from nuclear projected to
+be double the output in 2020 while maintaining an approximate 10\% share in
+electricity generation as global energy demand rises. A separate study from
+\gls{MIT} \cite{petti_future_2018} reports that attempting to limit carbon
+emissions without nuclear power would cause electricity generation costs to
+increase significantly due to the disproportionately large excess capacity in
+solar \gls{PV}, wind, and battery storage required to maintain electricity
+security during periods of adverse weather conditions.
 Beyond the electricity sector, nuclear power also has the potential to replace
 fossil fuels to meet energy demands from industrial process heat applications
 and transportation \cite{forsberg_market_2020}. Solar \gls{PV} and
@@ -68,14 +72,12 @@ These industries include hydrogen and ammonia production, two hydrogen-based
 fuel candidates for replacing fossil fuel consumption in the aviation and
 marine sectors to reduce carbon emissions.
 
-
-
 The world would have to ramp up the current rate of reactor deployments to
 replace aging reactors and displace a portion of the presently large share of
 energy production from fossil fuels. However, several obstacles stand in the
 way of new reactor deployments. These obstacles include perceived
-safety risks, sustainability concerns, nuclear proliferation
-risks, and the ability to compete economically with other sources of energy
+safety risks, sustainability concerns,
+and the ability to compete economically with other sources of energy
 \cite{massachusetts_institute_of_technology_future_2003}. A potential solution
 to the aforementioned issues is the \gls{MSR} concept, one of six advanced
 reactor designs selected by the Generation IV International Forum
@@ -91,11 +93,15 @@ reactor designs selected by the Generation IV International Forum
 
 ``\glspl{MSR}'' generally refer to all reactor designs that use molten salt as
 the primary coolant. In practice, the term usually refers to liquid-fueled
-designs which have fissile and/or fertile materials dissolved directly in the
-molten salt coolant, whereas solid-fueled designs are commonly referred to as
-\glspl{FHR}. In this work, I will also use the term ``\gls{MSR}'' to refer to
-liquid-fueled designs. Figure \ref{fig:msr} shows a schematic diagram of a
-typical \gls{MSR}. \glspl{MSR} possess an inherently robust
+designs which have fissile and/or fertile materials dissolved directly in
+molten salt coolants, whereas solid-fueled designs are commonly referred to as
+\glspl{FHR}. In this work, I will be following this convention. Figure
+\ref{fig:msr} shows a schematic diagram of a typical \gls{MSR}. The fuel salt
+refers to the molten salt in the primary coolant loop which carries the fissile
+material. Most designs include the intermediate coolant loop illustrated in
+Figure \ref{fig:msr} as an additional safety barrier from radioactive release
+and to protect the electricity generator section of the plant. \glspl{MSR}
+possess an inherently robust
 safety feature in the strongly negative fuel temperature coefficient of
 reactivity \cite{elsheikh_safety_2013}. This reactivity coefficient limits the
 maximum temperature that the reactor core would experience in an accident
@@ -107,23 +113,41 @@ circulation in the event of a pump failure. As a last resort, some \gls{MSR}
 designs incorporate a drain plug consisting of air-cooled frozen salt which
 melts when the core temperatures exceed a safety threshold. The hot molten salt
 in the core flows down to drain tanks designed to hold the fuel-filled salt in
-a subcritical configuration to halt any further chain fission reactions.
+a subcritical configuration to disrupt any further chain fission reactions.
 
-Some \glspl{MSR} can
+Some \glspl{MSR} like the \gls{MSBR} or the \gls{MSFR} can
 incorporate the thorium fuel cycle for improved sustainability arising from the
 use of abundant natural thorium resources and reduced transuranic waste
 \cite{heuer_towards_2014}. The latter consequence also reduces economical costs
 associated with long-term nuclear waste storage. In addition, the ability to
 operate at near atmospheric pressures eliminates the need for a thick pressure
 vessel and drives down construction costs, while online fuel reprocessing
-reduces reactor downtime during reactor operation \cite{dolan_1_2017}.
+reduces reactor downtime during reactor operation \cite{dolan_1_2017}. We can
+make further economic arguments supporting \glspl{MSR} in the context of the
+carbon-constrained future envisioned in \gls{IEA}'s \gls{NZE} roadmap
+\cite{iea_net_2021}. A solar \gls{PV} and wind-dominated energy market produces
+variable electricity generation. The resulting volatility in electricity prices
+encourages the construction of \textit{heat storage} and \textit{peak power
+production} plants. At the same time, demand for carbon-neutral
+\textit{hydrogen fuel} will rise as electrification is economically unfeasible
+for some industries such as the aviation and marine sectors which depend
+energy-dense fuels for transport. As described in
+\cite{forsberg_market_2020}, the most cost-efficient options for the
+aforementioned resources (\textit{heat storage}, \textit{peak power
+production}, and \textit{hydrogen fuel}) all require high-temperature heat.
+These factors economically favor salt-cooled reactors over other types of
+reactors as they output heat at higher average temperatures.
 
-However, the liquid fuel form also brings about new computational
+While \glspl{MSR} have attracted increasing research interest over the past two
+decades, they are still very much under research development and no commercial
+\gls{MSR} exists yet. Reactor analysis software are essential tools in aiding
+reactor development because they help inform design choices and regulations in
+line with maximizing safety, reducing proliferation risks, and improving fuel
+efficiency. The liquid fuel form in particular introduces new computational
 challenges in simulating the transient behavior of \glspl{MSR}. \glspl{MSR}
-feature strong negative reactivity feedback in the primary coolant which holds
-the dissolved fissile material. The feedback causes strong and
-near-instantaneous interactions between reactor power and thermal hydraulic
-temperature profile. Furthermore, fissile material
+feature strong negative reactivity feedback in the fuel salt. The feedback
+causes strong and near-instantaneous interactions between reactor power and
+thermal hydraulic temperature profile. Furthermore, fissile material
 and \glspl{DNP} in \glspl{MSR} flow freely within the primary coolant
 loop as opposed to being held in place in solid-fuel reactors. The movement of
 \glspl{DNP} impacts the effective delayed neutron fraction in the core and
@@ -152,7 +176,7 @@ parallel finite element framework. Lindsay et al.
 demonstrated its capabilities by simulating 2-D and 3-D models of the
 \gls{MSRE}. The results showed good qualitative
 agreement with the original design calculations by \gls{MSRE} researchers at
-\gls{ORNL}. This thesis presents some of the new developments in Moltres
+\gls{ORNL}. This thesis presents newer developments in Moltres
 allowing for more complex and accurate \gls{MSR} simulations.
 
 \section{Objectives}
