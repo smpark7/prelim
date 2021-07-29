@@ -1,0 +1,117 @@
+The following literature review describes challenges in \gls{MSR} multiphysics
+modeling, followed by a review of existing multiphysics simulation software
+developed for modeling \glspl{MSR}, with a focus on simulating steady-state
+operation and transient
+accident scenarios which typically occur on the order of a few minutes to
+several hours. Long-term dynamics such as fuel burnup and structural corrosion
+are outside the scope of this work. Lastly, this chapter reviews the existing
+capabilities of Moltres, the MSR simulation software to be developed in this
+work.
+
+\section{Challenges in \gls{MSR} Multiphysics Modeling}
+
+While modeling \glspl{MSR} is not necessarily more difficult than modeling
+solid-fueled reactors, we must adapt our software tools to accurately model the
+unique phenomena found in these circulating-fuel reactors. The differences in
+the challenges of simulating \glspl{MSR} compared to solid-fueled reactors stem
+mainly from the liquid fuel form of the fuel salt \cite{huff_identifying_2019,
+diamond_phenomena_2018}. Firstly, liquids generally exhibit greater thermal
+expansion per unit change in temperature than solids. A decrease in density of
+the fuel medium increases the likelihood of neutrons escaping the fuel region
+and being absorbed by non-fissile material elsewhere in the reactor.
+Consequently, combined with the temperature-dependent Doppler broadening of
+resonance capture cross sections, \glspl{MSR} possess stronger negative fuel
+temperature reactivity feedback than their solid-fueled counterparts. These
+phenomena ultimately result in strong interactions between the neutron fluxes
+and core temperatures given that neutron fluxes affect core temperatures
+through fission heat generation and core temperatures in turn affect neutron
+fluxes through the mechanisms as described prior.
+
+Secondly, with the fuel
+salt also serving the role of providing cooling in the core, velocity flow
+profiles in the fuel salts strongly impact the temperature distribution via
+advection-dominated heat transfer. This contrasts with the relatively static
+temperature distribution shapes in fuel pins and other forms of solid fuel
+matrixes physically separated from the coolant. Therefore, multiphysics
+software must employ \textit{tight coupling schemes} to couple the neutronics
+and thermal-hydraulics governing equations to accurately capture the strong
+multiphysics interactions in transient \gls{MSR} simulations. Tightly coupled
+numerical models handle multiphysics interactions by either updating all state
+variables simultaneously in one monolithic solve (\textit{full coupling}) or
+iterating among all state variables (\textit{fixed point iterations}) until the
+solution converges in every timestep \cite{keyes_multiphysics_2013}. Full
+coupling tends to be more computationally expensive because it combines all
+physics equations into a single large system of equations to be solved
+simultaneously, whereas fixed point iterations involve solving smaller systems
+separately and iteratively updating the state variables until convergence.
+However, full coupling schemes can outperform fixed point iterative methods in
+some multiphysics problems as they boast better stability and convergence
+rates. In contrast, \textit{Loosely coupled schemes} solve each set of
+single-physics equations sequentially using state variable data from the
+previous timestep without any iterations within every timestep. Aufiero et al.
+\cite{aufiero_development_2014} showed that the loose coupling approach failed
+to accurately reproduce an increase in reactor power in an \gls{MSR} in
+response to a 150 pcm reactivity insertion.
+
+Lastly, 
+
+\section{Multiphysics MSR Simulation Tools}
+
+In recent years, several simulation tools have been developed for full-core
+modeling of fast-spectrum \glspl{MSR}. One approach involves coupling
+single-physics neutronics and thermal-hydraulics software via a script which
+handles data transfers between the software. For example, researchers at
+the Delft University of Technology coupled 3D neutron diffusion software
+DALTON \citep{boer_validation_2010} and CFD software HEAT
+\citep{de_zwaan_static_2007} to perform a safety analysis of the \gls{MSFR}
+\citep{fiorina_modelling_2014}. In a later effort from the same institute,
+\cite{tiberga_discontinuous_2019} coupled PHANTOM-$S_N$ and DGFlows
+in their participation in the
+CNRS Benchmark study \citep{tiberga_results_2020}. Another multiphysics
+package was developed at the Paul Scherrer Institute (PSI) coupling
+thermal-hydraulics system software TRACE \citep{nrc_trace_2007} with the nodal
+neutron diffusion software PARCS \citep{downar_parcs_2010} for the safety
+analysis of the \gls{MSFR} \citep{pettersen_coupled_2016}. With modern
+advancements in computing hardware and growing access to high-performance
+computing, others \citep{laureau_transient_2017,blanco_neutronic_2020} have
+developed multiphysics packages coupling CFD software
+OpenFOAM with Monte Carlo particle transport software Serpent 2, thus allowing
+for high-fidelity neutronics calculations in transient reactor analyses.
+
+Another approach towards creating \gls{MSR} simulation tools involves
+developing stand-alone multiphysics software which can perform both
+neutronics and thermal-hydraulics calculations. Among earlier efforts,
+\cite{nicolino_coupled_2008} and \cite{zhang_development_2009} recognized the
+need for more robust multiphysics coupling techniques and higher-fidelity
+thermal hydraulics solutions to accurately capture complex flow profiles in
+pool-type \glspl{MSR}. They each independently developed unnamed multiphysics
+simulation tools and demonstrated their tools with non-moderated \gls{MSR}
+designs. Later, \cite{li_transient_2015} demonstrated the steady-state and
+transient analysis capabilities of COUPLE, a neutronics and thermal-hydraulics
+software developed at the Karlsruhe Institute of Technology.  Others opted to
+leverage general multiphysics software platforms such as OpenFOAM
+\citep{openfoam_openfoam_2021} and \gls{MOOSE}
+\citep{gaston_physics-based_2015}.
+Several parallel efforts at various European institutes have developed coupled
+neutronics and thermal-hydraulics tools in OpenFOAM. These tools share some
+similarities such as implementing the $SP_N$ simplified $P_N$ neutron transport
+model and leveraging OpenFOAM's turbulent flow modeling capabilities.
+Differences include the aforementioned external coupling capability with
+Serpent 2 from the Centre national de la scientifique (CNRS)
+\citep{blanco_neutronic_2020}, fuel compressibility modeling and helium bubble
+tracking capability from Politecnico di Milano (PoliMi)
+\citep{cervi_development_2019}, and fuel performance analysis capability from
+PSI \citep{fiorina_creation_2018}. Within the modular MOOSE finite element
+framework, \gls{MSR} simulation tools include Moltres
+\citep{lindsay_introduction_2018}, the subject of this work and Rattlesnake
+\citep{wang_rattlesnake_2021}, both of which rely on MOOSE's built-in
+incompressible flow physics module. Rattlesnake is primarily a radiation
+transport application but the MOOSE framework facilitates multiphysics coupling
+with other MOOSE-based applications such as Pronghorn for thermal-hydraulics
+such that all applications share the same data structure, thus eliminating
+computational costs from external data transfers and optionally allowing for
+all physics to be solved simultaneously instead of sequentially through
+fixed-point iterations. Similarly, Moltres benefits from the highly-integrated
+cross compatibility within the ``ecosystem'' of MOOSE-based applications.
+
+\section{Moltres}
