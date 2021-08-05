@@ -15,13 +15,16 @@ solid-fueled reactors, we must adapt our software tools to accurately model the
 unique phenomena found in these circulating-fuel reactors. The differences in
 the challenges of simulating \glspl{MSR} compared to solid-fueled reactors stem
 mainly from the liquid fuel form of the fuel salt \cite{huff_identifying_2019,
-diamond_phenomena_2018}. Firstly, liquids generally exhibit greater thermal
+diamond_phenomena_2018}.
+
+Firstly, liquids generally exhibit greater thermal
 expansion per unit change in temperature than solids. A decrease in density of
 the fuel medium increases the likelihood of neutrons escaping the fuel region
 and being absorbed by non-fissile material elsewhere in the reactor.
 Consequently, combined with the temperature-dependent Doppler broadening of
 resonance capture cross sections, \glspl{MSR} possess stronger negative fuel
-temperature reactivity feedback than their solid-fueled counterparts. These
+temperature reactivity feedback than their solid-fueled counterparts
+\cite{elsheikh_safety_2013}. These
 phenomena ultimately result in strong interactions between the neutron fluxes
 and core temperatures given that neutron fluxes affect core temperatures
 through fission heat generation and core temperatures in turn affect neutron
@@ -30,9 +33,22 @@ fluxes through the mechanisms as described prior.
 Secondly, with the fuel
 salt also serving the role of providing cooling in the core, velocity flow
 profiles in the fuel salts strongly impact the temperature distribution via
-advection-dominated heat transfer. This contrasts with the relatively static
-temperature distribution shapes in fuel pins and other forms of solid fuel
-matrixes physically separated from the coolant. Therefore, multiphysics
+advection-dominated heat transfer \cite{diamond_phenomena_2018}. This contrasts
+with the relatively static temperature distribution shapes in fuel pins and
+other forms of solid fuel matrixes physically separated from the coolant.
+
+Lastly, \glspl{DNP} flow freely within the primary coolant loop as opposed to
+being held in place as in solid-fueled reactors. Thus, the delayed neutron
+source distribution varies significantly depending on the flow profile. In
+addition,
+the reactor loses some delayed neutrons from out-of-core \gls{DNP} decay. These
+delayed neutrons are considered lost as they're emitted in subcritical regions
+and are unlikely to contribute to further fission reactions. The reduced
+delayed neutron fraction in the core strongly impacts the transient response of
+the reactor in various accident scenarios. Thus, accurate \gls{MSR} transient
+simulations require accurate modeling of \gls{DNP} drift.
+
+As a consequence of the physical processes above, multiphysics
 software must employ \textit{tight coupling schemes} to couple the neutronics
 and thermal-hydraulics governing equations to accurately capture the strong
 multiphysics interactions in transient \gls{MSR} simulations. Tightly coupled
@@ -51,9 +67,9 @@ single-physics equations sequentially using state variable data from the
 previous timestep without any iterations within every timestep. Aufiero et al.
 \cite{aufiero_development_2014} showed that the loose coupling approach failed
 to accurately reproduce an increase in reactor power in an \gls{MSR} in
-response to a 150 pcm reactivity insertion.
-
-Lastly, 
+response to a 150 pcm reactivity insertion. The next section explores various
+numerical coupling approaches in existing multiphysics \gls{MSR} simulation
+tools.
 
 \section{Multiphysics MSR Simulation Tools}
 
@@ -78,8 +94,19 @@ developed multiphysics packages coupling CFD software
 OpenFOAM with Monte Carlo particle transport software Serpent 2, thus allowing
 for high-fidelity neutronics calculations in transient reactor analyses.
 
-Another approach towards creating \gls{MSR} simulation tools involves
-developing stand-alone multiphysics software which can perform both
+The main advantage of coupling single-physics software to form an integrated
+multiphysics tool is that it allows leverage of older, well-established
+single-physics software which are often finely tuned and optimized for solving
+a given set of governing equations. However, this approach encounters
+performance bottlenecks from inefficient data transfer routines between the
+coupled software, especially if the data transfer doesn't scale well over
+multiple processors in high-performance computing
+\cite{keyes_multiphysics_2013}. Furthermore, this approach can only employ
+fixed point iterations or loose coupling methods by virtue of modeling
+separate physics with separate software.
+
+The other approach towards creating \gls{MSR} simulation tools involves
+developing inherently multiphysics software which can perform both
 neutronics and thermal-hydraulics calculations. Among earlier efforts,
 \cite{nicolino_coupled_2008} and \cite{zhang_development_2009} recognized the
 need for more robust multiphysics coupling techniques and higher-fidelity
@@ -103,7 +130,7 @@ tracking capability from Politecnico di Milano (PoliMi)
 \citep{cervi_development_2019}, and fuel performance analysis capability from
 PSI \citep{fiorina_creation_2018}. Within the modular MOOSE finite element
 framework, \gls{MSR} simulation tools include Moltres
-\citep{lindsay_introduction_2018}, the subject of this work and Rattlesnake
+\citep{lindsay_introduction_2018}, the subject of this work, and Rattlesnake
 \citep{wang_rattlesnake_2021}, both of which rely on MOOSE's built-in
 incompressible flow physics module. Rattlesnake is primarily a radiation
 transport application but the MOOSE framework facilitates multiphysics coupling
@@ -112,6 +139,8 @@ such that all applications share the same data structure, thus eliminating
 computational costs from external data transfers and optionally allowing for
 all physics to be solved simultaneously instead of sequentially through
 fixed-point iterations. Similarly, Moltres benefits from the highly-integrated
-cross compatibility within the ``ecosystem'' of MOOSE-based applications.
+cross compatibility within the ecosystem of MOOSE-based applications.
+
+
 
 \section{Moltres}
