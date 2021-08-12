@@ -1,12 +1,20 @@
-The following literature review describes challenges in \gls{MSR} multiphysics
-modeling, followed by a review of existing multiphysics simulation software
-developed for modeling \glspl{MSR}, with a focus on simulating steady-state
-operation and transient
-accident scenarios which typically occur on the order of a few minutes to
-several hours. Long-term dynamics such as fuel burnup and structural corrosion
-are outside the scope of this work. Lastly, this chapter reviews the existing
-capabilities of Moltres, the MSR simulation software to be developed in this
-work.
+\glspl{MSR} possess unique characteristics which render existing \gls{LWR}
+analysis software inappropriate for \gls{MSR} analysis. Legacy \gls{LWR}
+software typically scale poorly on modern high-performance computing
+clusters and do not support complex geometries beyond regular \gls{LWR} fuel
+assembly lattices. Furthermore, \glspl{MSR} feature strong multiphysics
+coupling which force segregated solvers into taking smaller timesteps to
+maintain accuracy. This chapter provides a brief history of \glspl{MSR},
+followed by a discussion of the challenges in \gls{MSR} multiphysics modeling
+for reactor accident analysis. Next, this chapter presents a literature review
+of existing multiphysics simulation software developed for \glspl{MSR}
+analysis. This work focuses software for analysing short-term reactor dynamics
+which requires the ability to accurately simulate various transient scenarios
+such as reactor start-up and coast-down, load-following operations,
+steady-state operation, and accident analysis. Long-term dynamics such as fuel
+burnup and structural corrosion fall outside the scope of this work. Lastly,
+this chapter reviews the existing capabilities of Moltres, the MSR simulation
+software to be developed in this work.
 
 \section{Molten Salt Reactors}
 
@@ -251,7 +259,7 @@ the very least, tight coupling schemes through fixed point iterations. The
 next section explores various numerical coupling approaches in existing
 multiphysics \gls{MSR} simulation tools.
 
-\section{MSR Multiphysics Simulation Tools}
+\section{MSR Multiphysics Simulation Tools} \label{sec:msr-tools}
 
 In recent years, several simulation tools have been developed for full-core
 modeling of \glspl{MSR}. One approach involves coupling separate,
@@ -332,27 +340,219 @@ Differences include the aforementioned external coupling capability with
 Serpent 2 from \gls{CNRS} \cite{blanco_neutronic_2020}, fuel
 compressibility modeling and helium bubble tracking capability from Politecnico
 di Milano \cite{cervi_development_2019}, and fuel performance analysis
-capability from \gls{PSI} \cite{fiorina_creation_2018}. Finally, within the
-modular MOOSE finite element framework, \gls{MSR} simulation tools include
-Moltres
-\cite{lindsay_introduction_2018}, the subject of this work, and Rattlesnake
-\cite{wang_rattlesnake_2021}, both of which can couple to MOOSE's built-in
-incompressible flow physics module. Rattlesnake supports high-fidelity
-$S_N$ discrete ordinates and $P_N$ spherical harmonics angular discretization
-schemes for solving the transport equations of various types of neutral
-particles, including neutrons. 
+capability from \gls{PSI} \cite{fiorina_creation_2018}.
 
-solves the transport equation
-for various types of neutral particles, including neutrons. It features 
+Finally, within the open-source, finite-element, multiphysics framework, MOOSE,
+simulation tools capable of modeling
+\glspl{MSR} include Moltres \cite{lindsay_moltres_2017}, the subject of
+this work, and Rattlesnake \cite{wang_rattlesnake_2021}. The MOOSE
+framework facilitates multiphysics coupling among all MOOSE-based applications
+by providing a common framework for shared data access and file
+input/output, thus eliminating computational costs from data transfers and
+optionally allowing for fully coupled solves. Abou-Jaoude et al.
+\cite{abou-jaoude_coupled_2020} coupled Rattlesnake with Pronghorn, another
+MOOSE-based application for advanced reactor thermal-hydraulics modeling, to
+demonstrate several steady-state \gls{MSR} simulation capabilities defined in
+the \gls{CNRS} numerical benchmark. Lindsay et al.
+\cite{lindsay_introduction_2018} first demonstrated Moltres' \gls{MSR} modeling
+capabilities on 2D axisymmetric and 3D models of the \gls{MSRE} with fixed
+velocity flow on a fully coupled neutronics and thermal-hydraulics solve. I
+later demonstrated Moltres' more recent developments through modeling a 2D
+axisymmetric model of the \gls{MSFR} for steady-state operation and transient
+accident analysis \cite{park_advancement_2020}. The latter work introduces
+looped \gls{DNP} flow, coupling the \gls{DNP} drift and temperature 
+advection-diffusion to incompressible flow, and decay heat modeling
+capabilities.
 
-Rattlesnake is primarily a radiation
-transport application but the MOOSE framework facilitates multiphysics coupling
-with other MOOSE-based applications such as Pronghorn for thermal-hydraulics
-such that all applications share the same data structure, thus eliminating
-computational costs from external data transfers and optionally allowing for
-fully coupled solves. Similarly, Moltres benefits from the highly-integrated
-cross compatibility within the ecosystem of MOOSE-based applications.
-
-Thus, MOOSE-based applications 
+The proposed work aims to continue Moltres development for multiphysics
+\gls{MSR} analysis. The following section describes Moltres and its existing
+capabilities for reactor analysis.
 
 \section{Moltres}
+
+This section discusses the general software features of Moltres. The
+discussion specifically focuses on robustness, extensibility, and ease of use
+as these characteristics represent the hallmarks of a good multiphysics
+software \cite{keyes_multiphysics_2013}. These criteria also apply for
+assessing \gls{MSR} simulation tools since the nonlinearity of \gls{MSR}
+multiphysics analysis and the complexity of advanced reactor designs
+necessitate robust, scalable, and flexible computational tools. This section
+also details the various model implementations in Moltres for solving coupled
+neutronics and thermal-hydraulics problems in \glspl{MSR}.
+
+\subsection{Advantages of Moltres for \gls{MSR} Analysis}
+
+As mentioned in Section \ref{sec:msr-tools}, Moltres is a multiphysics
+
+Similarly, Moltres benefits from the
+highly-integrated cross compatibility within the ecosystem of MOOSE-based
+applications. Moltres solves the multigroup neutron diffusion equations, along
+with supporting features for modeling \gls{DNP} advection and diffusion,
+fission heat source, and other \gls{MSR}-specific physics. Beyond imposing
+fixed velocity profiles, Moltres couples to MOOSE's built-in
+\texttt{Navier-Stokes} module for incompressible flow with the Boussinesq
+approximation for buoyancy-driven flow.
+
+MOOSE-based applications adopt
+the object-oriented programming style in \texttt{C++} to modularize various
+functions relevant to a finite-element solver. In this approach, MOOSE-based
+applications break down \glspl{PDE} into individual terms and store them
+as individual \texttt{C++ objects} referred to as \texttt{kernels}. These
+\texttt{kernels} contain functions for calculating their weak form and Jacobian
+contributions and other relevant functions required to solve a given
+\gls{PDE}. Object-oriented programming in MOOSE also helps software developers
+reduce development time since new \texttt{kernels} can inherit common functions
+from existing \texttt{kernels} which share similar physics.
+
+\subsection{Models and Coupling Schemes}
+
+Moltres is a coupled neutronics and thermal-hydraulics application for
+simulating \glspl{MSR}. Together with \gls{MOOSE}'s ``Navier-Stokes'' and
+``Heat Conduction'' modules, Moltres solves the multigroup neutron diffusion
+equations, for an arbitrary number of energy and precursor groups, and
+thermal-hydraulics equations simultaneously on the same mesh (or separately
+through fixed-point iterations if desired).
+In a previous work, \cite{lindsay_introduction_2018}
+demonstrated Moltres' \gls{MSR} neutronics modeling capabilities with 1D salt
+flow in 2D-axisymmetric and 3D models of the \gls{MSRE}. The neutron flux and
+temperature distributions agreed qualitatively with legacy
+\gls{MSRE} data albeit with some minor quantitative discrepancies due to
+simplifications and assumptions in the reactor geometry. Moltres has
+since undergone further development to support 1) the looping of \gls{DNP}
+drift back into the reactor core, 2) coupling the aforementioned \gls{DNP}
+drift to incompressible Navier-Stokes velocity flows within the reactor core,
+and 3) a decay heat model to simulate decay heat from fission products.
+
+To perform neutronics calculations, Moltres requires homogenized group constant
+data from dedicated high-fidelity neutronics software such as SCALE
+\citep{dehart_reactor_2011} or Serpent 2 \citep{leppanen_serpent_2014}. Users
+can run a Python script in Moltres' Github repository which automatically reads
+user-provided SCALE or Serpent 2 output data files and creates
+Moltres-compatible JSON or text files containing all required group constant
+data. There are on-going efforts to produce a similar script for parsing OpenMC
+output data.
+
+Moltres solves for the neutron fluxes governed by
+the multigroup neutron diffusion equations given by:
+%
+\begin{align}
+    \frac{1}{v_g} \frac{\partial \phi_g}{\partial t} =& \nabla \cdot D_g
+    \nabla \phi_g - \Sigma^r_g \phi_g +
+    \sum^G_{g' \neq g} \Sigma^s_{g' \rightarrow g} \phi_{g'} \nonumber \\
+    &+ \chi^p_g \sum^G_{g'=1} \left( 1-\beta \right) \nu \Sigma^f_{g'}
+    \phi_{g'} + \chi^d_g \sum^I_i \lambda_i C_i, \label{eq:neut} \\
+    %
+    \intertext{where}
+    v_g =& \text{ average speed of neutrons in group $g$ [cm$\cdot$s$^{-1}$],} 
+    \nonumber \\
+    \phi_g =& \text{ neutron flux in group $g$ [cm$^{-2}\cdot$s$^{-1}$],}
+    \nonumber \\
+    t =& \text{ time [s],} \nonumber \\
+    D_g =& \text{ diffusion coefficient of neutrons in} \nonumber \\
+    &\text{ group $g$ [cm$^2\cdot$s$^{-1}$],} \nonumber \\
+    \Sigma^r_g =& \text{ macroscopic cross section for removal of} \nonumber \\
+    &\text{ neutrons from group $g$ [cm$^{-1}$],} \nonumber \\
+    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic cross section of
+    scattering from} \nonumber \\
+    &\text{ groups $g'$ to $g$ [cm$^{-1}$],} \nonumber \\
+    \chi^p_g =& \text{ prompt fission spectrum for neutrons in} \nonumber \\
+    &\text{ group $g$ [ - ],} \nonumber \\
+    G =& \text{ total number of discrete neutron groups [ - ],} \nonumber \\
+    \nu =& \text{ average number of neutrons produced per} \nonumber \\
+    &\text{ fission [ - ],} \nonumber \\
+    \Sigma^f_{g} =& \text{ macroscopic fission cross section for neutron}
+    \nonumber \\
+    &\text{ in group $g$ [cm$^{-1}$],} \nonumber \\
+    \chi^d_g =& \text{ delayed fission spectrum for neutrons in} \nonumber \\
+    &\text{ group $g$ [ - ],} \nonumber \\
+    I =& \text{ total number of delayed neutron precursor} \nonumber \\
+    &\text{ groups [ - ],} \nonumber \\
+    \beta =& \text{ total delayed neutron fraction [ - ].} \nonumber
+\end{align}
+
+While Moltres is generally unit-agnostic, we use the CGS system here because
+the length units for the neutron cross section data from SCALE and Serpent 2
+are provided in centimeters. The delayed neutron precursor concentrations are
+governed by the following equation:
+%
+\begin{align}
+    \frac{\partial C_i}{\partial t} =& \beta_i \sum^G_{g'=1} \nu \Sigma^f_{g'}
+    \phi_{g'} - \lambda_i C_i - \vec{u} \cdot \nabla C_i + \nabla \cdot
+    D_{\text{P}} \nabla C_i, \label{eq:dnp} \\
+    %
+    \intertext{where}
+    \beta_i =& \text{ delayed neutron fraction of precursor group $i$ [ - ],}
+    \nonumber \\
+    \lambda_i =& \text{ average decay constant of delayed neutron} \nonumber \\
+    &\text{ precursors in precursor group $i$ [s$^{-1}$],} \nonumber \\
+    C_i =& \text{ concentration of delayed neutron precursors in}
+    \nonumber \\
+    &\text{ precursor group $i$ [cm$^{-3}$],} \nonumber \\
+    \vec{u} =& \text{ molten salt flow velocity vector [cm$\cdot$s$^{-1}$],}
+    \nonumber \\
+    D_{\text{P}} =& \text{ effective diffusion coefficient of the delayed}
+    \nonumber \\
+    &\text{ neutron precursors [cm$^2\cdot$s$^{-1}$].} \nonumber
+\end{align}
+
+The last two terms in Equation \ref{eq:dnp} represent the advection and
+diffusion terms, respectively, to model the movement of \gls{DNP} in
+liquid-fuel \glspl{MSR}.
+
+The governing equation for temperature is an advection-diffusion equation with
+a fission heat source term given by:
+%
+\begin{align}
+    \rho c_{p} \frac{\partial T}{\partial t} =& - \rho c_p \vec{u}
+    \cdot \nabla T + \nabla \cdot \left(k \nabla T \right) + Q_f
+    \label{eq:temp} \\
+    %
+    \intertext{where}
+    Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g \nonumber \\
+    =& \text{ fission heat source [W$\cdot$m$^{-3}\cdot$s$^{-1}$],} \nonumber
+    \\
+    \rho =& \text{ density of the molten salt [kg$\cdot$m$^{-3}$],}
+    \nonumber \\
+    c_p =& \text{ specific heat capacity of molten salt} \nonumber \\
+    &\text{ [J$\cdot$kg$^{-1}\cdot$K$^{-1}$],} \nonumber \\
+    T =& \text{ temperature of molten salt [K]} \nonumber \\
+    k =& \text{ effective thermal conductivity of molten salt} \nonumber \\
+    &\text{ [W$\cdot$m$^{-1}\cdot$K$^{-1}$].} \nonumber
+\end{align}
+
+Lastly, the governing equations for the incompressible Navier-Stokes flow are
+given by:
+%
+\begin{align}
+    \rho \frac{\partial \vec{u}}{\partial t} =&
+    -\rho (\vec{u}
+    \cdot \nabla) \vec{u} - \nabla p + \mu \nabla^2 \vec{u}
+    + \rho \alpha \vec{g} \left(T - T_{\text{ref}} \right)
+    \label{eq:momemtum} \\
+    %
+    \nabla \cdot \vec{u} =& 0
+    \label{eq:divergence}
+    \intertext{where}
+    p =& \text{ pressure [Pa],} \nonumber \\
+    \mu =& \text{ dynamic viscosity [Pa$\cdot$s],} \nonumber \\
+    \alpha =& \text{ coefficient of thermal expansion [K$^{-1}$],} \nonumber \\
+    \vec{g} =& \text{ gravitational force vector [N$\cdot$m$^{-3}$],} \nonumber
+    \\
+    T_{\text{ref}} =& \text{ reference temperature at which the nominal}
+    \nonumber \\
+    &\text{ density is provided [K].} \nonumber
+    \nonumber
+\end{align}
+
+The velocity components, temperature, and delayed neutron precursor
+distributions are all susceptible to numerical node-to-node oscillations
+commonly observed when resolving advection-dominated transport using continuous
+Galerkin methods \citep{kuhlmann_lid-driven_2018}.
+\gls{MOOSE}'s Navier-Stokes module provides the
+\gls{SUPG} stabilization scheme \citep{brooks_streamline_1982} for the velocity
+and temperature variables to combat these oscillations. We
+refer readers to \cite{peterson_overview_2018} for details on the
+implementation of these methods in \gls{MOOSE}'s Navier-Stokes module. On the 
+other hand, we discretized the delayed neutron precursor variables using
+discontinuous shape functions supported by \gls{MOOSE}'s discontinuous finite
+element solver to circumvent the numerical instability issue.
