@@ -318,7 +318,7 @@ thermal-hydraulics software developed at the Karlsruhe Institute of Technology.
 
 Others opted to leverage general multiphysics software platforms such as
 COMSOL \cite{comsol_ab_comsol_2018}, OpenFOAM \cite{openfoam_openfoam_2021},
-and \gls{MOOSE} \cite{gaston_physics-based_2015}. Researchers at Politecnico di
+and \gls{MOOSE} \cite{permann_moose_2020}. Researchers at Politecnico di
 Milano developed a COMSOL-based \gls{MSR} simulation tool and modeled the
 \gls{MSBR} as a single axisymmetric fuel channel with a uniform flow profile
 \cite{cammi_multi-physics_2011}, followed by the \gls{MSRE} core also as a
@@ -345,11 +345,7 @@ capability from \gls{PSI} \cite{fiorina_creation_2018}.
 Finally, within the open-source, finite-element, multiphysics framework, MOOSE,
 simulation tools capable of modeling
 \glspl{MSR} include Moltres \cite{lindsay_moltres_2017}, the subject of
-this work, and Rattlesnake \cite{wang_rattlesnake_2021}. The MOOSE
-framework facilitates multiphysics coupling among all MOOSE-based applications
-by providing a common framework for shared data access and file
-input/output, thus eliminating computational costs from data transfers and
-optionally allowing for fully coupled solves. Abou-Jaoude et al.
+this work, and Rattlesnake \cite{wang_rattlesnake_2021}. Abou-Jaoude et al.
 \cite{abou-jaoude_coupled_2020} coupled Rattlesnake with Pronghorn, another
 MOOSE-based application for advanced reactor thermal-hydraulics modeling, to
 demonstrate several steady-state \gls{MSR} simulation capabilities defined in
@@ -382,16 +378,52 @@ neutronics and thermal-hydraulics problems in \glspl{MSR}.
 
 \subsection{Advantages of Moltres for \gls{MSR} Analysis}
 
-As mentioned in Section \ref{sec:msr-tools}, Moltres is a multiphysics
+Moltres draws many advantages from being developed on MOOSE
+\cite{permann_moose_2020}. MOOSE is an open-source, finite-element,
+multiphysics framework developed at \gls{INL}. The framework provides a
+user-friendly interface for developing multiphysics software through
+object-oriented programming in \texttt{C++} to modularize various
+functions relevant to finite-element, multiphysics solvers. In this approach,
+MOOSE and MOOSE-based applications break down \glspl{PDE} into individual terms
+and store them
+as individual \texttt{C++ objects} referred to as \texttt{Kernels}. These
+\texttt{Kernels} contain functions for calculating their weak form and Jacobian
+contributions and other relevant functions required to solve a given
+\gls{PDE}. Object-oriented programming in MOOSE helps researchers
+reduce time spent on software development since developers can write new
+\texttt{Kernels} as child classes in \texttt{C++} derived from existing
+\texttt{Kernels} (base classes) which share similar physics to inherit common
+functions. The same philosophy applies for all other systems in MOOSE such as
+the \texttt{BoundaryCondition}, \texttt{Materials}, and \texttt{Postprocessor}
+systems for handling relevant boundary conditions, material properties, and
+postprocessing calculations, respectively. Overall, this approach also saves
+researchers time and effort as they are unencumbered by the technical details
+and complexities involved in programming efficient computational tools for
+numerical analysis.
 
-Similarly, Moltres benefits from the
-highly-integrated cross compatibility within the ecosystem of MOOSE-based
-applications. Moltres solves the multigroup neutron diffusion equations, along
+MOOSE relies on two other open-source libraries: libMesh
+\cite{kirk_libmesh_2006} for its \gls{FEM} capabilities on
+unstructured mesh, and PETSc \cite{satish_petsc_2019} for its non-linear
+solvers and preconditioning routines. By extension, Moltres gains access to
+these libraries for their \gls{PDE} solving capabilities. MOOSE supports
+modeling on up to three-dimensional (3-D) meshes for a wide range of mesh file
+formats, including the commonly used Exodus II file format. Specifically for
+2-D meshes, users can opt between Cartesian and polar coordinates. 
+
+Moltres also benefits
+from the highly-integrated cross compatibility within the ecosystem of
+MOOSE-based applications.
+MOOSE facilitates multiphysics coupling among all MOOSE-based applications
+by providing a common framework for shared data access and file
+input/output, thus eliminating computational costs from data transfers and
+optionally allowing for fully coupled solves.
+
+Moltres solves the multigroup neutron diffusion equations, along
 with supporting features for modeling \gls{DNP} advection and diffusion,
 fission heat source, and other \gls{MSR}-specific physics. Beyond imposing
 fixed velocity profiles, Moltres couples to MOOSE's built-in
-\texttt{Navier-Stokes} module for incompressible flow with the Boussinesq
-approximation for buoyancy-driven flow.
+\texttt{Navier-Stokes} module \cite{peterson_overview_2018} for incompressible
+flow with the Boussinesq approximation for buoyancy-driven flow.
 
 MOOSE-based applications adopt
 the object-oriented programming style in \texttt{C++} to modularize various
