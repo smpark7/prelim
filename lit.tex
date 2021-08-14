@@ -467,16 +467,8 @@ fixed velocity profiles, Moltres couples to MOOSE's built-in
 flow with the Boussinesq approximation for buoyancy-driven flow on the same
 mesh as the neutronics solution or separately through fixed point iterations
 if desired.
-In a previous work, \cite{lindsay_introduction_2018}
-demonstrated Moltres' \gls{MSR} neutronics modeling capabilities with 1D salt
-flow in 2D-axisymmetric and 3D models of the \gls{MSRE}. The neutron flux and
-temperature distributions agreed qualitatively with legacy
-\gls{MSRE} data albeit with some minor quantitative discrepancies due to
-simplifications and assumptions in the reactor geometry. Moltres has
-since undergone further development to support 1) the looping of \gls{DNP}
-drift back into the reactor core, 2) coupling the aforementioned \gls{DNP}
-drift to incompressible Navier-Stokes velocity flows within the reactor core,
-and 3) a decay heat model to simulate decay heat from fission products.
+
+\subsubsection{Neutronics Model}
 
 To perform neutronics calculations, Moltres requires homogenized group constant
 data from dedicated high-fidelity neutronics software such as SCALE
@@ -553,6 +545,8 @@ governed by the following equation:
 The last two terms in Equation \ref{eq:dnp} represent the advection and
 diffusion terms, respectively, to model the movement of \gls{DNP} in
 liquid-fuel \glspl{MSR}.
+
+\subsubsection{Thermal-Hydraulics Model}
 
 The governing equation for temperature is an advection-diffusion equation with
 a fission heat source term given by:
