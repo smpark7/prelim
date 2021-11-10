@@ -1,9 +1,128 @@
-\subsection{Physics Models}
+This chapter provides a complete overview of Moltres as a multiphysics
+simulation software for molten salt reactors.
+Section \ref{sec:moltres-features}
+describes general software features of Moltres, Section
+\ref{sec:moltres-physics} expands on the physics models in Moltres, and Section
+\ref{sec:moltres-previous} describes the current capabilities in Moltres.
 
-\subsection{Previous Work}
+\section{General Features} \label{sec:moltres-features}
 
-\subsubsection{MSRE}
+This section discusses the general software features of Moltres. The
+discussion specifically focuses on robustness, extensibility, and ease of use
+as these characteristics represent the hallmarks of a good multiphysics
+software \cite{keyes_multiphysics_2013}. These criteria also apply for
+assessing \gls{MSR} simulation tools since the nonlinearity of \gls{MSR}
+multiphysics analysis and the complexity of advanced reactor designs
+necessitate robust, scalable, and flexible computational tools.
 
-\subsubsection{MSFR}
+Moltres draws many advantages from being developed on MOOSE
+\cite{permann_moose_2020}. MOOSE is an open-source, finite-element,
+multiphysics framework developed at \gls{INL}. The framework provides a
+user-friendly interface for developing multiphysics software through
+\gls{OOP} in \texttt{C++} to modularize various
+functions relevant to finite-element, multiphysics solvers. In this approach,
+MOOSE and MOOSE-based applications break down \glspl{PDE} into individual terms
+and store them as individual \texttt{C++ objects} referred to as
+\texttt{Kernels}. These \texttt{Kernels} contain functions for calculating
+their weak form residual and Jacobian
+contributions and other relevant functions required to solve a given
+\gls{PDE}. \gls{OOP} in MOOSE simplifies software development
+since developers can write new \texttt{Kernels} as child classes in
+\texttt{C++} derived from existing \texttt{Kernels} (base classes) which share
+similar physics to inherit common functions.
+The same philosophy applies for all other systems in MOOSE such as
+the \texttt{BoundaryCondition}, \texttt{Materials}, and \texttt{Postprocessor}
+systems for handling relevant boundary conditions, material properties, and
+postprocessing calculations, respectively. Overall, this approach also saves
+researchers time and effort as they are unencumbered by the technical details
+and complexities involved in programming efficient computational tools for
+numerical analysis.
 
-\subsubsection{CNRS Benchmark}
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.7\columnwidth]{moose}
+	\caption{Structure of MOOSE and its dependencies.}
+	\label{fig:moose}
+\end{figure}
+
+MOOSE relies on two other open-source libraries: libMesh
+\cite{kirk_libmesh_2006} for its \gls{FEM} capabilities on
+unstructured mesh, and PETSc \cite{satish_petsc_2019} for its non-linear
+solvers and preconditioning routines. By extension, Moltres gains access to
+these libraries for their \gls{PDE} solving capabilities. Figure
+\ref{fig:moose} shows how MOOSE serves as an interface between physics
+applications and libMesh/PETSc. MOOSE supports
+modeling on up to three-dimensional (3-D) unstructured meshes for a wide range
+of mesh file formats, including the commonly used Exodus II file format. For
+2-D meshes, users can opt between Cartesian and polar RZ coordinates. MOOSE
+also supports parallel computing through the \gls{MPI} library to leverage
+modern high-performance computing for large multiphysics simulations.
+
+Moltres benefits from the highly-integrated cross compatibility within the
+ecosystem of MOOSE-based applications. MOOSE facilitates multiphysics coupling
+among all MOOSE-based applications by providing a common framework for shared
+data access and file input/output, thus eliminating computational costs from
+data transfers and allowing for fully coupled solves. For example, Moltres
+couples with the \texttt{Navier-Stokes} module \cite{peterson_overview_2018}
+from MOOSE for fully coupled reactor simulations modeling neutronics and
+thermal-hydraulics with incompressible flow. Section
+\ref{sec:challenges} highlighted the advantages of using fully coupled schemes
+for modeling strongly coupled systems such as the coupled
+neutronics and thermal-hydraulics in \glspl{MSR}. Moltres can also
+couple to other MOOSE-based applications in a similar fashion with ease. In
+addition, MOOSE
+provides the option for either tight or loose coupling through the
+\texttt{MultiApp} system \cite{gaston_physics-based_2015}. Tight coupling
+schemes can outperform fully coupled schemes in weakly coupled systems in which
+the computational expenses of fully coupled schemes outweigh the savings from
+running fewer Newton iterations due to the superior convergence rate. Loose
+coupling schemes are useful for accelerating time-dependent simulations of
+stable systems towards steady state in which only the steady-state
+configuration is of interest to the user. This typically occurs in the later
+stages \gls{MSR} simulations when the delayed neutron precursor concentrations
+converge slowly due to their relatively large decay half-lives. Furthermore,
+segregated solves through the \texttt{MultiApp} system enables Moltres to
+introduce delayed neutron precursor drift and non-uniform temperature
+distributions into criticality search simulations. Regardless of which
+coupling scheme is best, MOOSE-based applications provide the flexibility
+to switch among the schemes as users see fit. For time-dependent simulations,
+MOOSE provides more than ten different implicit and explicit timestepping
+schemes. The default, most common scheme is the first-order backward Euler
+method which offers excellent solver stability for stiff \glspl{PDE}.
+
+Lastly, Moltres is an open-source \gls{LGPL} software hosted on
+GitHub \cite{github_build_2017}. Open-sourcing software provides ease of access
+and expands the userbase. These characteristics promote software quality
+through increased feedback on users' needs and transparency for peer review.
+Open-source software accelerate research progress by supporting research
+collaboration and sharing best software practices. Supporting Moltres'
+continued development, Moltres relies on GitHub for online version control with
+continuous integrated testing to protect its existing capabilities.
+
+In summary, Moltres provides robust, yet flexible coupling capabilities to
+model strongly coupled neutronics and thermal-hydraulics in \glspl{MSR}. As a
+MOOSE-based application, Moltres is highly extensible by means of coupling to
+other MOOSE-based applications and benefits from MOOSE's user-friendly
+interface for software development and general ease of use.
+
+\section{Physics Models} \label{sec:moltres-physics}
+
+\subsection{Neutronics}
+
+\subsection{Thermal-Hydraulics}
+
+\subsection{Precursor Loop}
+
+\section{Previous Work} \label{sec:moltres-previous}
+
+\subsection{MSRE}
+
+\subsection{MSFR}
+
+\subsection{CNRS Benchmark}
+
+\input{cnrs-benchmark/introduction}
+\input{cnrs-benchmark/benchmark}
+\input{cnrs-benchmark/moltres}
+\input{cnrs-benchmark/results}
+\input{cnrs-benchmark/conclusion}
