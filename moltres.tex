@@ -1,5 +1,5 @@
-This chapter provides a complete overview of Moltres as a multiphysics
-simulation software for molten salt reactors.
+This chapter provides an abridged overview of Moltres as a multiphysics
+simulation software for molten salt reactors. 
 Section \ref{sec:moltres-features}
 describes general software features of Moltres, Section
 \ref{sec:moltres-physics} expands on the physics models in Moltres, and Section
@@ -107,9 +107,148 @@ interface for software development and general ease of use.
 
 \section{Physics Models} \label{sec:moltres-physics}
 
+This section describes the various physics models available in Moltres to model
+coupled neutronics and thermal-hydraulics in \glspl{MSR}.
+
 \subsection{Neutronics}
 
+\subsubsection{Multigroup Neutron Diffusion Equations}
+
+Moltres solves the multigroup neutron diffusion equations for the neutron
+flux solution within the problem domain. These equations are derived from the
+neutron transport
+equation in the diffusion-dominated limit with Fick's law of diffusion and
+further simplified by discretizing the continuous neutron energy variable into
+a finite number of energy groups. The time-dependent multigroup neutron
+diffusion equations with $G$ energy groups and $I$ delayed neutron precursor
+groups are given by:
+%
+\begin{align}
+    \frac{1}{v_g} \frac{\partial \phi_g}{\partial t} =& \nabla \cdot D_g
+    \nabla \phi_g - \Sigma^r_g \phi_g +
+    \sum^G_{g' \neq g} \Sigma^s_{g' \rightarrow g} \phi_{g'} \nonumber \\
+    &+ \chi^p_g \sum^G_{g'=1} \left( 1-\beta \right) \nu \Sigma^f_{g'}
+    \phi_{g'} + \chi^d_g \sum^I_i \lambda_i C_i \label{eq:neutron} \\
+    %
+    \shortintertext{where}
+    v_g =& \text{ average speed of neutrons in group $g$,} 
+    \nonumber \\
+    \phi_g =& \text{ neutron flux in group $g$,}
+    \nonumber \\
+    t =& \text{ time,} \nonumber \\
+    D_g =& \text{ diffusion coefficient of neutrons in} \nonumber \\
+    &\text{ group $g$,} \nonumber \\
+    \Sigma^r_g =& \text{ macroscopic cross section for removal of} \nonumber \\
+    &\text{ neutrons from group $g$,} \nonumber \\
+    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic cross section of
+    scattering from} \nonumber \\
+    &\text{ groups $g'$ to $g$,} \nonumber \\
+    \chi^p_g =& \text{ prompt fission spectrum for neutrons in} \nonumber \\
+    &\text{ group $g$,} \nonumber \\
+    G =& \text{ total number of discrete neutron groups,} \nonumber \\
+    \nu_g =& \text{ average number of neutrons produced per} \nonumber \\
+    &\text{ fission,} \nonumber \\
+    \Sigma^f_{g} =& \text{ macroscopic fission cross section for neutron}
+    \nonumber \\
+    &\text{ in group $g$,} \nonumber \\
+    \chi^d_g =& \text{ delayed fission spectrum for neutrons in} \nonumber \\
+    &\text{ group $g$,} \nonumber \\
+    I =& \text{ total number of delayed neutron precursor} \nonumber \\
+    &\text{ groups,} \nonumber \\
+    \beta =& \text{ total delayed neutron fraction.} \nonumber
+\end{align}
+
+In spite of forming only around 0.7\% of all neutrons emitted, delayed neutrons
+play outsized roles in reactor kinetics. The relatively long half-lives of
+delayed neutron precursors gives us ample time in adequately designed reactors
+to control reactor power output and intervene in case of power excursions.
+The precursor concentration balance equations for $I$ precursor
+groups are given by:
+%
+\begin{align}
+    \frac{\partial C_i}{\partial t} =& \beta_i \sum^G_{g'=1} \nu \Sigma^f_{g'}
+    \phi_{g'} - \lambda_i C_i - \vec{u} \cdot \nabla C_i + \nabla \cdot
+    D_{\text{P}} \nabla C_i \label{eq:precursor} \\
+    %
+    \shortintertext{where}
+    \beta_i =& \text{ delayed neutron fraction of precursor group $i$,}
+    \nonumber \\
+    \lambda_i =& \text{ average decay constant of delayed neutron} \nonumber \\
+    &\text{ precursors in precursor group $i$,} \nonumber \\
+    C_i =& \text{ concentration of delayed neutron precursors in}
+    \nonumber \\
+    &\text{ precursor group $i$,} \nonumber \\
+    \vec{u} =& \text{ molten salt flow velocity vector,}
+    \nonumber \\
+    D_{\text{P}} =& \text{ effective diffusion coefficient of the delayed}
+    \nonumber \\
+    &\text{ neutron precursors.} \nonumber
+\end{align}
+
+These two equations are largely similar to conventional formulations of the
+multigroup neutron diffusion equations with delayed neutrons for most reactor
+types. The only differences are in the last two terms in Equation \ref{eq:dnp}
+which represent the advection and diffusion terms, respectively, to model the
+movement of \gls{DNP} in liquid-fuel \glspl{MSR}.
+
+As shown in Equations \ref{eq:neutron} and \ref{eq:precursor}, Moltres requires
+group constant data from dedicated high-fidelity neutronics software such as
+the NEWT module in SCALE \cite{dehart_reactor_2011}, Serpent
+\cite{leppanen_serpent_2014}, or OpenMC \cite{romano_openmc:_2015}. These group
+constant data are the neutron energy group $g$ values for $v_g$, $D_g$,
+$\Sigma^r_g$, $\Sigma^s_{g' \rightarrow g}$, $\chi^p_g$, $\chi^d_g$,
+$\Sigma^f_{g}$, and $\nu\Sigma^f_{g}$, and precursor group $i$ values for
+$\beta_i$ and $\lambda_i$. Users
+can run a Python script in Moltres' Github repository which automatically reads
+user-provided SCALE/Serpent/OpenMC output data files and creates
+Moltres-compatible JSON format files containing all required group constant
+data. Moltres allows for an arbitrary number of neutron energy groups $G$ and
+precursor groups $I$ as long as the user provides the necessary group constant
+data. In practice, $I$ depends on the nuclear data library used to generate
+group constants---the JEFF \cite{plompen_joint_2020} and ENDF
+\cite{brown_endfb-viii0_2018} data libraries define eight precursor groups
+and six precursor groups, respectively.
+
+In multiphysics reactor simulations, we model the coupling between neutronics
+and thermodynamics through temperature-dependent group constants. To sample
+group constants at different temperatures in Moltres, users must provide group
+constant data measured at more than one temperature (e.g. 800K--1500K at 100K
+intervals). Users can then choose from linear spline, cubic spline, or monotone
+cubic interpolation methods available in Moltres to interpolate the group
+constant data for values falling within the provided temperature range. 
+
+\subsubsection{Boundary Conditions}
+
+Moltres provides two types of boundary conditions for neutron fluxes; these are
+conventionally known as the vacuum and reflective boundary conditions given,
+respectively, as:
+
+\begin{align}
+    \frac{\partial \phi}{\partial x_i} + \frac{\phi}{2} =& 0
+    \shortintertext{and}
+    \frac{\partial \phi}{\partial x_i} =& 0
+    \shortintertext{where}
+    x_i =& \mbox{ spatial coordinate perpendicular to the boundary.} \nonumber
+\end{align}
+
+The vacuum boundary condition typically applies to the external boundaries of
+the reactor beyond which lies low-interaction media such as air, while the
+reflective boundary condition is useful for exploiting symmetries in the
+model geometry such as the axial boundary in axisymmetric geometries. The
+reflective boundary condition is also equivalent to the more generally known
+homogeneous Neumann boundary condition. Relevant boundary conditions for
+delayed neutron precursors include the homogeneous Neumann boundary condition
+along fuel salt-structural interfaces; and outflow/inflow boundary
+conditions along the outlet/inlet boundaries through which the precursors
+flow as they circulate the fuel salt loop.
+
 \subsection{Thermal-Hydraulics}
+
+\subsubsection{Temperature Advection-Diffusion}
+
+\subsubsection{Incompressible Navier-Stokes Flow}
+
+\subsubsection{Boundary Conditions}
 
 \subsection{Precursor Loop}
 
@@ -121,7 +260,7 @@ interface for software development and general ease of use.
 
 \subsection{CNRS Benchmark}
 
-\input{cnrs-benchmark/introduction}
+%\input{cnrs-benchmark/introduction}
 \input{cnrs-benchmark/benchmark}
 \input{cnrs-benchmark/moltres}
 \input{cnrs-benchmark/results}
