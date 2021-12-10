@@ -1,4 +1,4 @@
-This chapter provides an abridged overview of Moltres as a multiphysics
+This chapter provides an overview of Moltres as a multiphysics
 simulation software for molten salt reactors. 
 Section \ref{sec:moltres-features}
 describes general software features of Moltres, Section
@@ -31,7 +31,7 @@ since developers can write new \texttt{Kernels} as child classes in
 \texttt{C++} derived from existing \texttt{Kernels} (base classes) which share
 similar physics to inherit common functions.
 The same philosophy applies for all other systems in MOOSE such as
-the \texttt{BoundaryCondition}, \texttt{Materials}, and \texttt{Postprocessor}
+the \texttt{BCs}, \texttt{Materials}, and \texttt{Postprocessor}
 systems for handling relevant boundary conditions, material properties, and
 postprocessing calculations, respectively. Overall, this approach also saves
 researchers time and effort as they are unencumbered by the technical details
@@ -46,10 +46,11 @@ numerical analysis.
 \end{figure}
 
 MOOSE relies on two other open-source libraries: libMesh
-\cite{kirk_libmesh_2006} for its \gls{FEM} capabilities on
-unstructured mesh, and PETSc \cite{satish_petsc_2019} for its non-linear
-solvers and preconditioning routines. By extension, Moltres gains access to
-these libraries for their \gls{PDE} solving capabilities. Figure
+\cite{kirk_libmesh_2006} for its \gls{FEM} capabilities on unstructured mesh,
+and PETSc \cite{satish_petsc_2019} for its non-linear solvers and
+preconditioning routines. By extension, Moltres gains access to these
+sophiscated numerical analysis tools and benefits from their continuous
+development. Figure
 \ref{fig:moose} shows how MOOSE serves as an interface between physics
 applications and libMesh/PETSc. MOOSE supports
 modeling on up to three-dimensional (3-D) unstructured meshes for a wide range
@@ -79,12 +80,12 @@ running fewer Newton iterations due to the superior convergence rate. Loose
 coupling schemes are useful for accelerating time-dependent simulations of
 stable systems towards steady state in which only the steady-state
 configuration is of interest to the user. This typically occurs in the later
-stages \gls{MSR} simulations when the delayed neutron precursor concentrations
-converge slowly due to their relatively large decay half-lives. Furthermore,
-segregated solves through the \texttt{MultiApp} system enables Moltres to
-introduce delayed neutron precursor drift and non-uniform temperature
-distributions into criticality search simulations. Regardless of which
-coupling scheme is best, MOOSE-based applications provide the flexibility
+stages of \gls{MSR} simulations when the delayed neutron precursor
+concentrations converge slowly due to their relatively large decay half-lives.
+Furthermore, segregated solves through the \texttt{MultiApp} system enables
+Moltres to introduce delayed neutron precursor drift and non-uniform
+temperature distributions into criticality search simulations. Regardless of
+which coupling scheme is best, MOOSE-based applications provide the flexibility
 to switch among the schemes as users see fit. For time-dependent simulations,
 MOOSE provides more than ten different implicit and explicit timestepping
 schemes. The default, most common scheme is the first-order backward Euler
@@ -108,18 +109,20 @@ interface for software development and general ease of use.
 \section{Physics Models} \label{sec:moltres-physics}
 
 This section describes the various physics models available in Moltres to model
-coupled neutronics and thermal-hydraulics in \glspl{MSR}.
+coupled neutronics and thermal-hydraulics in \glspl{MSR}. Section \ref{sec:nts}
+discusses the neutronics model in Moltres, while Section \ref{sec:th} discusses
+the thermal-hydraulics model.
 
-\subsection{Neutronics}
+\subsection{Neutronics} \label{sec:nts}
 
 \subsubsection{Multigroup Neutron Diffusion Equations}
 
 Moltres solves the multigroup neutron diffusion equations for the neutron
 flux solution within the problem domain. These equations are derived from the
-neutron transport
-equation in the diffusion-dominated limit with Fick's law of diffusion and
-further simplified by discretizing the continuous neutron energy variable into
-a finite number of energy groups. The time-dependent multigroup neutron
+neutron transport equation in the diffusion-dominated limit with Fick's law of
+diffusion and further simplified by discretizing the continuous neutron energy
+variable into a finite number of energy groups \cite{bell_nuclear_1970,
+duderstadt_nuclear_1976}. The time-dependent multigroup neutron
 diffusion equations with $G$ energy groups and $I$ delayed neutron precursor
 groups are given by:
 %
@@ -138,10 +141,10 @@ groups are given by:
     t =& \text{ time,} \nonumber \\
     D_g =& \text{ diffusion coefficient of neutrons in} \nonumber \\
     &\text{ group $g$,} \nonumber \\
-    \Sigma^r_g =& \text{ macroscopic cross section for removal of} \nonumber \\
+    \Sigma^r_g =& \text{ macroscopic removal cross section for} \nonumber \\
     &\text{ neutrons from group $g$,} \nonumber \\
-    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic cross section of
-    scattering from} \nonumber \\
+    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic scattering cross section
+    for neutrons from} \nonumber \\
     &\text{ groups $g'$ to $g$,} \nonumber \\
     \chi^p_g =& \text{ prompt fission spectrum for neutrons in} \nonumber \\
     &\text{ group $g$,} \nonumber \\
@@ -187,7 +190,8 @@ groups are given by:
 
 These two equations are largely similar to conventional formulations of the
 multigroup neutron diffusion equations with delayed neutrons for most reactor
-types. The only differences are in the last two terms in Equation \ref{eq:dnp}
+types. The only differences are in the last two terms in Equation
+\ref{eq:precursor}
 which represent the advection and diffusion terms, respectively, to model the
 movement of \gls{DNP} in liquid-fuel \glspl{MSR}.
 
@@ -217,14 +221,14 @@ intervals). Users can then choose from linear spline, cubic spline, or monotone
 cubic interpolation methods available in Moltres to interpolate the group
 constant data for values falling within the provided temperature range. 
 
-\subsubsection{Boundary Conditions}
+\subsubsection{Neutronics Boundary Conditions}
 
 Moltres provides two types of boundary conditions for neutron fluxes; these are
 conventionally known as the vacuum and reflective boundary conditions given,
 respectively, as:
 
 \begin{align}
-    \frac{\partial \phi}{\partial x_i} + \frac{\phi}{2} =& 0
+    \frac{\partial \phi}{\partial x_i} + \frac{\phi}{2} =& 0 \label{eq:vacuum}
     \shortintertext{and}
     \frac{\partial \phi}{\partial x_i} =& 0
     \shortintertext{where}
@@ -234,7 +238,7 @@ respectively, as:
 The vacuum boundary condition typically applies to the external boundaries of
 the reactor beyond which lies low-interaction media such as air, while the
 reflective boundary condition is useful for exploiting symmetries in the
-model geometry such as the axial boundary in axisymmetric geometries. The
+model geometry such as along the axial boundary in axisymmetric geometries. The
 reflective boundary condition is also equivalent to the more generally known
 homogeneous Neumann boundary condition. Relevant boundary conditions for
 delayed neutron precursors include the homogeneous Neumann boundary condition
@@ -242,26 +246,425 @@ along fuel salt-structural interfaces; and outflow/inflow boundary
 conditions along the outlet/inlet boundaries through which the precursors
 flow as they circulate the fuel salt loop.
 
-\subsection{Thermal-Hydraulics}
+\subsection{Thermal-Hydraulics} \label{sec:th}
+
+\subsubsection{Incompressible Flow}
+
+Moltres largely relies on MOOSE's \texttt{Heat} \texttt{Conduction} and
+\texttt{Navier-Stokes} physics modules for its thermal-hydraulics modeling
+capabilities. While the \texttt{Navier-Stokes} module supports both
+compressible and incompressible flow modeling, this work focuses on
+multiphysics coupling in \glspl{MSR} with incompressible flow. The
+time-dependent incompressible Navier-Stokes equations for velocity $\vec{u}$
+with the Boussinesq approximation for buoyancy-driven flow are given as:
+
+\begin{align}
+    \text{Momentum equation: } \rho \frac{\partial \vec{u}}{\partial t} =&
+    -\rho (\vec{u}
+    \cdot \nabla) \vec{u} - \nabla p + \mu \nabla^2 \vec{u}
+    + \rho \alpha \vec{g} \left(T - T_{\text{ref}} \right)
+    \label{eq:momemtum}
+    \shortintertext{and}
+    \text{Mass equation: } \nabla \cdot \vec{u} =& 0
+    \label{eq:divergence}
+    \shortintertext{where}
+    \rho =& \text{ fluid density,} \nonumber \\
+    p =& \text{ pressure,} \nonumber \\
+    \mu =& \text{ dynamic viscosity,} \nonumber \\
+    \alpha =& \text{ coefficient of thermal expansion,} \nonumber \\
+    \vec{g} =& \text{ gravitational force vector,} \nonumber
+    \\
+    T =& \text{ fluid temperature,} \nonumber \\
+    T_{\text{ref}} =& \text{ reference temperature at which the nominal}
+    \nonumber \\
+    &\text{ density is provided.} \nonumber
+    \nonumber
+\end{align}
+
+Velocity variables and advected quantities such as temperature are susceptible
+to numerical node-to-node oscillations
+commonly observed when resolving advection-dominated flows using continuous
+Galerkin methods \cite{kuhlmann_lid-driven_2018}. The \texttt{Navier-Stokes}
+module provides the \gls{SUPG} stabilization scheme
+\cite{brooks_streamline_1982} for the velocity and temperature variables to
+minimize these oscillations. The module also provides the \gls{PSPG}
+stabilization scheme \cite{hughes_new_1986} which enables equal-order
+discretizations. Peterson et al. \cite{peterson_overview_2018}
+provides further detail on the implementation of these stabilization schemes in
+the \texttt{Navier-Stokes} module.
 
 \subsubsection{Temperature Advection-Diffusion}
 
-\subsubsection{Incompressible Navier-Stokes Flow}
+Lastly, Moltres solves for the temperature distribution through the temperature
+advection-diffusion equation given by:
+
+\begin{align}
+    \rho c_{p} \frac{\partial T}{\partial t} =& - \rho c_p \vec{u}
+    \cdot \nabla T + \nabla \cdot \left(k \nabla T \right) + Q_f - Q_s
+    \label{eq:temp}
+    \shortintertext{and}
+    Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g
+    \shortintertext{where}
+    c_p =& \text{ specific heat capacity of molten salt,} \nonumber \\
+    k =& \text{ effective thermal conductivity of molten salt,} \nonumber \\
+    Q_f =& \text{ fission heat source,} \nonumber \\
+    \epsilon_g =& \text{ average fission energy released by neutrons in group
+    $g$,} \nonumber \\
+    Q_s =& \text{ heat sink/removal.} \nonumber
+\end{align}
+
+$Q_f$ represents the fission heat source term and is calculated by taking the
+sum of neutron group fluxes multiplied by their respective macroscopic fission
+cross sections and the average fission energy released per fission.
+
+\subsubsection{Thermal-Hydraulics Boundary Conditions}
+
+The \texttt{Navier-Stokes} module provides the following types of boundary
+conditions for the velocity and temperature variables:
+
+\begin{align}
+    \text{Dirichlet: }& & u \ \left(\text{or } T\right) =& c & \\
+    \text{Homogeneous Neumann: }& & \frac{\partial u}{\partial x_i} \
+    \left(\text{or } \frac{\partial T}{\partial x_i}\right) =& 0 & \\
+    \text{``No boundary condition'' outflow: }& &
+    \mu \left[ \nabla \vec{u} + \left(\nabla \vec{u} \right)^T \right] \cdot
+    \hat{n} =& 0 \ \text{ (velocity)} & \\
+    \text{``No boundary condition'' outflow: }& &
+    k \nabla T \cdot\hat{n} =& 0 \ \text{ (temperature)} &
+    \shortintertext{where}
+    & & c =& \text{ user-defined constant value,} & \nonumber \\
+    & & \hat{n} =& \text{ unit normal vector to the boundary.} & \nonumber
+\end{align}
+
+The Dirichlet boundary condition can be used to set the inlet velocities and
+temperatures, and no-slip conditions along solid boundaries, while the
+homogeneous Neumann boundary condition is commonly
+imposed along the outlet boundary. However, the latter approach tends to
+artificially influence upstream behavior, especially in developing flow. The
+``no boundary condition'' outflow boundary condition by Griffiths
+\cite{griffiths_no_1997} has been shown to reduce such upstream errors.
+
+\subsection{Precursor Loop} \label{sec:moltres-loop}
+
+Moltres also accounts for the decay of
+\glspl{DNP} outside the active core region by simulating its flow in a
+separate 1-D pipe geometry. This outer loop pipe calculation is implicitly
+coupled to the active core simulation through Picard iterations in MOOSE's
+MultiApp functionality and inlet/outlet boundary values.
+The outer loop region is assumed to be subcritical to minimize neutron
+irradiation upon heat exchangers, pumps, and other equipment. Therefore, the
+only significant neutronics-related phenomena are the drift and decay of
+\glspl{DNP}. The governing equation for the \glspl{DNP} is:
+%
+\begin{align}
+    \frac{\partial C_i}{\partial t} =& - \lambda_i C_i - u
+    \frac{\partial C_i}{\partial x}.
+    \label{eq:dnploop}
+\end{align}
+%
+Equation \ref{eq:dnploop} is derived from equation \ref{eq:precursor} by
+removing the fission \gls{DNP} source and diffusion terms, and the conversion
+of the advection into a 1-D form.
+
+The governing equation
+for temperature, derived from equation \ref{eq:temp}, is:
+%
+\begin{align}
+    \rho c_{p} \frac{\partial T}{\partial t} =& - \rho c_p u
+    \frac{\partial T}{\partial x} - Q_{hx} \label{eq:temploop}
+    \intertext{where}
+    Q_{hx} =& \text{heat removal rate through the heat exchanger [W].} 
+    \nonumber
+\end{align}
+
+In the outer loop region, the fission heat source term is replaced with a heat
+exchanger sink term $Q_{hx}$.
 
 \subsubsection{Boundary Conditions}
 
-\subsection{Precursor Loop}
+Table \ref{table:loopbc} summarizes the boundary conditions for all variables
+on the inlet and outlet of the 1-D outer loop region. The inlet boundary
+conditions are all Dirichlet boundary conditions. The inlet boundary values
+are set by the outflow from the active core region that this inlet is
+connected to in the actual reactor geometry. The outlet boundary conditions
+are all outflow boundary conditions as shown in Table \ref{table:loopbc}.
+
+\begin{table}[htbp!]
+    \small
+	\caption{Boundary conditions in the 1-D outer loop geometry. $u$
+	represents the 1-D velocity in this region.}
+	\centering
+	\begin{tabular}{ l l c}
+		\toprule
+		Variable & Boundary & Boundary Condition \\
+        \midrule
+        \multirow{2}{*}{Delayed neutron precursor concentration $C_i$} &
+        Inlet (Core) & $C_i = c$ \\
+        & Outlet (Core) & $u \cdot C_i = 0$ \\
+        \midrule
+        \multirow{2}{*}{Temperature $T$} &
+        Inlet (Core) & $T = c$ \\
+        & Outlet (Core) & $u \cdot T = 0$ \\
+		\bottomrule
+	\end{tabular}
+	\label{table:loopbc}
+\end{table}
+
+\subsubsection{Core and Outer Loop Coupling}
+
+This subsection details the delayed neutron precursors, and
+temperature coupling between the core and outer loop regions. 
+
+At every timestep, Moltres calculates weighted averages of the
+temperature and the precursors at the outlet. These values are weighted by the
+outflow velocity values at the outlet according to the following equation:
+%
+\begin{align}
+    \overline{\psi} =& \frac{\int_\mathcal{C} \psi(x_j) u(x_j) dx_j}{
+    \int_\mathcal{C} u(x_j) dx_j} \\
+    \intertext{where}
+    \psi =& \text{ variable to be weighted [ - ]} \nonumber \\
+    \mathcal{C} =& \text{ outlet boundary area [ - ]} \nonumber \\
+    u =& \text{ outflow velocity perpendicular to the outlet boundary
+    [m$\cdot$s$^{-1}$],} \nonumber \\
+    x_j =& \text{ spatial coordinate parallel to the outlet boundary.}
+    \nonumber
+\end{align}
+
+Moltres transfers this outflow value from the core region to the 1-D
+outer loop region, to be used as the boundary value for the inhomogeneous
+Dirichlet boundary
+condition at the inlet. Likewise, the outflow value from the outer
+loop region is used for the inflow value in the central core region. No
+averaging is required for this step as the outer loop region is a 1-D system.
+This approach that the inflow temperature and \gls{DNP} are uniform at the
+inlet. The Picard iterations within every timestep ensure that the two systems
+are implicitly coupled.
 
 \section{Previous Work} \label{sec:moltres-previous}
 
-\subsection{MSRE}
+This section discusses some previous work with Moltres to illustrate its
+various capabilities and coupling approaches for multiphysics \gls{MSR}
+modeling and simulation. Section \ref{sec:msre} summarizes work by Lindsay et
+al. \cite{lindsay_introduction_2018} in modeling the \gls{MSRE}, and Section
+\cite{park_advancement_2020} summarizes my previous work in modeling the
+\gls{MSFR}.
 
-\subsection{MSFR}
+\subsection{Introduction to Moltres and Modeling the MSRE} \label{sec:msre}
 
-\subsection{CNRS Benchmark}
+This section follows work by Lindsay et al. in \textit{Introduction to Moltres:
+An Application for Simulation of Molten Salt Reactors}
+\cite{lindsay_introduction_2018}.
 
-%\input{cnrs-benchmark/introduction}
-\input{cnrs-benchmark/benchmark}
-\input{cnrs-benchmark/moltres}
-\input{cnrs-benchmark/results}
-\input{cnrs-benchmark/conclusion}
+In 2017, Lindsay et al. first introduced
+Moltres to the \gls{MSR} community for multiphysics simulations of \glspl{MSR}.
+Their work showcased Moltres' neutron diffusion model, thermal-hydraulics
+model, and their coupling in the \gls{MOOSE} framework. The authors
+demonstrated these capabilities by running time-dependent simulations of 2D
+axisymmetric and 3D \gls{MSRE} models until the flux, precursor, and
+temperature distributions reached steady state.
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.45\columnwidth]{msre-geometry}
+	\caption{Schematic diagram of the 2D \gls{MSRE} geometry adopted by
+	Lindsay et al. \cite{lindsay_introduction_2018}.}
+	\label{fig:msre-geometry}
+\end{figure}
+
+Figure \ref{fig:msre-geometry} shows the fuel channels and moderator regions of
+the 2D \gls{MSRE} geometry that Lindsay et al. adopted for their study.
+They ran a two-group neutron diffusion model with six precursor groups and
+vacuum boundary conditions on the outer boundaries governed by Equations
+\ref{eq:neutron}, \ref{eq:precursor}, and \ref{eq:vacuum} shown in Section
+\ref{sec:nts}. They modeled precursor drift due to fuel salt flow by imposing
+fixed uniform flow upwards through the fuel channels shown in Figure
+\ref{fig:msre-geometry}. For their thermal-hydraulics model, they employed a
+governing equation for temperature in the fuel salt equivalent to Equation
+\ref{eq:temp} with fixed uniform flows while also imposing a cosine-shaped heat
+source term representing heat dissipation from gamma and neutron irradiation in
+the graphite moderator region. In addition, all governing equations were fully
+coupled and solved simultaneously as a single system of equations with implicit
+Euler time-stepping to accurately and efficiently resolve the strong coupling
+expected between the neutronics and temperature.
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_group1}
+	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_group2}
+	\caption{Neutron group 1 and 2 fluxes in the 2D axisymmetric \gls{MSRE}
+	model from Lindsay et al. \cite{lindsay_introduction_2018}.}
+	\label{fig:msre-flux}
+\end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_pre1_scaled}
+	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_pre6_scaled}
+	\caption{Longest- and shortest-lived precursor concentrations ($\lambda =
+	1.24\times 10^{-2}$s$^{-1}$ and $3.07$s${-1}$, respectively) in the 2D
+	axisymmetric \gls{MSRE} model from Lindsay et al.
+	\cite{lindsay_introduction_2018}.}
+	\label{fig:msre-precursor}
+\end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\begin{minipage}[b]{0.45\columnwidth}
+	    \includegraphics[width=\columnwidth]{2d_gamma_heating_temp}
+	    \caption{Temperature distribution in the 2D
+	    axisymmetric \gls{MSRE} model from Lindsay et al.
+	    \cite{lindsay_introduction_2018}.}
+	    \label{fig:msre-temp}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.45\columnwidth}
+	    \includegraphics[width=\columnwidth]{combined_msre_moltres_axial_temps}
+	    \caption{Moltres \cite{lindsay_introduction_2018} and \gls{ORNL}
+	    \gls{MSRE} \cite{briggs_molten-salt_1964} axial temperature
+	    distributions in the hottest fuel channel and adjacent graphite.}
+	    \label{fig:msre-temp-plot}
+	\end{minipage}
+\end{figure}
+
+Figure \ref{fig:msre-flux} shows the fast and thermal neutron fluxes
+corresponding to group 1 and 2 in the 2D \gls{MSRE} model. As expected, the
+fluxes exhibit general cosine shapes in the axial and radial directions. We
+also observe minor oscillations in the radial direction coinciding with the
+regular fuel and moderator lattice. The fuel regions favor the fast flux while
+the moderator regions favor the thermal flux.
+
+Figure \ref{fig:msre-precursor}
+shows the longest- and shortest-lived precursor concentrations in the fuel
+channels. With a long half-life of 55.9 s relative to the 6.91 s it takes for
+salt to flow from bottom to top, longest-lived precursor concentration peaks
+outside the model domain. By contrast, the shortest-lived precursor
+concentration closely follows the cosine shape of the neutron fluxes which
+dictate where the precursors are born.
+
+Finally, Figure \ref{fig:msre-temp}
+shows the temperature distribution in the 2D \gls{MSRE} model. The temperature
+naturally peaks near the outlet due to upward advection. The moderator regions
+experience hotter temperatures than the fuel regions due to radiative heating
+and the relatively inefficiency of heat conduction in the graphite compared to
+advection in the fuel salt.
+
+\begin{figure}[htb!]
+	\centering
+	\begin{subfigure}[h]{0.45\columnwidth}
+	    \includegraphics[width=\columnwidth]{combined_msre_moltres_radial}
+	    \caption{Radial fluxes at reactor half-height.}
+	    \label{fig:msre-flux-radial}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[h]{0.45\columnwidth}
+	    \includegraphics[width=\columnwidth]{combined_msre_moltres_axial}
+	    \caption{Axial fluxes along the core centerline ($r=0$ cm).}
+	    \label{fig:msre-flux-axial}
+	\end{subfigure}
+	\caption{The fast and thermal fluxes from
+	Moltres \cite{lindsay_introduction_2018} and the \gls{ORNL} \gls{MSRE}
+	design calculations \cite{briggs_molten-salt_1964}.}
+\end{figure}
+
+The corresponding neutronics and thermal-hydraulics results from their 3D model
+show good qualitative agreement with the 2D results. Given the lack of
+\gls{MSR} experimental data, they compared their 2D model results with
+\gls{MSRE} design calculations performed using legacy software in 1963-1964 at
+\gls{ORNL}. Their neutron flux and temperature distribution results showed good
+qualitative agreement with \gls{ORNL} data. The authors attributed
+discrepancies to the following differences in the two modeling approaches: the
+absence of axial heat conduction and the use of 32 neutron groups in the
+\gls{ORNL} calculations, and the exclusion of control rod thimbles in the
+Moltres calculations.
+
+\subsubsection{Critical Assessment} \label{sec:msre-critique}
+
+Ultimately, Lindsay et al. achieved their goal of ``introducing Moltres as a
+simulation tool'' \cite{lindsay_introduction_2018}. Their work illustrated the
+development of neutronics and thermal-hydraulics models in Moltres and
+demonstrated, along with advanced capabilities from the \gls{MOOSE} framework,
+fully-coupled simulations of the \gls{MSRE} with implicit time-stepping. The
+decent qualitative agreement observed between Moltres and the \gls{ORNL}
+\gls{MSRE} calculations proved that Moltres was capable of simulating
+\glspl{MSR} with some simplifying assumptions. Furthermore, Moltres was a
+relatively newly developed software at the time of submission.
+
+On the other hand, significant improvements could be made to Moltres to better
+model multiphysics phenomena in \glspl{MSR}. For instance, replacing the
+fixed uniform salt flow with a proper flow profile governed by fluid flow
+equations would accurately capture precursor and temperature advection.
+Temperature advection has a particularly large impact on the temperature
+distribution in the fuel salt since molten salts generally have large Prandtl
+numbers, which measures the ratio of convective to conductive heat transfer.
+The flow-modeling feature would be of even greater importance when modeling
+pool-type \glspl{MSR} which consist of a single large fuel salt region in the
+reactor core.
+
+Another essential feature for modeling \glspl{MSR}, which was already under
+development at the time of publication, is a precursor loop
+system to recirculate precursors back into the core. While some precursors
+decay outside the core, others survive long enough to recirculate back into the
+core. The loop system would provide a more accurate estimate of the delayed
+neutron fraction as opposed to discarding all precursors which flowed out of
+the core. In transient simulations involving sudden increases in the neutron
+flux, precursors recirculating into the core can induce observable jumps and
+dips in the power output due to the associated reactivity insertion from the
+delayed neutrons.
+
+Additionally, Moltres would also benefit from a decay heat model which Lindsay
+et al. also mention in their work \cite{lindsay_introduction_2018}, especially
+for accident transient analyses. While decay heat from fission product decays
+represents a small fraction ($\sim5\%$) of total power output, this heat source
+can be significant in unprotected loss of flow or loss of secondary cooling
+accidents. Therefore, understanding residual heat generation from fission
+product decays in \gls{MSR} is essential in preventing further structural
+failure in the aftermath of an accident.
+
+Lastly, the authors rightly recognized two other avenues for future work: more
+rigorous validation and verification of Moltres' capabilities by comparison
+with more detailed experimental data and other modern \gls{MSR} modeling
+efforts; and the study of transient simulation cases investigating control rod
+ejection, single channel blockage, loss of flow, and loss of secondary cooling.
+
+\subsection{Steady-State and Transient Simulations of the MSFR}
+\label{sec:msfr}
+
+This section follows my previous work in \textit{Advancement and Verification
+of Moltres for Molten Salt Reactor Safety Analysis}
+\cite{park_advancement_2020}, which I shall refer to as ``this work'' in this
+section.
+
+This work represents a continuation of the work by Lindsay et al.
+\cite{lindsay_introduction_2018} in the development of Moltres as an \gls{MSR}
+simulation tool. New features introduced include the coupling of the existing
+neutronics and temperature equations to incompressible Navier-Stokes equations
+to model flow dynamics, the precursor loop system, and the decay heat model.
+I later demonstrated these features through steady-state and transient
+simulations of a 2D axisymmetric \gls{MSFR} model.
+
+Moltres depends on the \texttt{Navier-Stokes} module in \gls{MOOSE} for
+incompressible flow modeling capabilities. Efforts towards coupling
+the neutronics capabilities to the \texttt{Navier-Stokes} module were already
+underway during the peer review process of the work described in Section
+\ref{sec:msre}. Section \ref{sec:th} describes the governing equations for
+incompressible flow and temperature advection-diffusion. At the same time,
+the precursor loop system was being developed to model
+precursor recirculation into the core. The precursor loop system leverages on
+the \texttt{MultiApp} system in \gls{MOOSE} to couple a 1D pipe model to the
+core to simulate precursor flow outside the core. The core and the pipe models
+are coupled via inlet and outlet boundary conditions, as detailed in Section
+\ref{sec:moltres-loop}. The loop system can also accommodate a pointwise heat
+exchanger model with heat removal rate as a function of time
+and/or auxiliary variables in the Moltres simulation.
+
+
+
+Navier-stokes flow
+precursor loop
+decay heat
+2D MSFR
+accident transient analysis
+
+\subsubsection{Critical Assessment} \label{msfr-critique}
+
