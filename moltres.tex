@@ -139,25 +139,21 @@ groups are given by:
     \phi_g =& \text{ neutron flux in group $g$,}
     \nonumber \\
     t =& \text{ time,} \nonumber \\
-    D_g =& \text{ diffusion coefficient of neutrons in} \nonumber \\
-    &\text{ group $g$,} \nonumber \\
+    D_g =& \text{ diffusion coefficient of neutrons in group $g$,} \nonumber \\
     \Sigma^r_g =& \text{ macroscopic removal cross section for} \nonumber \\
     &\text{ neutrons from group $g$,} \nonumber \\
     \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic scattering cross section
     for neutrons from} \nonumber \\
     &\text{ groups $g'$ to $g$,} \nonumber \\
-    \chi^p_g =& \text{ prompt fission spectrum for neutrons in} \nonumber \\
-    &\text{ group $g$,} \nonumber \\
+    \chi^p_g =& \text{ prompt fission spectrum for neutrons in group $g$,} \nonumber \\
     G =& \text{ total number of discrete neutron groups,} \nonumber \\
-    \nu_g =& \text{ average number of neutrons produced per} \nonumber \\
-    &\text{ fission,} \nonumber \\
+    \nu_g =& \text{ average number of neutrons produced per fission,} \nonumber
+    \\
     \Sigma^f_{g} =& \text{ macroscopic fission cross section for neutron}
     \nonumber \\
     &\text{ in group $g$,} \nonumber \\
-    \chi^d_g =& \text{ delayed fission spectrum for neutrons in} \nonumber \\
-    &\text{ group $g$,} \nonumber \\
-    I =& \text{ total number of delayed neutron precursor} \nonumber \\
-    &\text{ groups,} \nonumber \\
+    \chi^d_g =& \text{ delayed fission spectrum for neutrons in group $g$,} \nonumber \\
+    I =& \text{ total number of delayed neutron precursor groups,} \nonumber \\
     \beta =& \text{ total delayed neutron fraction.} \nonumber
 \end{align}
 
@@ -303,7 +299,7 @@ advection-diffusion equation given by:
     \cdot \nabla T + \nabla \cdot \left(k \nabla T \right) + Q_f - Q_s
     \label{eq:temp}
     \shortintertext{and}
-    Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g
+    Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g \label{eq:heat-source}
     \shortintertext{where}
     c_p =& \text{ specific heat capacity of molten salt,} \nonumber \\
     k =& \text{ effective thermal conductivity of molten salt,} \nonumber \\
@@ -372,8 +368,8 @@ for temperature, derived from equation \ref{eq:temp}, is:
 \begin{align}
     \rho c_{p} \frac{\partial T}{\partial t} =& - \rho c_p u
     \frac{\partial T}{\partial x} - Q_{hx} \label{eq:temploop}
-    \intertext{where}
-    Q_{hx} =& \text{heat removal rate through the heat exchanger [W].} 
+    \shortintertext{where}
+    Q_{hx} =& \text{heat removal rate through the heat exchanger.} 
     \nonumber
 \end{align}
 
@@ -422,11 +418,10 @@ outflow velocity values at the outlet according to the following equation:
 \begin{align}
     \overline{\psi} =& \frac{\int_\mathcal{C} \psi(x_j) u(x_j) dx_j}{
     \int_\mathcal{C} u(x_j) dx_j} \\
-    \intertext{where}
-    \psi =& \text{ variable to be weighted [ - ]} \nonumber \\
-    \mathcal{C} =& \text{ outlet boundary area [ - ]} \nonumber \\
-    u =& \text{ outflow velocity perpendicular to the outlet boundary
-    [m$\cdot$s$^{-1}$],} \nonumber \\
+    \shortintertext{where}
+    \psi =& \text{ variable to be weighted} \nonumber \\
+    \mathcal{C} =& \text{ outlet boundary area} \nonumber \\
+    u =& \text{ outflow velocity perpendicular to the outlet boundary,} \nonumber \\
     x_j =& \text{ spatial coordinate parallel to the outlet boundary.}
     \nonumber
 \end{align}
@@ -467,8 +462,8 @@ temperature distributions reached steady state.
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=.45\columnwidth]{msre-geometry}
-	\caption{Schematic diagram of the 2D \gls{MSRE} geometry adopted by
-	Lindsay et al. \cite{lindsay_introduction_2018}.}
+	\caption{Schematic diagram of the 2Daxisymmetric \gls{MSRE} geometry
+	adopted by Lindsay et al. \cite{lindsay_introduction_2018}.}
 	\label{fig:msre-geometry}
 \end{figure}
 
@@ -627,7 +622,7 @@ with more detailed experimental data and other modern \gls{MSR} modeling
 efforts; and the study of transient simulation cases investigating control rod
 ejection, single channel blockage, loss of flow, and loss of secondary cooling.
 
-\subsection{Steady-State and Transient Simulations of the MSFR}
+\subsection{Advancements in Moltres and Transient Simulations of the MSFR}
 \label{sec:msfr}
 
 This section follows my previous work in \textit{Advancement and Verification
@@ -658,13 +653,213 @@ are coupled via inlet and outlet boundary conditions, as detailed in Section
 exchanger model with heat removal rate as a function of time
 and/or auxiliary variables in the Moltres simulation.
 
+In addition, I developed a decay heat model to simulate delayed heat release
+from the decay of fission products, similar to delayed neutron emission
+from precursors. The decay heat model introduces decay heat groups of different
+decay constants, variables representing the decay heat groups, and modifies the
+heat source term given by Equation \ref{eq:heat-source} to account for
+the delayed heat generation. The governing equations for decay heat power
+density and the new heat source term are given by:
 
+\begin{align}
+	\frac{\partial \omega_j}{\partial t} =& f_j \lambda_j \sum^G_{g=1}
+	\epsilon_{g}
+	\Sigma^f_{g} \phi_{g} - \lambda_j \omega_j - \vec{u} \cdot \nabla
+	\omega_j + \nabla \cdot D_P \nabla \omega_j, \label{eq:decayheat} \\
+	\shortintertext{and}
+	Q_f =& \left( 1 - \sum^J_{j=1} f_j \right) \sum^G_{g=1} \epsilon_g
+	\Sigma_g^f \phi_g + \sum^J_{j=1} \omega_j
+	\shortintertext{where}
+    \omega_j =& \text{ total decay heat power density from decay heat
+    precursors in group $j$,} \nonumber \\
+	f_j =& \text{ fraction of total power attributable to decay heat group
+	$j$,} \nonumber \\
+	\epsilon_g =& \text{ average fission energy per fission initiated by a
+	neutron in group $g$,} \nonumber \\
+	\lambda_j =& \text{ average decay constant of decay heat precursors in
+	group $j$,} \nonumber \\
+	J =& \text{ total number of decay heat groups.} \nonumber
+\end{align}
 
-Navier-stokes flow
-precursor loop
-decay heat
-2D MSFR
-accident transient analysis
+The number of decay heat groups and their respective decay constants depends on
+the decay heat profile of the reactor after a specified period of operation.
+Determining the decay heat profile requires fuel depletion calculations to
+obtain the fuel composition during/after reactor operation and subsequent
+calculations for the cumulative decay heat released from individual isotopes.
+In this work, I cited results by Aufiero et al. \cite{aufiero_extended_2013}
+who determined that three decay heat groups ($J=3$) were sufficient to
+reproduce the decay heat profile of the \gls{MSFR} equilibrium fuel composition
+for up to 300 seconds after shutdown with a relative error of less than 2\%.
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.55\columnwidth]{central-core-legend}
+	\caption{Schematic diagram of the 2D axisymmetric \gls{MSFR} model with
+	the core region enclosed by the red box \cite{park_advancement_2020}.}
+	\label{fig:msfr-geometry}
+\end{figure}
+
+For the verification and demonstration of the capabilities introduced in this
+work, I ran coupled, steady-state and unprotected accident transient
+simulations of the \gls{MSFR} and compared the results with published results
+by Fiorina et al. \cite{fiorina_modelling_2014} and Aufiero et al.
+\cite{aufiero_development_2014}. The PoliMi and TU Delft models in this section
+refer to two sets of results published by Fiorina et al. I compensated for
+the lack of a turbulence model in Moltres by imposing a fixed turbulent
+viscosity of 40 Pa$\cdot$s in addition to the molecular viscosity $\mu$ in
+Equation \ref{eq:momemtum}. Figure \ref{fig:msfr-geometry} shows the 2D
+axisymmetric \gls{MSFR} model with the core region indicated with the red box,
+while the rest of the fuel region was modeled with the 1D loop system. Fuel
+salt flows into the core region from the inlet at the bottom-right corner and
+out through the outlet at the top-right corner.
+
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}[t]{.35\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{flow-temp-plasma}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{.625\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{flow-temp-fiorina}
+    \end{subfigure}
+    \caption{Temperature and velocity fields in the core from Moltres
+    (left), PoliMi (center), and TU Delft (right) models. The colors represent
+    temperature according to the respective color bars and the arrows
+    represent velocity fields. \cite{park_advancement_2020}}
+    \label{fig:flow-temp}
+\end{figure}
+
+Figure \ref{fig:flow-temp} shows the steady-state temperature and velocity
+fields in the core from the Moltres, PoliMi, and TU Delft models. The Moltres
+model showed
+good qualitative agreement with the PoliMi and TU Delft models as the plots
+show similar flow and hotspot features in all three models. The salt flow
+largely follows a parabolic path from the inlet to the outlet. A large
+recirculation region formed near the right wall while the top and bottom
+regions along the central axis experience relatively stagnant flow compared to
+the main salt flowstream. The temperature hotspots coincide with the regions of
+recirculation and stagnation because convection is the dominant heat transfer
+mechanism. Maximum temperatures are observed near the bottom of the
+recirculation zones; the Moltres model reports 1275 K which is closer to the
+PoliMi model ($\sim1300$ K) than the TU Delft model ($\sim1200$ K). Thus, the
+incompressible flow model in Moltres performed well in reproducing the
+thermal-hydraulic profiles of the \gls{MSFR} under steady state conditions in
+spite of the fixed turbulent viscosity assumption.
+
+\begin{figure}[b!]
+    \centering
+    \begin{subfigure}[t]{.30\textwidth}
+        \centering
+        \vspace{.9cm}
+        \includegraphics[width=\textwidth]{pre}
+    \end{subfigure}
+    \begin{subfigure}[t]{.69\textwidth}
+        \centering
+        \vspace{0pt}
+        \includegraphics[width=\textwidth]{fiorina-pre}
+    \end{subfigure}
+    \caption{Total delayed neutron source distribution in the core from the
+    Moltres (left), PoliMi (center), and TU Delft (right) models.}
+    \label{fig:pre}
+\end{figure}
+
+Moltres reported a peak total neutron flux of $9.80 \times 10^{15}$
+cm$^{-2}\cdot$s$^{-1}$ which is close to the 8.6 and 9.0 $\times 10^{15}$
+cm$^{-2}\cdot$s$^{-1}$ values reported by Fiorina et al.
+\cite{fiorina_molten_2013} and \cite{aufiero_development_2014}. However, the
+delayed neutron source distribution from the Moltres model exhibits some
+differences compared to the PoliMi and TU Delft models as shown in Figure
+\ref{fig:pre}. The Moltres model retains fewer precursors than the other two
+models, resulting in a higher 44.16\% out-of-core delayed neutron emissions
+compared with the 34.80\% and 34.85\% from the other models
+\cite{park_advancement_2020}. Therefore, the incompressible flow model with
+constant turbulent viscosity fell short on accurately capturing precursor
+drift in the \gls{MSFR}.
+
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=.55\textwidth]{decay-heat-temp}
+    \caption{Difference in core temperatures at steady-state with decay heat
+    relative to the result without decay heat (Figure \ref{fig:flow-temp}).}
+    \label{fig:decayheattemp}
+\end{figure}
+
+This work also compared steady-state temperature distributions with and without
+the decay heat model. As expected, the decay heat model effectively flattens
+the heat source distribution, causing a reduction in the maximum
+temperatures and an increase in the minimum temperatures observed in the model.
+Figure \ref{fig:decayheattemp} shows a decrease in temperature in the hotspot
+regions and an increase in temperature near the inlet which is the coolest
+region in the core.
+
+For the transient studies, this work considered unprotected reactivity
+insertion, loss of heat sink, loss of flow, and pump overspeed accidents. The
+term ``unprotected'' signifies accident scenarios without reactor SCRAM.
+Moltres reproduced similar trends observed in the PoliMi and TU Delft
+models for the reactivity insertion and loss of heat sink scenarios. For
+instance, Figure \ref{fig:200pcmheat} shows the power output response of the
+three models following a 200 pcm step reactivity insertion. The lower peak from
+the Moltres model is attributed to the more strongly negative fuel temperature
+reactivity feedback coefficient of $-7.184$ pcm$\cdot$K$^{-1}$ compared to
+approximately $-6.5$ pcm$\cdot$K$^{-1}$ for the PoliMi and TU Delft models.
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.7\textwidth]{200pcm-heat}
+    \caption{Power output following a 200 pcm step-wise unprotected reactivity
+    insertion in the Moltres, PoliMi, and
+    TU Delft models \cite{fiorina_modelling_2014}.}
+    \label{fig:200pcmheat}
+\end{figure}
+
+The loss of heat sink transients were performed with and without the decay heat
+model as the TU Delft model did not possess this capability. As shown in
+Figure \ref{fig:lohsheat}, without decay heat, all three models reported
+similar power output responses following loss of cooling through the heat
+exchanger modeled as an exponential decrease in heat removal rate with a time
+constant of 1 s. As prompt heat generation decreases due to rising core
+temperatures and the negative temperature reactivity feedback, decay heat
+becomes a significant heat source. We observe this in Figure
+\ref{fig:moltresdecaypower} which shows decay heat output overtaking prompt
+heat output 34 s into the accident scenario. With the decay heat model, the
+Moltres model shows good agreement with the PoliMi model. The temperature
+increase averaged over the whole fuel salt loop falls within 10\% of the PoliMi
+model (Figure \ref{fig:polimidecaytemp}).
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.7\textwidth]{lohs-heat}
+    \caption{Power output during
+    an unprotected loss of heat sink transient in the Moltres, PoliMi, and
+    TU Delft models \cite{fiorina_modelling_2014} without decay heat.}
+    \label{fig:lohsheat}
+\end{figure}
+
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=.7\textwidth]{moltres-decay-power}
+    \caption{Power output during
+    an unprotected loss of heat sink transient in the Moltres model with
+    decay heat.}
+    \label{fig:moltresdecaypower}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.7\textwidth]{decay-temp}
+    \caption{Loop-averaged temperature increase during
+    an unprotected loss of heat sink transient in the Moltres and Polimi
+    models \cite{fiorina_modelling_2014} with decay heat.}
+    \label{fig:polimidecaytemp}
+\end{figure}
+
+On the other hand, for the pump-initiated accident scenarios, significant
+changes in the flow affected the validity of the uniform turbulent viscosity
+assumption. Moltres required ad hoc adjustments to the uniform turbulent
+viscosity assumption to reproduce the trends observed in the PoliMi and TU
+Delft models.
 
 \subsubsection{Critical Assessment} \label{msfr-critique}
 
