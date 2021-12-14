@@ -608,13 +608,13 @@ dips in the power output due to the associated reactivity insertion from the
 delayed neutrons.
 
 Additionally, Moltres would also benefit from a decay heat model which Lindsay
-et al. also mention in their work \cite{lindsay_introduction_2018}, especially
-for accident transient analyses. While decay heat from fission product decays
-represents a small fraction ($\sim5\%$) of total power output, this heat source
-can be significant in unprotected loss of flow or loss of secondary cooling
-accidents. Therefore, understanding residual heat generation from fission
-product decays in \gls{MSR} is essential in preventing further structural
-failure in the aftermath of an accident.
+et al. also mentioned in their work \cite{lindsay_introduction_2018},
+especially for accident transient analyses. While decay heat from fission
+product decays represents a small fraction ($\sim5\%$) of total power output,
+this heat source can be significant in unprotected loss of flow or loss of
+secondary cooling accidents. Therefore, understanding residual heat generation
+from fission product decays in \gls{MSR} is essential in preventing further
+structural failure in the aftermath of an accident.
 
 Lastly, the authors rightly recognized two other avenues for future work: more
 rigorous validation and verification of Moltres' capabilities by comparison
@@ -628,7 +628,7 @@ ejection, single channel blockage, loss of flow, and loss of secondary cooling.
 This section follows my previous work in \textit{Advancement and Verification
 of Moltres for Molten Salt Reactor Safety Analysis}
 \cite{park_advancement_2020}, which I shall refer to as ``this work'' in this
-section.
+subsection.
 
 This work represents a continuation of the work by Lindsay et al.
 \cite{lindsay_introduction_2018} in the development of Moltres as an \gls{MSR}
@@ -837,29 +837,90 @@ model (Figure \ref{fig:polimidecaytemp}).
     \label{fig:lohsheat}
 \end{figure}
 
-\begin{figure}[htbp!]
-    \centering
-    \includegraphics[width=.7\textwidth]{moltres-decay-power}
-    \caption{Power output during
+\begin{figure}[htb!]
+	\centering
+	\begin{minipage}[t]{0.485\columnwidth}
+	    \includegraphics[width=\columnwidth]{moltres-decay-power}
+	    \caption{Power output during
     an unprotected loss of heat sink transient in the Moltres model with
     decay heat.}
-    \label{fig:moltresdecaypower}
-\end{figure}
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=.7\textwidth]{decay-temp}
-    \caption{Loop-averaged temperature increase during
-    an unprotected loss of heat sink transient in the Moltres and Polimi
+	    \label{fig:moltresdecaypower}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.485\columnwidth}
+	    \includegraphics[width=\columnwidth]{decay-temp}
+	    \caption{Loop-averaged temperature increase during
+    an unprotected loss of heat sink transient in the Moltres and PoliMi
     models \cite{fiorina_modelling_2014} with decay heat.}
-    \label{fig:polimidecaytemp}
+	    \label{fig:polimidecaytemp}
+	\end{minipage}
 \end{figure}
 
 On the other hand, for the pump-initiated accident scenarios, significant
 changes in the flow affected the validity of the uniform turbulent viscosity
-assumption. Moltres required ad hoc adjustments to the uniform turbulent
-viscosity assumption to reproduce the trends observed in the PoliMi and TU
-Delft models.
+assumption. These transients required ad hoc adjustments to the uniform
+turbulent viscosity assumption as a function of volumetric flow to reproduce
+the trends observed in the PoliMi and TU Delft models. Furthermore, unlike the
+other two models, the Moltres model did not apply the Boussinesq approximation
+for buoyancy-driven flow. The Moltres model could replicate expected trends in
+the pump overspeed scenario (Figure \ref{fig:poshort}), but performed
+poorly in the loss of flow scenario (Figure \ref{fig:lof}). In the latter
+scenario, buoyancy effects become significant as the model loses forced flow.
+
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}[t]{.485\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{po-heat-short}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{.485\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{po-temp-short}
+    \end{subfigure}
+    \caption{Average core temperature increase during
+    an unprotected pump overspeed transient in the Moltres, PoliMi, and
+    TU Delft models \cite{fiorina_modelling_2014}.}
+    \label{fig:poshort}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}[t]{.485\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{lof-heat}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{.485\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{lof-temp}
+    \end{subfigure}
+    \caption{Power output and average core temperature increase during
+    an unprotected loss of flow transient in the Moltres, PoliMi, and
+    TU Delft models \cite{fiorina_modelling_2014}.}
+    \label{fig:lof}
+\end{figure}
 
 \subsubsection{Critical Assessment} \label{msfr-critique}
 
+Given the inherent and unique characteristics of \glspl{MSR}, the new
+capabilities introduced in this work---coupling to incompressible Navier-Stokes
+equations, precursor loop system, and decay heat model---are essential for
+accurate \gls{MSR} modeling and simulation. This work demonstrated these
+capabilities through steady-state and transient studies of a 2D axisymmetric
+\gls{MSFR} model similar to models by Fiorina et al.
+\cite{fiorina_modelling_2014} and Aufiero et al.
+\cite{aufiero_development_2014}. The Moltres model showed good agreement with
+the other models in
+most steady-state and transient cases with respect to the neutron flux, reactor
+power, temperature, and velocity distributions. Most crucially, the
+incompressible flow model reproduced characteristic regions of recirculating
+flow and near-stagnant flow observed in the PoliMi and TU Delft \gls{MSFR}
+models which led to the formation of temperature hotspots and precursor
+accumulation in the core.
+
+However, significant discrepancies observed during pump-initiated transient
+scenarios highlight the need for a proper turbulence model to capture
+turbulent flow effects in some \gls{MSR} designs. Unlike the \gls{MSRE}, the
+\gls{MSFR} experiences highly turbulent flow whose Reynolds numbers is on the
+order of $10^6$ under normal operating conditions. 
