@@ -922,5 +922,24 @@ accumulation in the core.
 However, significant discrepancies observed during pump-initiated transient
 scenarios highlight the need for a proper turbulence model to capture
 turbulent flow effects in some \gls{MSR} designs. Unlike the \gls{MSRE}, the
-\gls{MSFR} experiences highly turbulent flow whose Reynolds numbers is on the
-order of $10^6$ under normal operating conditions. 
+\gls{MSFR} experiences highly turbulent flow whose Reynolds number is on the
+order of $10^6$ under normal operating conditions. This level of turbulent flow
+produces eddies of a wide range of length scales, and the computational demands
+of the fine mesh and time resolution render it numerically unsolvable with
+today's computational resources. Turbulence models allow for cheaper turbulence
+simulations on coarser meshes by approximating the turbulent effects through
+statistical analysis. Fiorina et al. \cite{fiorina_modelling_2014} employed the
+$k-\epsilon$ turbulence model in their PoliMi and TU Delft models. Moltres
+will benefit from coupling to similar intermediate-fidelity turbulence models
+for turbulence simulations at reasonable computational costs.
+
+While the Moltres model demonstrated good agreement with published data in the
+steady-state, reactivity, and loss of heat sink scenarios, this work does not
+provide rigorous verification of Moltres' capabilities for \gls{MSR} modeling.
+The \gls{MSFR} simulations involve various physics models which combine to form
+a complex multiphysics model. Therefore, it is difficult to pinpoint sources of
+discrepancy with a high degree of certainty. Differences in the modeling
+approaches also introduce discrepancies which cannot be reliably identified.
+Moving forward, Moltres will benefit from code-to-code verification of
+individual components responsible for modeling various physics present in
+\glspl{MSR} as well as the multiphysics coupling approach.
