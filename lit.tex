@@ -6,17 +6,15 @@ assembly lattices. Furthermore, \glspl{MSR} feature strong multiphysics
 coupling which force segregated solvers into taking smaller timesteps to
 maintain accuracy. This chapter provides a brief history of \glspl{MSR},
 followed by a discussion of the challenges in \gls{MSR} multiphysics modeling
-for reactor accident analysis. Next, this chapter presents a literature review
-of existing multiphysics simulation software developed for \glspl{MSR}
-analysis. This work focuses software for analysing short-term reactor dynamics
-which requires the ability to accurately simulate various transient scenarios
-such as reactor start-up and coast-down, load-following operations,
+for reactor accident analysis. Lastly, this chapter presents a literature
+review of existing multiphysics simulation software developed for \glspl{MSR}
+analysis. This work focuses on software for analysing short-term reactor
+dynamics which requires the ability to accurately simulate various transient
+scenarios such as reactor start-up and coast-down, load-following operations,
 steady-state operation, and accident analysis. Long-term dynamics such as fuel
-burnup and structural corrosion fall outside the scope of this work. Lastly,
-this chapter reviews the existing capabilities of Moltres, the MSR simulation
-software to be developed in this work.
+burnup and structural corrosion fall outside the scope of this work.
 
-\section{Molten Salt Reactors}
+\section{\gls{MSR}}
 
 The first \gls{MSR}, named the \gls{ARE}, dates back to the 1940s
 as part of the US Aircraft Nuclear Propulsion program
@@ -174,7 +172,7 @@ designs remain safe under various accident scenarios. The next section
 identifies challenges in \gls{MSR} multiphysics modeling with respect to
 reactor accident analysis.
 
-\section{Challenges in \gls{MSR} Multiphysics Modeling} \label{sec:challenges}
+\section{Challenges in MSR Multiphysics Modeling} \label{sec:challenges}
 
 While modeling \glspl{MSR} is not necessarily more difficult than modeling
 solid-fueled reactors, we must adapt our software tools to accurately model the
@@ -375,5 +373,5 @@ and transient accident analysis \cite{park_advancement_2020}. The latter study
 introduced looped \gls{DNP} flow, coupling the \gls{DNP} drift and temperature 
 advection-diffusion to incompressible flow, and decay heat modeling
 capabilities. The proposed work aims to continue Moltres development for
-multiphysics \gls{MSR} analysis. The following chapter describes Moltres and
-its existing capabilities for reactor analysis.
+multiphysics \gls{MSR} analysis. Chapter \ref{chap:moltres} describes Moltres
+and its existing capabilities for reactor analysis.

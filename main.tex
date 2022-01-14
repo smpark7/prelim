@@ -9,6 +9,7 @@
 \usepackage{xspace}
 \usepackage{graphicx}
 \graphicspath{{images/}}
+\usepackage[title,titletoc]{appendix}
 
 \usepackage{placeins}
 \usepackage{booktabs} % nice rules (thick lines) for tables
@@ -52,7 +53,7 @@ Salt Reactor Safety Analysis}
 \author{Sun Myung Park}
 \department{Nuclear, Plasma \& Radiological Engineering}
 \advisor{Kathryn D. Huff}
-\degreeyear{2021}
+\degreeyear{2022}
 \committee{Associate Professor Kathryn D. Huff, Co-Advisor \\
            Dr Madicken Munk, Co-Advisor \\
            TBC}
@@ -101,9 +102,9 @@ nogroupskip=true]
 \glsresetall
 
 \chapter{Introduction}
-%\label{chap:intro}
-%\input{introduction}
-%\glsresetall
+\label{chap:intro}
+\input{introduction}
+\glsresetall
 
 \chapter{Molten Salt Reactor Multiphysics Modeling}
 \label{chap:lit}
@@ -115,25 +116,16 @@ nogroupskip=true]
 \input{moltres}
 \glsresetall
 
-\chapter{Benchmark Verification of Moltres for Fast-Spectrum Molten Salt
+\chapter{Verification of Moltres for Fast-Spectrum Molten Salt
 Reactor Simulations}
 \label{chap:benchmark}
 \input{benchmark}
 \glsresetall
 
-%\chapter{Proposed Work: Models}
-%\label{chap:models}
-%\input{models}
-%\glsresetall
-%
-%\chapter{Proposed Work: Simulations}
-%\label{chap:simulations}
-%\input{simulations}
-%\glsresetall
-%
-%\chapter*{Appendix}
-%\label{chap:appendix}
-%\input{appendix}
+\chapter{Proposed Work}
+\label{chap:models}
+\input{models}
+\glsresetall
 
 \backmatter
 
