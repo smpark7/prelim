@@ -6,13 +6,15 @@ assembly lattices. Furthermore, \glspl{MSR} feature strong multiphysics
 coupling which force segregated solvers into taking smaller timesteps to
 maintain accuracy. This chapter provides a brief history of \glspl{MSR},
 followed by a discussion of the challenges in \gls{MSR} multiphysics modeling
-for reactor accident analysis. Lastly, this chapter presents a literature
+for reactor accident analysis. Next, this chapter presents a literature
 review of existing multiphysics simulation software developed for \glspl{MSR}
 analysis. This work focuses on software for analysing short-term reactor
 dynamics which requires the ability to accurately simulate various transient
 scenarios such as reactor start-up and coast-down, load-following operations,
 steady-state operation, and accident analysis. Long-term dynamics such as fuel
-burnup and structural corrosion fall outside the scope of this work.
+burnup and structural corrosion fall outside the scope of this work. Lastly,
+this chapter provides a literature review of turbulence modeling and control
+rod modeling, and their relevance in \glspl{MSR} modeling.
 
 \section{\gls{MSR}}
 
@@ -347,8 +349,7 @@ performance analysis capability from \gls{PSI} \cite{fiorina_creation_2018},
 and the aforementioned external coupling capability with Serpent from
 \gls{CNRS} \cite{blanco_neutronic_2020}.
 
-Finally, within the MOOSE framework,
-simulation tools capable of modeling
+Finally, within the MOOSE framework, simulation tools capable of modeling
 \glspl{MSR} include: Rattlesnake \cite{wang_rattlesnake_2021}; and Moltres
 \cite{lindsay_moltres_2017}\textemdash the subject of this work.
 Rattlesnake primarily tackles radiation transport problems, but the MOOSE
@@ -375,3 +376,122 @@ advection-diffusion to incompressible flow, and decay heat modeling
 capabilities. The proposed work aims to continue Moltres development for
 multiphysics \gls{MSR} analysis. Chapter \ref{chap:moltres} describes Moltres
 and its existing capabilities for reactor analysis.
+
+\section{Turbulence Modeling in MSRs}
+
+In fluid dynamics, turbulent flow is characterized by unsteady, irregular, and
+chaotic fluid motion as opposed to neat, parallel flow layers in laminar flow
+\cite{pope_turbulent_2000}. The transition from laminar to turbulent flow
+typically occur at Reynolds numbers between 2000 and 4000, depending on the
+setup \cite{pope_turbulent_2000}. Turbulent flows are expected in \glspl{MSR}.
+Kedl \cite{kedl_fluid_1970} reports expected Reynolds numbers in the \gls{MSRE}
+ranging from 1000 in the regular fuel coolant channels to over 10000 in the
+flow distributor volute and core wall cooling annulus regions. For the
+\gls{MSFR}, salt flow in the central core region is highly turbulent and
+reaches Reynolds numbers on the order of $10^5$.
+
+\subsection{Turbulence Models}
+
+Numerous types of turbulence models exist for various turbulent flow
+applications. The most common turbulence models can be classified into the
+following categories:
+%
+\begin{itemize}
+    \item \gls{RANS}-based models
+    \begin{itemize}
+        \item Eddy viscosity models
+        \begin{itemize}
+            \item Algebraic models
+            \item One- and two-equation models
+        \end{itemize}
+        \item \gls{RSM}
+    \end{itemize}
+    \item \gls{LES}
+    \item \gls{DNS}
+\end{itemize}
+
+\gls{RANS}-based models are based on the \gls{RANS} equations obtained from
+applying time-averaging to the equations of fluid flow. The \gls{RANS}
+equations separate flow into time-averaged $U$ and fluctuating $u$ components
+and can be writtin in Einstein notation and Cartesian coordinates as:
+%
+\begin{align}
+    \frac{\partial U_i}{\partial t} + U_j \frac{\partial u_i}{\partial x_j} =&
+    -\frac{1}{\rho} \frac{\partial P}{\partial x_i} + \nu \nabla^2 U_i -
+    \frac{\partial \langle u_i u_j \rangle}{x_j}
+    \shortintertext{where}
+    \langle \cdot \rangle =& \mbox{ time-averaging operator,} \nonumber \\
+    \rho =& \mbox{ fluid density,} \nonumber \\
+    P =& \mbox{ time-averaged pressure field,} \nonumber \\
+    \nu =& \mbox{ kinematic viscosity.} \nonumber
+\end{align}
+
+, which represent most turbulence models in use today
+\cite{rodi_turbulence_2017}, operate on the eddy viscosity hypothesis which
+states that the Reynolds stresses in the \gls{RANS} equations are given by:
+%
+\begin{align}
+    \langle u_iu_j \rangle =& \frac{2}{3}k \delta_{ij} - \nu_T \left(
+    \frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}
+    \right)
+    \shortintertext{where}
+    k =& \mbox{ mean turbulent kinetic energy,} \nonumber \\
+    \delta_{ij} =& \mbox{ Kronecker delta,} \nonumber \\
+    \nu_T =& \mbox{ eddy viscosity.} \nonumber \\
+\end{align}
+
+The various \gls{RANS}-based models mainly differ in their approach towards
+the closure problem of calculating the eddy viscosity. As the name suggests,
+algebraic models rely on algebraic equations to calculate the eddy viscosity
+distribution directly from flow variables. As a result, algebraic models are
+the least computationally intensive models for turbulence. Algebraic models
+can be further categorized into two types: uniform eddy viscosity models
+and mixing length models. Uniform eddy viscosity models apply a uniform eddy
+viscosity throughout the problem domain. The uniform eddy viscosity is
+calculated from flow parameters such as the characteristic velocity, the
+characteristic flow width, and empirically determined turbulent Reynolds
+number. Given that eddy viscosities usually vary significantly in most types of
+flow, uniform eddy viscosity models have a very limited range of applicability
+\cite{pope_turbulent_2000}. Mixing length models add a level of complexity by
+relating the eddy viscosity to spatially-varying flow parameters such as the
+mean velocity gradient (Prandtl \cite{prandtl_7_1925} and Cebeci-Smith
+\cite{smith_numerical_1967} models) or the mean rate of strain (Baldwin-Lomax
+\cite{baldwin_thin-layer_1978} model) and an empirical mixing length parameter.
+Combined with empirical data for the mixing length parameter, these
+models provide better approximations of free shear flows, but still
+underperform for more complex flows involving flow separation and significant streamline curvature.
+
+One- and two-equation turbulence models introduce differential equations to
+describing turbulence quantities such as the turbulence kinetic energy and the
+turbulence rate of dissipation to obtain the eddy viscosity distribution. The
+most common and best performing one-equation model is the Spalart-Allmaras
+model which provides an equation for the eddy viscosity directly with several
+closure coefficients and functions \cite{wilcox_turbulence_2006}. The
+Spalart-Allmaras model is considered ``complete'' as it does not involve any
+adjustable coefficients or functions. Calibrated for free shear flows in
+aeronautical applications, the model performs modestly better than algebraic
+models in these applications \cite{pope_turbulent_2000}, but it still deviates
+significantly from experimental data
+for separated flows \cite{wilcox_turbulence_2006}. Investigations with
+one-equation models reveal the need for an extra equation to account for
+turbulent length scales separately from turbulent velocity. Thus, two-equation
+models became the most widely used turbulence model in the late 20th century
+\cite{pope_turbulent_2000}. Two-equation models include the $k$-$\epsilon$,
+$k$-$\omega$, and $k$-$\tau$ models. The variables $k$, $\epsilon$, $\omega$,
+and $\tau$ correspond to turbulent kinetic energy, turbulent dissipation,
+specific turbulent dissipation rate, and turbulent time scale, respectively.
+While none of these models perform universally well, they are generally more
+accurate than the algebraic and one-equation models. Successive contributions
+and modifications to the two-equation models through the years have also
+improved their performance in predicting various types of turbulent flow. Their
+moderate computational expense compared to expensive, high-fidelity turbulence
+models favor their adoption in most commercial \gls{CFD} software for
+engineering applications \cite{pope_turbulent_2000}.
+
+
+
+\subsection{Turbulence Models in MSR Simulation Tools}
+
+\subsection{$k$-$\tau$ Turbulence Model}
+
+\section{Control Rod Modeling in MSRs}
