@@ -27,31 +27,13 @@ to the other models which employ different neutron transport models,
 non-uniform meshes, and/or finite volume-based solvers.
 
 This work verifies Moltres' capabilities for future work involving modeling and
-simulation of fast-spectrum \glspl{MSR}. Fast-spectrum \glspl{MSR}
-under consideration for modeling with Moltres include the European \gls{MSFR}
-as a continuation of work done in \cite{park_advancement_2020}, and
-TerraPower's \gls{MCFR} \cite{terrapower_terrapower_2021} from publicly
-available design specifications. Moltres can play an important role in
-supporting further \gls{MSR} development through enabling transient accident
-safety analysis and design optimization studies on an open-source platform.
-An ongoing research project involves employing Moltres as a
-surrogate model for machine learning-based reactor design optimization.
-We note that Moltres also supports modeling solid-fueled reactors such as the
-\gls{HTGR} by disabling the precursor drift functionality as demonstrated by
-\cite{fairhurst-agosta_multi-physics_2020}. Future work pertaining to
-further Moltres development include introducing an intermediate-fidelity
-turbulence model for highly turbulent flows in \glspl{MSR}, improving
-neutronics accuracy in heterogeneous geometries, and enhancing the general
-computational performance of existing features.
-
-This work verifies Moltres' capabilities for future work involving modeling and
 simulation of fast-spectrum \glspl{MSR} such as the European \gls{MSFR} and
 TerraPower's \gls{MCFR} \cite{terrapower_terrapower_2021}. Notably, the CNRS
 benchmark does not assess modeling capabilities for complex physics phenomena
-such as turbulent flow in \glspl{MSR}. This works in favor of existing
-capabilities in Moltres since Moltres doesn't currently support turbulence
-modeling. However, we expect coolant loops in many \gls{MSR} designs will
-experience turbulent flow under normal operation or accident scenarios.
+such as turbulent flow in \glspl{MSR}. This worked in favor of verifying
+existing capabilities in Moltres since Moltres does not currently support
+turbulence modeling. However, we expect coolant loops in many \gls{MSR} designs
+will experience turbulent flow under normal operation or accident scenarios.
 These expectations, alongside the subpar results of pump-initiated accidents
 reported in Section \ref{sec:msfr}, call for the implementation and
 verification of a turbulence model in Moltres for accurate modeling of
