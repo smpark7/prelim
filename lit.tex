@@ -394,7 +394,7 @@ reaches Reynolds numbers on the order of $10^5$.
 
 Numerous types of turbulence models exist for various turbulent flow
 applications. The most common turbulence models can be classified into the
-following categories:
+following categories by order of increasing computational complexity:
 %
 \begin{itemize}
     \item \gls{RANS}-based models
@@ -406,6 +406,7 @@ following categories:
         \end{itemize}
         \item \gls{RSM}
     \end{itemize}
+    \item \gls{DES}
     \item \gls{LES}
     \item \gls{DNS}
 \end{itemize}
@@ -426,9 +427,10 @@ and can be writtin in Einstein notation and Cartesian coordinates as:
     \nu =& \mbox{ kinematic viscosity.} \nonumber
 \end{align}
 
-, which represent most turbulence models in use today
-\cite{rodi_turbulence_2017}, operate on the eddy viscosity hypothesis which
-states that the Reynolds stresses in the \gls{RANS} equations are given by:
+Eddy viscosity models, which comprise of the most widely used turbulence models
+in use today \cite{rodi_turbulence_2017}, operate on the eddy viscosity
+hypothesis which states that the Reynolds stresses in the \gls{RANS} equations
+are given by:
 %
 \begin{align}
     \langle u_iu_j \rangle =& \frac{2}{3}k \delta_{ij} - \nu_T \left(
@@ -440,7 +442,7 @@ states that the Reynolds stresses in the \gls{RANS} equations are given by:
     \nu_T =& \mbox{ eddy viscosity.} \nonumber \\
 \end{align}
 
-The various \gls{RANS}-based models mainly differ in their approach towards
+The various eddy viscosity models mainly differ in their approach towards
 the closure problem of calculating the eddy viscosity. As the name suggests,
 algebraic models rely on algebraic equations to calculate the eddy viscosity
 distribution directly from flow variables. As a result, algebraic models are
@@ -472,10 +474,12 @@ adjustable coefficients or functions. Calibrated for free shear flows in
 aeronautical applications, the model performs modestly better than algebraic
 models in these applications \cite{pope_turbulent_2000}, but it still deviates
 significantly from experimental data
-for separated flows \cite{wilcox_turbulence_2006}. Investigations with
+for separated flows \cite{wilcox_turbulence_2006}.
+
+Investigations with
 one-equation models reveal the need for an extra equation to account for
 turbulent length scales separately from turbulent velocity. Thus, two-equation
-models became the most widely used turbulence model in the late 20th century
+models became the most widely adopted turbulence model in the late 20th century
 \cite{pope_turbulent_2000}. Two-equation models include the $k$-$\epsilon$,
 $k$-$\omega$, and $k$-$\tau$ models. The variables $k$, $\epsilon$, $\omega$,
 and $\tau$ correspond to turbulent kinetic energy, turbulent dissipation,
@@ -488,10 +492,56 @@ moderate computational expense compared to expensive, high-fidelity turbulence
 models favor their adoption in most commercial \gls{CFD} software for
 engineering applications \cite{pope_turbulent_2000}.
 
+\glspl{RSM} directly computes the individual components $\langle u_i u_j
+\rangle$ of the Reynolds stress tensor instead of approximating it with a
+single, isotropic eddy viscosity term. As a consequence, \glspl{RSM} provide
+more realistic predictions for flows with significant rotational motion and
+sudden changes in the mean strain rate, albeit at greater computational
+expense, compared to the one- and two-equation models
+\cite{wilcox_turbulence_2006}. Smaller improvements are observed in modeling
+free shear flows and backward-facing step flows \cite{wilcox_turbulence_2006}.
 
+Due to the much higher computational cost for \gls{DES}, \gls{LES}, and
+\gls{DNS}, these models have limited applicability in routine, high-Reynolds
+number engineering problems today. However, given their high accuracy, these
+models are useful for flow problems with relatively simple geometries and at
+low Reynolds numbers and validating the lower-fidelity turbulence models
+\cite{zhiyin_large-eddy_2015}.
 
 \subsection{Turbulence Models in MSR Simulation Tools}
 
-\subsection{$k$-$\tau$ Turbulence Model}
+For MSR modeling, the $k$-$\epsilon$ and $k$-$\omega$ turbulence models are the
+most commonly used models as shown in published work with COMSOL
+\cite{fiorina_modelling_2014}, OpenFOAM \cite{aufiero_development_2014}, and
+\gls{TUD}'s in-house codes \cite{fiorina_modelling_2014,tiberga_results_2020}.
+Podila et al. \cite{podila_cfd_2019} performed \gls{CFD} simulations of the
+\gls{MSRE} core with six different turbulence models, namely a Spalart-Allmaras
+model, two variants of the $k$-$\epsilon$ model, a $k$-$\omega$ model, and two
+variants of \glspl{RSM}. Their results showed relatively small differences
+in graphite and fuel temperatures among different turbulence models. However,
+they observed significant differences in the turbulence intensities near the
+wall. Given the lack of experimental data for model validation, the authors
+could not make a clear assessment of the models' accuracies. Nevertheless, the
+close agreement of the fuel temperatures imply that the discrepancies in the
+turbulent intensities near the wall have a negligible impact on the overall
+distribution of advected quantities in the \gls{MSRE}. Podila et al.
+\cite{podila_cfd_2019} opted to use a $k$-$\epsilon$ model for subsequent
+calculations in their work given its lowest computational cost and the close
+agreement in the temperature distributions.
 
-\section{Control Rod Modeling in MSRs}
+Amongst other \gls{MSR} simulation tools, the $k$-$\epsilon$ and $k$-$\omega$
+turbulence models are the most commonly used models as shown in published work
+with COMSOL \cite{fiorina_modelling_2014}, OpenFOAM
+\cite{aufiero_development_2014}, and \gls{TUD}'s in-house codes
+\cite{fiorina_modelling_2014,tiberga_results_2020}. Fiorina et al.
+\cite{fiorina_modelling_2014} compared the flow distribution from both models
+in a 2D axisymmetric \gls{MSFR} geometry and observed that the $k$-$\omega$
+model produced a wider recirculation zone near the outer wall, an additional
+recirculation zone near the top wall, and significantly higher maximum
+temperatures within the former recirculation zone. Thus, their work highlights
+the difficulties of modeling separated flows and calls for extra attention
+towards the choice of turbulence model in \glspl{MSR}.
+
+\section{Movable Control Rod Modeling in MSRs}
+
+Control rods 
