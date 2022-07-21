@@ -1,5 +1,5 @@
-%% Package and Class "uiucthesis2018" for use with LaTeX2e.
-\documentclass[edeposit,fullpage,12pt]{uiucthesis2018}
+%% Package and Class "uiucthesis2021" for use with LaTeX2e.
+\documentclass[edeposit,fullpage,11pt]{uiucthesis2021}
 
 
 \usepackage[acronym,toc]{glossaries}
@@ -48,15 +48,15 @@
 \usepackage{tikz}
 
 
-\title{Development and Verification of Moltres for Molten
-Salt Reactor Safety Analysis}
+\title{Advancement of Moltres for Multiphysics Molten Salt Reactor Modeling}
 \author{Sun Myung Park}
 \department{Nuclear, Plasma \& Radiological Engineering}
-\advisor{Kathryn D. Huff}
+\prelim
 \degreeyear{2022}
-\committee{Dr Madicken Munk, Advisor \\
-           Associate Professor Kathryn D. Huff \\
-           Associate Professor Tomasz Kozlowski}
+\committee{Dr Madicken Munk, Chair \\
+           Professor Rizwan Uddin \\
+           Associate Professor Tomasz Kozlowski \\
+           Associate Professor Andreas Kloeckner}
 
 
 \begin{document}
@@ -71,9 +71,15 @@ Salt Reactor Safety Analysis}
 
 \end{abstract}
 
-\chapter*{Acknowledgments}
+\begin{dedication}
+
+\end{dedication}
+
+\begin{acknowledgments}
 
 %\input{acks}
+
+\end{acknowledgments}
 
 %% The thesis format requires the Table of Contents to come
 %% before any other major sections, all of these sections after
@@ -86,9 +92,10 @@ Salt Reactor Safety Analysis}
 %% List Symbols and/or Abbreviations
 %% etc.
 
-\tableofcontents
-\listoftables
-\listoffigures
+{
+  \hypersetup{linkcolor=black}
+  \tableofcontents
+}
 
 %% Create a List of Abbreviations. The left column
 %% is 1 inch wide and left-justified
@@ -111,16 +118,16 @@ nogroupskip=true]
 \input{lit}
 \glsresetall
 
-\chapter{Description of Moltres}
-\label{chap:moltres}
-\input{moltres}
-\glsresetall
-
-\chapter{Verification of Moltres for Fast-Spectrum Molten Salt
-Reactor Simulations}
-\label{chap:benchmark}
-\input{benchmark}
-\glsresetall
+%\chapter{Description of Moltres}
+%\label{chap:moltres}
+%\input{moltres}
+%\glsresetall
+%
+%\chapter{Verification of Moltres for Multiphysics Molten Salt
+%Reactor Modeling}
+%\label{chap:benchmark}
+%\input{benchmark}
+%\glsresetall
 
 \chapter{Proposed Work}
 \label{chap:models}
