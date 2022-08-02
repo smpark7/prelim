@@ -548,70 +548,79 @@ towards the choice of turbulence model in \glspl{MSR}.
 
 \section{Control Rod Modeling}
 
-Most reactor designs have control rods to control the fission rate or
-completely shut down the reactor by inserting the rods further into the reactor
-core. As such, control rods consist of strong
-neutron absorbers like boron, cadmium, and gadolinium to reduce the number of
-fission neutrons available to contribute to further fission chain reactions.
-All reactors start operation with excess reactivity to ensure that they have
-enough fissile material to last through to the next scheduled refueling.
-Control rods, along with burnable poisons, allow reactors to operate at a
-multiplication factor of unity by canceling out the excess reactivity.
-Control rods are also useful for ramping the power up or down during start-up,
-coast-down, or load-following operations. Most importantly, control rods
-provide a safety mechanism for quickly shutting down a reactor under dangerous
-conditions. Rapid control rod insertion is the main mechanism of a reactor
-scram to reliably introduce a large negative reactivity insertion in response
-to an unintended reactivity insertion or other events which may threaten the
-safe operation of the reactor.
+Most reactor designs have control rods to control the fission rate or completely shut down the
+reactor by inserting the rods further into the reactor core. As such, control rods consist of
+strong neutron absorbers like boron, cadmium, and gadolinium to reduce the number of fission
+neutrons available to contribute to further fission chain reactions. All reactors start operation
+with excess reactivity to ensure that they have enough fissile material to last through to the next
+scheduled refueling. Control rods, along with burnable poisons, allow reactors to operate at a
+multiplication factor of unity by canceling out the excess reactivity. Control rods are also useful
+for ramping the power up or down during start-up, shut-down, or load-following operations. Most
+importantly, control rods provide a safety mechanism for quickly shutting down a reactor under
+dangerous conditions. Rapid control rod insertion is the main mechanism of a reactor scram to
+reliably introduce a large negative reactivity insertion in response to an unintended reactivity
+insertion or other events which may threaten the safe operation of the reactor. 
+
+The number and locations of control rods in a reactor vary significantly for different reactor
+types, depending on their maximum operating power, refueling frequency, and other factors. For
+instance, as shown in Figure *, a single fuel assembly in a \gls{PWR} can accommodate 24 control
+rods in close proximity to the fuel pins. The total number of fuel assemblies vary from 37
+assemblies in the NuScale VOYGR reactor to 157 assemblies in the Westinghouse AP1000 reactor. On
+the other hand, the entire MHTGR-350 high-temperature gas reactor, shown in Figure *, has 30
+control rods in total. The control rods are located in graphite reflector blocks, thereby placing
+them further from fuel elements. Lastly, the \gls{MSRE} design has three control rods located
+centrally in graphite-moderated core with fuel salt channels. While the objective of the proposed
+work is to improve diffusion-based control rod modeling in Moltres for \gls{MSR}-like designs, this
+literature review also explores existing methods developed for other reactor types.
 
 [Insert control rod illustration]
 
-\subsection{Challenges of Control Rod Modeling}
+\subsection{Challenges of Control Rod Modeling} \label{sec:challenges-control-rod}
 
-Neutrons entering the control rods have a higher chance of being absorbed than
-adjacent regions in the reactor core. Therefore, control rods induce highly
-anisotropic neutron angular fluxes and sharp gradients in the neutron flux in
-their vicinity. Control rods also cause shifts in the neutron energy spectrum
-because their absorption cross sections are much higher in the lower neutron
-energy range; more energetic neutrons generally have a higher probability of
-escaping the control rod region. As a consequence, modeling control rods
-accurately requires high-fidelity computational methods to capture the angular-
-and energy-dependence in the neutron flux near the highly absorbing medium.
+In reactor design studies, we aim to determine control rod worth which is measured as the reduction
+in the neutron multiplication factor $k_{eff}$ due to the presence of the control rod in the
+reactor. We are also interested in the accompanying change in flux shape in the vicinity of the
+control rod. Neutrons entering the control rods have a higher chance of being absorbed than
+adjacent regions in the reactor core. Therefore, control rods induce highly anisotropic neutron
+angular fluxes and sharp gradients in the neutron flux in their vicinity. Control rods also cause
+shifts in the neutron energy spectrum because their absorption cross sections are much higher in
+the lower neutron energy range; more energetic neutrons generally have a higher probability of
+escaping the control rod region. As a consequence, modeling control rods accurately requires
+high-fidelity computational methods to capture the angular- and energy-dependence in the neutron
+flux near the highly absorbing medium.
 
-High-fidelity \textit{neutron transport methods} fall under two categories:
-stochastic Monte Carlo methods and deterministic methods. Monte Carlo methods
-involve simulating a finite number of neutron histories. Randomly generated
-numbers determine the outcome of various probabilistic events such as travel
-distances between particle collisions, types of collisions, and scattering
-angles in each history until it is terminated by a neutron capture event.
-Deterministic methods for neutron transport, such as the discrete ordinates
-$S_N$ and spherical harmonics $P_N$ methods, solve the \gls{BTE} for neutron
-transport with some approximations for handling the angular and energy
+High-fidelity \textit{neutron transport methods} fall under two categories: stochastic Monte Carlo
+methods and deterministic methods. Monte Carlo methods involve simulating a finite number of
+neutron histories. Randomly generated numbers determine the outcome of various probabilistic events
+such as travel distances between particle collisions, types of collisions, and scattering angles in
+each history until it is terminated by a neutron capture event. Deterministic methods for neutron
+transport, such as the discrete ordinates $S_N$ and spherical harmonics $P_N$ methods, solve the
+\gls{BTE} for neutron transport with some approximations for handling the angular and energy
 dependence. The \gls{BTE} for neutron transport is given as:
 %
 \begin{align}
-  \frac{1}{v(E)}& \frac{\partial}{\partial t} \Psi(\vec{r},E,\hat{\Omega},t) + \hat{\Omega}\cdot
+  \frac{1}{v(E)} \frac{\partial}{\partial t} \Psi(\vec{r},E,\hat{\Omega},&t) + \hat{\Omega}\cdot
   \nabla\Psi(\vec{r},E,\hat{\Omega},t) + \Sigma_t(\vec{r},E,t)\Psi(\vec{r},E,\hat{\Omega},t) 
   \nonumber \\
-  &- \int^\infty_0 dE' \int_{4\pi} d\hat{\Omega}' \Sigma_s(\vec{r},E'\rightarrow E,\hat{\Omega}'
+  - \int^\infty_0 dE'& \int_{4\pi} d\hat{\Omega}' \Sigma_s(\vec{r},E'\rightarrow E,\hat{\Omega}'
   \rightarrow \hat{\Omega},t) \Psi(\vec{r},E',\hat{\Omega}',t) \nonumber \\
-  &= \frac{\chi(E)}{4\pi}
+  =& \frac{\chi(E)}{4\pi}
   \int^\infty_0 dE' \int_{4\pi} d\hat{\Omega}' \nu\Sigma_f(\vec{r},E',t) \Psi(\vec{r},E',
   \hat{\Omega}',t)+S(\vec{r},E,\hat{\Omega}',t) \label{eq:bte}
   \shortintertext{where}
-  v =& \mbox{ neutron velocity,} \nonumber \\
-  \Psi =& \mbox{ neutron angular flux,} \nonumber \\
+  v(E) =& \mbox{ neutron velocity,} \nonumber \\
+  \Psi(\vec{r},E,\hat{\Omega},t) =& \mbox{ neutron angular flux,} \nonumber \\
   \vec{r} =& \mbox{ spatial coordinates,} \nonumber \\
   E =& \mbox{ neutron energy,} \nonumber \\
   \hat{\Omega} =& \mbox{ direction of neutron travel,} \nonumber \\
   t =& \mbox{ time,} \nonumber \\
-  \Sigma_t =& \mbox{ macroscopic total cross section,} \nonumber \\
-  \Sigma_s =& \mbox{ macroscopic scattering cross section,} \nonumber \\
-  \chi =& \mbox{ fission neutron spectrum,} \nonumber \\
+  \Sigma_t(\vec{r},E,t) =& \mbox{ macroscopic total cross section,} \nonumber \\
+  \Sigma_s(\vec{r},E'\rightarrow E,\hat{\Omega}'\rightarrow \hat{\Omega},t) =&
+  \mbox{ macroscopic scattering cross section,} \nonumber \\
+  \chi(E) =& \mbox{ fission neutron spectrum,} \nonumber \\
   \nu =& \mbox{ number of neutrons produced per fission reaction,} \nonumber \\
-  \Sigma_f =& \mbox{ macroscopic fission cross section,} \nonumber \\
-  S =& \mbox{ external neutron source.} \nonumber \\
+  \Sigma_f(\vec{r},E',t) =& \mbox{ macroscopic fission cross section,} \nonumber \\
+  S(\vec{r},E,\hat{\Omega}',t) =& \mbox{ external neutron source.} \nonumber
 \end{align}
 
 The $S_N$ method discretizes the continuous angular directional phase space into a few discrete
@@ -621,44 +630,90 @@ Legendre polynomial expansions of the angular flux to approximate the angular de
 methods require higher-order approximations, through more discrete ordinates or higher-order
 Legendre expansions, to produce accurate flux solutions. Both methods also discretize the
 continuous energy dependence into discrete neutron energy groups which cover non-overlapping,
-finite energy ranges across the entire energy spectrum. Overall, neutron transport methods are very
-computationally expensive and thus are mainly used for time-independent neutronic analyses.
+finite energy ranges across the entire energy spectrum to form multigroup equations as follows:
+%
+\begin{align}
+  \frac{1}{v_g} \frac{\partial}{\partial t} \Psi_g(\vec{r},\hat{\Omega},&t) + \hat{\Omega}\cdot
+  \nabla\Psi_g(\vec{r},\hat{\Omega},t) + \Sigma_{t,g}(\vec{r},t)\Psi_g(\vec{r},\hat{\Omega},t)
+  \nonumber \\
+  - \sum^G_{g'=1}& \int_{4\pi} d\hat{\Omega}' \Sigma_s^{g'\rightarrow g}(\vec{r},\hat{\Omega}'
+  \rightarrow \hat{\Omega},t) \Psi_{g'}(\vec{r},\hat{\Omega}',t) \nonumber \\
+  =& \frac{\chi_g}{4\pi}
+  \sum^G_{g'=1} \int_{4\pi} d\hat{\Omega}' \nu\Sigma_{f,g'}(\vec{r},t) \Psi_{g'}(\vec{r},
+  \hat{\Omega}',t)+S_g(\vec{r},\hat{\Omega}',t) \label{eq:mg-bte}
+  \shortintertext{where}
+  G =& \mbox{ total number of energy groups,} \nonumber \\
+  g =& \mbox{ neutron energy group index (in decreasing energy order)} = 1,2,...,G. \nonumber
+\end{align}
 
-For time-dependent multiphysics simulations coupling neutronics to
-thermal-hydraulics and other physics present in nuclear reactors, most reactor
-codes rely on the neutron diffusion equation for modeling neutronics.
-The neutron diffusion equations are \glspl{PDE} derived from the \gls{BTE} for
-neutron transport by integrating the \gls{BTE}
-over all solid angles to eliminate angular-dependence and over predefined
-neutron energy ranges to convert the dependence on continuous energy to
-discrete neutron energy groups. This treatment significantly reduces the number
-of coupled \glspl{PDE} to be solved and the computational costs of modeling
-neutronics in reactors.
-Yet, the simplifications limit the validity of the neutron diffusion
-equation to regions of high scattering-to-absorption ratios which are a few
-mean free paths away from shared interfaces to neighboring media with highly
-dissimilar neutronic properties \cite{shultis_chapter_2016}. Naturally, neutron
-diffusion theory fails within and near control rod regions.
+The subscript $g$ denotes the corresponding quantity for neutrons in energy group $g$.
+Overall, neutron transport methods are very computationally expensive and thus are mainly used for
+time-independent neutronic analyses. For time-dependent multiphysics simulations coupling
+neutronics to thermal-hydraulics and other physics present in nuclear reactors, most reactor codes
+rely on the neutron diffusion equation for modeling neutronics. The multigroup neutron diffusion
+equations are \glspl{PDE} derived from Eq. \ref{eq:mg-bte} by making
+simplifying assumptions on the angular dependence in the scattering cross section and integrating
+the equations over all solid angles to eliminate angular dependence as follows:
+%
+\begin{align}
+  \frac{1}{v_g} \frac{\partial}{\partial t} \phi_g&(\vec{r},t) + \nabla\cdot J_g(\vec{r},t)
+  +\Sigma_{t,g}(\vec{r},t) \phi_g(\vec{r},t) \nonumber \\
+  =& \sum^G_{g'=1}\left[\Sigma_s^{g'\rightarrow g}
+  \phi_{g'}(\vec{r},t) + \chi_g \nu\Sigma_{f,g'} \phi_{g'}(\vec{r},t)\right] + S_g(\vec{r},t)
+  \label{eq:mg-diff} \\
+  \shortintertext{where}
+  J_g(\vec{r},t) =& \mbox{ neutron current for neutron group $g$.} \nonumber
+\end{align}
 
-Furthermore, many legacy diffusion solvers are based on coarse-mesh or nodal methods. These methods
+Fick's first law of diffusion provides a closure relation for Eq. \ref{eq:mg-diff} by relating the
+current to the flux:
+%
+\begin{align}
+  J_g(\vec{r},t) =& -D_g(\vec{r},t)\nabla\phi_g(\vec{r},t) \label{eq:fick}
+  \shortintertext{where}
+  D_g(\vec{r},t) =& \mbox{ neutron diffusion coefficient for neutron group $g$.} \nonumber
+\end{align}
+
+The diffusion coefficient itself is estimated from the total or transport cross sections, depending
+on whether we take scattering to be isotropic or linearly anisotropic in the $P_1$ approximation of
+the \gls{BTE} \cite{lamarsh_introduction_1975}:
+%
+\begin{align}
+  D(\vec{r},t) =& \frac{1}{3\Sigma_t(\vec{r},t)} \quad \mbox{(isotropic)} \\
+  D(\vec{r},t) =& \frac{1}{3\Sigma_{tr}(\vec{r},t)} = \frac{1}{3\left(\Sigma_t(\vec{r},t)-
+  \bar{\mu}\Sigma_s(\vec{r},t)\right)}
+  \quad \mbox{(linearly anisotropic)}
+  \shortintertext{where}
+  \Sigma_{tr} =& \mbox{ macroscopic transport cross section,} \nonumber \\
+  \bar{\mu} =& \mbox{ average cosine of the scattering angles.} \nonumber
+\end{align}
+
+This treatment significantly reduces the number of coupled \glspl{PDE} to be solved and the
+computational costs of modeling neutronics in reactors. Yet, the simplifications limit the validity
+of the neutron diffusion equation to regions of high scattering-to-absorption ratios at least a
+few mean free paths away from shared interfaces to neighboring media with highly dissimilar
+neutronic properties \cite{shultis_chapter_2016}. A single diffusion constant cannot capture the
+strongly anisotropic flux within and near control rod regions.
+
+Many legacy diffusion solvers are based on coarse-mesh or nodal methods. These methods
 primarily involve replacing heterogeneous lattices of materials of differing properties with
-equivalent homogeneous mixtures of the same materials in each coarse mesh/node
-\cite{stacey_nuclear_2007}. Reducing the heterogeneity of the geometry reduces computational
-complexity and circumvents poor diffusion performance in highly heterogeneous interfaces. Each
-coarse mesh typically corresponds to a subregion comprising of repeating substructures, e.g. a
-single fuel assembly or randomly distributed spherical fuel pebbles. The homogenization procedure
-consists of two main steps: a transport calculation to obtain detailed heterogeneous flux
-distribution within each subregion, followed by the calculation of homogenized
+equivalent homogeneous mixtures of the same materials in each coarse mesh (referred to as nodes in
+nodal methods) \cite{stacey_nuclear_2007}. Reducing the heterogeneity of the geometry reduces
+computational complexity and circumvents poor diffusion performance in highly heterogeneous
+interfaces. Each coarse mesh typically corresponds to a subregion comprising of repeating
+substructures, e.g. a single fuel assembly or randomly distributed spherical fuel pebbles. The
+homogenization procedure consists of two main steps: a transport calculation to obtain detailed
+heterogeneous flux distribution within each subregion, followed by the calculation of homogenized
 \textit{group constants} from the detailed flux distribution. \textit{Group constants} refer to
 macroscopic neutron cross section values for various neutron interactions such as neutron
 scattering, absorption, and fission. Macroscopic cross sections represent the probability that a
 neutron, in a given energy range, will undergo the associated interaction per unit distance
 traveled in the material. Group constants also broadly include neutron diffusion
-coefficients/constants and delayed neutron precursor data. While coarse-mesh and nodal methods
-provide acceptable flux solutions for calculating global and intermediate-scale quantities, they do
-not capture detailed heterogeneous flux distribution within each coarse mesh subregion.
+coefficients/constants and delayed neutron precursor data. While advanced coarse-mesh and nodal
+methods provide reasonable flux solutions for calculating global and intermediate-scale quantities,
+they do not capture detailed heterogeneous flux distribution within each coarse mesh subregion.
 
-\subsection{Transport Correction Techniques for Neutron Diffusion-Based Solvers}
+\subsection{Transport Correction Techniques With Neutron Diffusion-Based Solvers}
 
 Transport correction techniques for diffusion-based solvers require additional information beyond
 conventional homogenized group constants from transport-based solvers to ameliorate diffusion
@@ -668,34 +723,76 @@ transport corrections in the form of more accurate neutron flux and current esti
 diffusion-based solvers. The methods differ mainly in how they incorporate corrections into a
 diffusion-based solver.
 
+\subsubsection{Absorber Blackness and Linear Extrapolation Length}
+
+Methods based on absorber blackness \cite{davison_influence_1951, spinks_extrapolation_1965,
+pellaud_extrapolation_1968, mendelson_two-dimensional_1969} encompass a
+broad class of procedures for generating boundary conditions to match approximate solutions of
+low-order methods (e.g. diffusion) to more accurate solutions from high-order methods (e.g.
+transport). The internal boundary conditions replace absorber regions and mimic their presence in
+the problem domain. The boundary conditions are generalizations of the Marshak boundary condition
+\cite{marshak_note_1947} which in 1D are of the form:
+%
+\begin{align}
+  \frac{\phi(x)}{d\phi(x)/dx} =& \lambda \label{eq:marshak}
+  \shortintertext{where}
+  \lambda =& \mbox{ linear extrapolation length.} \nonumber
+\end{align}
+%
+The gradient of the flux in the denominator is taken in the outward direction at the surface of the
+absorber or black body. In Cartesian coordinates, it is common to approximate Eq. \ref{eq:marshak}
+in the form:
+%
+\begin{align}
+  \phi(x+\lambda) =& 0
+\end{align}
+because Dirichlet boundary conditions are easier to work with analytically and numerically.
+The corresponding relations in cylindrical and spherical coordinates depend on the radius of the
+absorber rod. Various forms for $\lambda$ exist for specific absorber geometries such as slabs
+\cite{maynard_blackness_1959} and cylinders \cite{spinks_extrapolation_1965,
+pellaud_extrapolation_1968} which were dependent
+on the size of the absorber region and coefficients quantifying the escape probability of neutrons
+entering the absorber region. The $\lambda$ and the associated coefficients were derived
+analytically from the \gls{BTE} with some simplifying assumptions as such having uniform or
+cosine-shaped incident neutron currents, isotropic scattering within the absorber, and mathematical
+approximations in ignoring higher-order terms in intermediate steps. Blackness theory emerged in
+the mid-20th century when computational resources were limited. Later, as computational
+resources became more readily available and powerful enough for more complicated transport
+calculations, appropriate boundary conditions could be calculated numerically
+\cite{bretscher_computing_1997}. Alternatively, effective group constants can be calculated for
+diffusion codes which are not programmed to handle internal boundary conditions. For instance,
+Bretscher \cite{bretscher_computing_1997} provided formulae for effective diffusion coefficient and
+absorption cross section for thin absorber slabs as a function of blackness coefficients, absorber
+thickness, and mesh size.
+
+Diffusion calculations with corrections from blackness theory can generally provide control rod
+worths which are in reasonable agreement with more accurate transport calculations. However, the
+diffusion flux distributions still deviate significantly from transport calculations because no
+corrections are introduced in the adjacent regions near the absorber where the angular flux can be
+strongly anisotropic.
+
 \subsubsection{Method of Equivalent Cross Sections}
 
-Scherer and Neef developed the \gls{MECS} \cite{scherer_determination_1976} to
-improve control rod modeling in \gls{HTGR} with mesh-centered nodal diffusion
-methods. The \gls{MECS} involves running a 1D neutron transport calculation on
-a representative \textit{super cell} of the heterogeneous absorber region and
-its vicinity. The super cell is a volume-preserved model of the absorber region
-approximated from its cylindrical or Cartesian geometry in the diffusion solve.
-The transport calculation is typically performed using a fine group structure,
-fine spatial discretization, and high-order angular discretization and
-scattering moments (e.g. $S_8$ method with $P_3$ scattering matrix)
-\cite{fen_modelling_1992}. The calculated net neutron leakage
-rates from the tranport solver are matched with the calculated leakage rates
-from the diffusion solver according to an analytic calculation to obtain
-equivalent diffusion coefficient for the absorber region. The diffusion
-coefficient formula for this analytic calculation depends on the solution
-method of the diffusion solver. In the most widely used implementation of
-\gls{MECS} used in conjunction with the mesh-centered diffusion code CITATION
-\cite{teuchert_vsop94_1994}, the diffusion coefficient formula assumes there
-is only one inner mesh point in the absorber region as using more inner mesh
-points greatly increases the difficulty of finding the proper analytic formula
-\cite{fen_modelling_1992}. Other macroscopic cross sections for the absorber
-region are calculated using conventional group constant generation techniques
-from the transport solution using the super cell average flux and reaction
-rates. To facilitate further discussion of the \gls{MECS}, here is an example
-of applying the \gls{MECS} on a control rod in x-y geometry (Figure
-\ref{fig:mecs-geometry}) in the CITATION code as provided by Fen et al.
-\cite{fen_modelling_1992}.
+Scherer \& Neef developed the \gls{MECS} \cite{scherer_determination_1976} to improve control rod
+modeling in \gls{HTGR} with mesh-centered nodal diffusion methods. The \gls{MECS} involves running
+a 1D neutron transport calculation on a representative \textit{super cell} of the heterogeneous
+absorber region and its vicinity. The super cell is a volume-preserved model of the absorber region
+approximated from its cylindrical or Cartesian geometry in the diffusion solve. The transport
+calculation is typically performed using a fine group structure, fine spatial discretization, and
+high-order angular discretization and scattering moments (e.g. $S_8$ method with $P_3$ scattering
+matrix) \cite{fen_modelling_1992}. The calculated net neutron leakage rates from the tranport
+solver are matched with the calculated leakage rates from the diffusion solver according to an
+analytic calculation to obtain equivalent diffusion coefficients or cross sections for the absorber
+region. The diffusion coefficient formula for this analytic calculation depends on the solution
+method of the diffusion solver. In the most widely used implementation of \gls{MECS} used in
+conjunction with the mesh-centered diffusion code CITATION \cite{teuchert_vsop94_1994}, the
+diffusion coefficient formula assumes there is only one inner mesh point in the absorber region as
+using more inner mesh points greatly increases the difficulty of finding the proper analytic
+formula \cite{fen_modelling_1992}. Other macroscopic cross sections for the absorber region are
+calculated using conventional group constant generation techniques from the transport solution
+using the super cell average flux and reaction rates. To facilitate further discussion of the
+\gls{MECS}, here is an example of applying the \gls{MECS} on a control rod in x-y geometry (Figure
+\ref{fig:mecs-geometry}) in the CITATION code as provided by Fen et al. \cite{fen_modelling_1992}.
 %
 \begin{figure}[htb!]
     \centering
@@ -703,7 +800,7 @@ of applying the \gls{MECS} on a control rod in x-y geometry (Figure
     \caption{Geometries of the absorber region and its vicinity in the super
         cell (top) and the diffusion solver mesh (bottom).
         The shaded and unshaded regions represent the homogenized absorber
-        region and the adjacent non-absorber region.
+        region and the adjacent non-absorber region, respectively.
         Retrieved from Fen et al. \cite{fen_modelling_1992}.}
     \label{fig:mecs-geometry}
 \end{figure}
@@ -740,10 +837,24 @@ calculated as:
   D_o =& \mbox{ diffusion coefficient in the neighboring nodes.} \nonumber
 \end{align}
 
-Taking leakage and flux values at $R_x$ and $R_y$ (figure
-\ref{fig:mecs-geometry}) from the transport solver to be equal to the
-corresponding values in equation \ref{eq:mecs} yields the equivalent diffusion
-coefficient as follows:
+In the original formulation by Scherer \& Neef \cite{scherer_determination_1976}, they chose to let
+$D_a=D_o$. Taking leakage and flux values at $R_x$ and $R_y$ (figure \ref{fig:mecs-geometry}) from
+the transport solver to be equal to the corresponding values in equation \ref{eq:mecs} yields a
+value for $\phi_a$ which also represents the average flux in the absorber region. The equivalent
+cross sections for each reaction type $i$ is then determined by matching reaction rates from the
+transport calculation to the reaction rate as governed by diffusion theory as follows:
+%
+\begin{align}
+  \Sigma_i =& \frac{A_i}{\phi_a V}
+  \shortintertext{where}
+  \Sigma_i =& \mbox{ macroscopic cross section of reaction type $i$,} \nonumber \\
+  A_i =& \mbox{ reaction rate of reaction type $i$ from the transport calculation,} \nonumber \\
+  V =& \mbox{ volume of the absorber region} = a^2 p.
+\end{align}
+
+Fen et al. \cite{fen_modelling_1992} later provided an updated formulation by assuming that the
+cross sections are accurate and instead determined the equivalent diffusion coefficient from Eq.
+\ref{eq:mecs} and the transport leakage and flux values as follows:
 %
 \begin{align}
   \frac{1}{D_a} =& 2p\frac{\phi_x-\phi_a}{L}+\frac{2}{p}\frac{\phi_y-\phi_a}{L}
@@ -754,19 +865,16 @@ coefficient as follows:
   \frac{1}{D_o} \nonumber
 \end{align}
 
-As illustrated by the implementation in CITATION, \gls{MECS} requires
-considerable user input on the super cell configuration to ensure that leakage
-rates of the transport solution are equivalent to the leakage rates of the
-subsequent diffusion solution. This procedure also places some constraints on
-the location and size of the absorber node that can be inconsistent
-with the nodalization of the rest of the reactor geometry
-\cite{ougouag_transport_2010}. \gls{MECS} is also incompatible with
-reactor geometries which contain control rods that are too close to each other
-such that there is not enough distance in between to define neighboring nodes
-where flux-equivalence is assumed. Nevertheless, \gls{MECS} has been widely
-used within the \gls{VSOP} suite of codes (which contains CITATION) and has
-been shown to be effective in a number of \gls{HTGR} studies
-\cite{fen_modelling_1992, reitsma_evaluating_2003, mulder_neutronics_2020}.
+As illustrated by the implementation in CITATION, \gls{MECS} requires considerable user input on
+the super cell configuration to ensure that leakage rates of the transport solution are equivalent
+to the leakage rates of the subsequent diffusion solution. This procedure also places some
+constraints on the location and size of the absorber node that can be inconsistent with the
+nodalization of the rest of the reactor geometry \cite{ougouag_transport_2010}. \gls{MECS} is also
+incompatible with reactor geometries which contain control rods that are too close to each other
+such that there is not enough distance in between to define neighboring nodes where
+flux-equivalence is assumed. Nevertheless, \gls{MECS} has been widely used within the \gls{VSOP}
+suite of codes (which contains CITATION) and has been shown to be effective in a number of
+\gls{HTGR} studies \cite{fen_modelling_1992, reitsma_evaluating_2003, mulder_neutronics_2020}.
 
 \subsubsection{Response-Based Methods}
 
@@ -832,21 +940,10 @@ tri-diagonal system of nodal diffusion equations. In several verification studie
 distribution results \cite{rahnema_advanced_2011} as the \gls{RMM}. However, they did not
 demonstrate the response region swapping that the \gls{IDT} was designed for.
 
-\subsubsection{The Ronen Method}
+\subsubsection{Ronen Method}
 
 Ronen \cite{ronen_accurate_2004} postulated an alternative formulation for diffusion coefficients
-based on neutron currents from transport calculations. In diffusion theory, Fick's first law
-relates neutron current to neutron flux with a diffusion coefficient as a proportionality constant
-as follows:
-%
-\begin{align}
-  \vec{J_D}(\vec{r},E) =& -D(\vec{r},E) \nabla\phi(\vec{r},E) \label{eq:fick}
-  \shortintertext{where}
-  \vec{J_D} =& \mbox{ neutron current,} \nonumber \\
-  D =& \mbox{ diffusion coefficient (scalar or tensor),} \nonumber \\
-  \phi =& \mbox{ neutron flux.} \nonumber
-\end{align}
-
+based on neutron currents from transport calculations.
 Fick's law of diffusion is valid under three assumptions: the neutron flux gradient is small, the
 absorption-to-scattering ratio is small, and scattering sources are isotropic. Therefore, diffusion
 theory fails for anisotropic fluxes in and near absorber regions. The Ronen method proposes using
@@ -855,7 +952,7 @@ and substituting the values into Fick's first law of diffusion (Eq. \ref{eq:fick
 space-dependent diffusion coefficients as follows:
 %
 \begin{align}
-  D(\vec{r},E)= -\frac{J_{tr}(\vec{r},E)}{\nabla \phi(\vec{r},E)}
+  D(\vec{r},E) =& -\frac{J_{tr}(\vec{r},E)}{\nabla \phi(\vec{r},E)}
   \label{eq:ronen}
   \shortintertext{where}
   J_{tr} =& \mbox{ transport-derived neutron current.} \nonumber
@@ -878,6 +975,8 @@ currents as follows:
   \Delta x_i =& \mbox{ size of $i$-th spatial interval.} \nonumber
 \end{align}
 
+They derived expressions for the transport operators for $J_{tr}$ in terms of exponential integral
+functions and Legendre expansions of the angular flux.
 Gross et al. \cite{gross_high-accuracy_2020} extended the derivation of the transport operators to
 handle 1D heterogeneous problems in the form of fuel assemblies with fuel, water, and fuel+absorber
 regions. Tomatis et al. \cite{tomatis_ronen_2021} developed new numerical implementations for 1D
@@ -887,30 +986,199 @@ a solver acceleration scheme which helped with the poor convergence rate observe
 studies \cite{tomatis_application_2011, gross_high-accuracy_2020}.
 
 The results from all three studies showed improvements in flux solutions with the Ronen method over
-pure diffusion solvers in all of the test cases, especially in heterogeneous geometries containing
-significant absorption cross sections \cite{gross_high-accuracy_2020}. However, the demonstrations
-thus far have been limited to simple 1D geometries with at most linearly anisotropic scattering.
-The derivation of semi-analytic transport operators for more complex reactor geometries would be a
-much more complicated endeavor. Without an accompanying solver acceleration scheme, poorly
-converged solutions retained significant discrepancies near material interfaces and vacuum
-boundaries.
+pure diffusion solvers in all of the test cases, particularly for a 1D heterogeneous
+\gls{BWR}-based problem with isotropic scattering and strong absorption cross sections
+\cite{gross_high-accuracy_2020}. The error in reactivity values for three different \gls{BWR}
+configurations differed from the reference $S_16$ transport calculations by at most 62 pcm after
+one hundred iterations ($1$ pcm $=10^{-5}$) . However, the demonstrations were limited to simple
+1D geometries. Although the authors provided derivations for anisotropic scattering, their test
+cases incorporated only isotropic scattering. The derivation of semi-analytic transport operators
+for more complex reactor geometries would be a much more complicated endeavor. Furthermore, without
+an accompanying solver acceleration scheme, poorly converged solutions retained significant
+discrepancies near material interfaces and vacuum boundaries.
 
-\subsubsection{Averaged Eddington Factor-Based and High-Order Empirical Diffusion Coefficients}
+\subsubsection{Averaged Eddington Factors and High-Order Empirical Diffusion Coefficients}
 
-Similar to the Ronen method, Pounders \& Rahnema developed two separate methods for generating
+In a similar vein, Pounders \& Rahnema developed two separate methods for generating
 space-dependent diffusion coefficients \cite{pounders_diffusion_2009}. Both methods come with the
-same caveat in requiring a priori knowledge of the flux and current. The first method relies on the
-Eddington factor, which is defined as the second angular moment of the angular flux normalized by
-its zeroth moment. In 1D, the Eddington factor is given as:
+same caveat in requiring a priori knowledge of the flux and current. The first method, called the
+\gls{AEF} method, relies on the Eddington factor, which is defined as the second angular moment of
+the angular flux normalized by its zeroth moment. In 1D, the Eddington factor is given as:
 %
 \begin{align}
-  E(z) =& \frac{\int^1_{-1} \mu^2\psi(z,\mu)d\mu}{\int^1_{-1} \psi(z,\mu)d\mu}
+  E_g(z) =& \frac{\int^1_{-1} \mu^2\psi(z,\mu)d\mu}{\int^1_{-1} \psi(z,\mu)d\mu}
+\end{align}
+%
+The $g$ subscript denotes the discrete neutron group index of the multigroup diffusion equations
+obtained from discretizing the continuous energy variable as described in Section
+\ref{sec:challenges-control-rod}. The Eddington factor features in the fist angular moment of the
+1D multigroup transport equations, obtained by multiplying the transport equation throughout by
+$\mu=\cos\theta$ and integrating over $\mu=-1$ to $\mu=1$:
+%
+\begin{align}
+  \frac{d\left[E_g(z)\phi_g(z)\right]}{dz} + \Sigma_{t,g}(z)J_g(z) =& \sum^G_{g'=1}
+  \Sigma^{g'\rightarrow g}_{s1}(z)J_{g'}(z) \label{eq:bte-1st-mom}
+  \shortintertext{where}
+  \Sigma^{g'\rightarrow g}_{s1} =& \int^1_{-1} \mu \Sigma_s d\mu \nonumber
+\end{align}
+%
+Assuming the Eddington factor varies slowly in space, we can approximate Eq. \ref{eq:bte-1st-mom}
+as:
+%
+\begin{align}
+  E_g(z)\frac{d\bar{\phi}_g(z)}{dz} + \Sigma_{t,g}(z)\bar{J}_g(z) =& \sum^G_{g'=1}
+  \Sigma^{g'\rightarrow g}_{s1}(z)\bar{J}_{g'}(z) \mbox{ for } z \in V_i \label{eq:bte-1st-est}
+  \shortintertext{where}
+  V_i =& \mbox{ a subvolume of the system domain.}
+\end{align}
+The overbars distinguish the approximate solutions of Eq. \ref{eq:bte-1st-est} from the true
+solution of Eq. \ref{eq:bte-1st-mom}. From Eq. \ref{eq:bte-1st-est}, the diffusion coefficient can
+be defined as:
+%
+\begin{align}
+  D_g(z) = E_g(z)\left[\Sigma_{t,g}(z)-\sum^g_{g'=1}\Sigma^{g'\rightarrow g}_{s1}(z)
+  \frac{\bar{J}_{g'}(z)}{\bar{J}_g(z)}\right]^{-1} \label{eq:diffcoef-edd}
+\end{align}
+By further assuming that the Eddington factors are piecewise constant in each subvolume $V_i$, the
+averaged Eddington factor $E^i_g$ can be evaluated as:
+%
+\begin{align}
+  E^i_g =& \frac{E_g(z_{i+1})\phi_g(z_{i+1})-E_g(z_i)\phi_g(z_i)}{\bar{\phi}_g(z_{i+1})-
+  \bar{\phi}_g(z_i)}
+  \shortintertext{where}
+  z_{i+1} =& \mbox{ upper bound of subvolume $V_i$,} \nonumber \\
+  z_i =& \mbox{ lower bound of subvolume $V_i$.} \nonumber
+\end{align}
+%
+The diffusion coefficient from Eq. \ref{eq:diffcoef-edd} can then be calculated as:
+%
+\begin{align}
+  D^{AEF}_g(z) =& E^i_g\left[\hat{\Sigma}_{t,g}-\sum^G_{g'=1}\hat{\Sigma}^{g'\rightarrow g}_{s1}
+  \frac{\hat{J}_{g'}}{\hat{J}_g}\right]^{-1}
+  \shortintertext{where}
+  \hat{\Sigma}_{t,g} =& \frac{\int_{V_i}\Sigma_{t,g}(z)J_g(z)dz}{\int_{V_i}\bar{J}_g(z)dz},
+  \nonumber \\
+  \hat{\Sigma}^{g'\rightarrow g}_{s1} =& \frac{\int_{V_i}\Sigma^{g'\rightarrow g}_{s1}(z)J_{g'}(z)
+  dz}{\int_{V_i}\bar{J}_{g'}(z)dz}, \nonumber \\
+  \hat{J}_g =& \int_{V_i} \bar{J}_g(z)dz. \nonumber
 \end{align}
 
-By assuming the Eddington factor varies slowly in space, the authors introduced locally averaged,
-i.e. constant, Eddington factors to simplify the first angular moment of the transport equation.
-Further approximations were made to arrive at a space-dependent diffusion coefficient as a function
-of local Eddington factors, current-weighted cross sections, and neutron currents. 
+The second method employs a much simpler premise in that Fick's law is assumed to be accurate with
+high-order empirical diffusion coefficients that are to be determined. Given a known transport
+solution, the following integration holds for a small homogeneous volume $V_i$:
+%
+\begin{align}
+  \frac{1}{V_i}\int_{V_i}J_g(z)dV =& -\frac{1}{V_i}\int_{V_i}D_g(z)\frac{d\phi_g(z)}{dz}dV.
+\end{align}
+%
+Taking $D_g$ to be constant in $V_i$, we may apply divergence theorem to obtain
+%
+\begin{align}
+  \bar{J}_gV_i =& -D^i_g\int_{\partial V_i} \phi_g(z)dA
+  \shortintertext{where}
+  \bar{J}_g =& \mbox{ average current in $V_i$,} \nonumber \\
+  \partial V_i =& \mbox{ bounding surface of $V_i$.} \nonumber
+\end{align}
+%
+Rearranging the terms, we may obtain the empirical diffusion coefficient formulation from the
+transport-derived flux and current as follows:
+%
+\begin{align}
+  D^i_g =& -\frac{\left(z_{i+1}-z_i\right) \bar{J}_g}{\left[\phi_g(z_{i+1})-\phi_g(z_i)\right]}
+\end{align}
+%
+Both \gls{AEF} and empirical methods require the respective subvolumes $V_i$ to be small enough
+for the assumptions of constant Eddington factors and diffusion coefficients to hold within $V_i$.
 
-The second method employs a much simpler premise that Fick's law is assumed to be accurate with
-diffusion coefficients that are to be determined. 
+Both methods performed much better than with conventional diffusion coefficients derived using the
+$P_1$ approximation method. For the same 1D heterogeneous \gls{BWR} problem demonstrating the prior
+Ronen method \cite{gross_high-accuracy_2020} but with anisotropic scattering, the reactivity errors
+were around 10 pcm after eliminating errors associated with energy group condensation. The error
+values compare favorably with the 16-68 pcm error with the $P_1$ method. The \gls{AEF} and
+empirical methods also reproduced the flux distributions better with a maximum pointwise error of
+2\% as opposed to 5\% from the $P_1$ method. Similar to the Ronen method, the \gls{AEF} and
+empirical methods introduce pointwise corrections with information from transport methods. However,
+the present methods require a priori knowledge of the true solution or otherwise accurate estimates
+from transport methods, whereas the Ronen method relies on analytical transport operators which use
+diffusion flux estimates from the previous iteration to update the flux solution. Nevertheless, the
+\gls{AEF} and empirical methods provide the foundation for further development of practical,
+self-closing transport correction techniques.
+
+\subsubsection{General Equivalence Theory and Superhomogenization Method}
+
+As mentioned in Section \ref{sec:challenges-control-rod}, coarse-mesh and nodal methods homogenize
+heterogeneities in reactor geometries to reduce computational costs of running full-core
+simulations. Equivalence techniques which reduce spatial homogenization error are also effective
+for accurately modeling the worths of control rods within fuel assemblies. The \gls{GET}
+\cite{koebke_new_1980, smith_nodal_1983} and \gls{SPH} \cite{kavenoky_sph_1978,
+hebert_consistent_1991} methods represent the most widely used equivalence methods for improving
+the performance of diffusion calculations in homogenized \gls{LWR} models. Both methods involve
+deriving additional homogenization parameters from single-assembly transport calculations with
+reflective boundary conditions. Since the transport calculation step is already a prerequisite step
+for generating homogenized group constants, the equivalence methods are simple to implement and
+impose reasonably small additional computational costs.
+
+Koebke \cite{koebke_new_1980} first proposed abandoning continuous surface fluxes in favor of
+preserving net surface currents through discontinuity factors. Smith \cite{smith_assembly_1986}
+later extended this concept for assembly-homogenized calculations. The discontinuity factors are
+calculated for each face of the homogenized region to preserve volumetric reaction rates and
+surface neutron currents. The discontinuity factors are calculated as follows:
+%
+\begin{align}
+  DF =& \frac{\phi^{het,sur}}{\phi^{hom,sur}}
+  \shortintertext{where}
+  DF =& \mbox{ discontinuity factor,} \nonumber \\
+  \phi^{het,sur} =& \mbox{ surface flux of the region from the heterogeneous calculation,}
+  \nonumber \\
+  \phi^{hom,sur} =& \mbox{ surface flux of the region from the homogeneous calculation.}
+  \nonumber
+\end{align}
+%
+\gls{GET} was later extended for fine mesh calculations \cite{yamamoto_cell_2004} which refers to
+cell-level homogenization; each fuel cell in an assembly, consisting of the fuel pellet, cladding,
+and moderator, is individually homogenized as opposed to lumping together the entire assembly.
+
+On the other hand, the \gls{SPH} method, first proposed by Kavenoky \cite{kavenoky_sph_1978} for
+irregular lattices and later applied as a cell-homogenization technique by Hebert
+\cite{hebert_consistent_1991}, introduces correction factors to homogeneous cross sections as
+follows:
+%
+\begin{align}
+  \tilde{\Sigma}^{hom}_k =& \mu_k \Sigma^{hom}_k
+  \shortintertext{where}
+  \tilde{\Sigma}^{hom}_k =& \mbox{ \gls{SPH}-corrected homogeneous cross section for region $k$,}
+  \nonumber \\
+  \mu_k =& \mbox{ \gls{SPH} correction factor for region $k$,} \nonumber \\
+  \Sigma^{hom}_k =& \mbox{ uncorrected homogeneous cross section for region $k$.} \nonumber
+\end{align}
+%
+The \gls{SPH} factor is calculated as follows:
+%
+\begin{align}
+  \mu_k =& \frac{\bar{\phi}^{het}_k}{\phi^{hom}_k}
+  \shortintertext{where}
+  \bar{\phi}^{het}_k =& \mbox{ average flux in region $k$ from the heterogeneous calculation,}
+  \nonumber \\
+  \phi^{hom}_k =& \mbox{ average flux in region $k$ from the homogeneous calculation}
+  \nonumber \\
+                & \mbox{ with \gls{SPH}-corrected cross sections.} \nonumber
+\end{align}
+
+Both \gls{GET} and the \gls{SPH} method are designed to preserve reaction rates at the assembly
+level \cite{yamamoto_cell_2004}. Given that the \gls{SPH} method introduces only one correction
+factor per cell, it only preserves the average net current across all surfaces as opposed
+to the net current at each surface with \gls{GET}. Similarly, the isotropic nature of \gls{SPH}
+factors lead to worse pin-power estimates near control rods and reflectors compared to \gls{GET}.
+However, the \gls{SPH} method is simpler to implement in the diffusion solver as the \gls{SPH}
+factors can be precombined with the cross sections to generate \gls{SPH}-corrected cross sections.
+\gls{GET} requires diffusion solvers which allow for flux discontinuities at the interfaces.
+Furthermore, \gls{GET} requires more memory to store up to six discontinuity factors, one for each
+mesh surface, in 3D calculations.
+
+Modeling control rods in full-core calculations with the \gls{SPH} method or \gls{GET} provides
+better estimates of the multiplication factor and the flux distribution than reference diffusion
+solutions. In this regard, the correction factors do not distinguish between errors arising from
+homogenization or the diffusion approximation. However, the improved solutions, especially with the
+\gls{SPH} method, can still deviate significantly from reference transport calculations. A super
+cell, similar to the one adopted by \gls{MECS}, can be used to reduce errors within and near
+control rod cells \cite{ortensi_newton_2018}.
