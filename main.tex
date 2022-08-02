@@ -1,5 +1,5 @@
-%% Package and Class "uiucthesis2018" for use with LaTeX2e.
-\documentclass[edeposit,fullpage,11pt]{uiucthesis2018}
+%% Package and Class "uiucthesis2021" for use with LaTeX2e.
+\documentclass[edeposit,fullpage,11pt]{uiucthesis2021}
 
 
 \usepackage[acronym,toc]{glossaries}
@@ -7,8 +7,9 @@
 \include{acros}
 
 \usepackage{xspace}
-\usepackage{graphics}
+\usepackage{graphicx}
 \graphicspath{{images/}}
+\usepackage[title,titletoc]{appendix}
 
 \usepackage{placeins}
 \usepackage{booktabs} % nice rules (thick lines) for tables
@@ -20,11 +21,11 @@
 \usepackage{subcaption}
 \usepackage{hhline}
 \usepackage{amsmath}
+\usepackage{mathtools}
 \allowdisplaybreaks
 \usepackage{color}
 \usepackage{multirow}
 \usepackage{siunitx}
-\usepackage{booktabs}
 
 \usepackage{threeparttable, tablefootnote}
 
@@ -33,6 +34,12 @@
 \makeatletter
 
 \usepackage{tabularx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{diagbox}
+\usepackage{courier}
+\usepackage{pdflscape}
 
 \usepackage{cleveref}
 \usepackage{datatool}
@@ -41,15 +48,15 @@
 \usepackage{tikz}
 
 
-\title{Development of a High-Resolution Multiphysics Simulation Tool for Molten
-Salt Reactor Safety Analysis}
+\title{Advancement of Moltres for Multiphysics Molten Salt Reactor Modeling}
 \author{Sun Myung Park}
 \department{Nuclear, Plasma \& Radiological Engineering}
-\advisor{Kathryn D. Huff}
-\degreeyear{2021}
-\committee{Assistant Professor Kathryn D. Huff, Advisor \\
-           Dr Madicken Munk \\
-           TBC}
+\prelim
+\degreeyear{2022}
+\committee{Dr Madicken Munk, Chair \\
+           Professor Rizwan Uddin \\
+           Associate Professor Tomasz Kozlowski \\
+           Associate Professor Andreas Kloeckner}
 
 
 \begin{document}
@@ -64,9 +71,15 @@ Salt Reactor Safety Analysis}
 
 \end{abstract}
 
-\chapter*{Acknowledgments}
+\begin{dedication}
+
+\end{dedication}
+
+\begin{acknowledgments}
 
 %\input{acks}
+
+\end{acknowledgments}
 
 %% The thesis format requires the Table of Contents to come
 %% before any other major sections, all of these sections after
@@ -79,9 +92,10 @@ Salt Reactor Safety Analysis}
 %% List Symbols and/or Abbreviations
 %% etc.
 
-\tableofcontents
-\listoftables
-\listoffigures
+{
+  \hypersetup{linkcolor=black}
+  \tableofcontents
+}
 
 %% Create a List of Abbreviations. The left column
 %% is 1 inch wide and left-justified
@@ -99,34 +113,26 @@ nogroupskip=true]
 \input{introduction}
 \glsresetall
 
-\chapter{Literature Review}
+\chapter{Molten Salt Reactor Multiphysics Modeling}
 \label{chap:lit}
 \input{lit}
 \glsresetall
 
-%\chapter{Preliminary Work}
-%\label{chap:pw}
-%\input{pw}
+%\chapter{Description of Moltres}
+%\label{chap:moltres}
+%\input{moltres}
 %\glsresetall
 %
-%\chapter{CNRS Benchmark Results from Moltres}
+%\chapter{Verification of Moltres for Multiphysics Molten Salt
+%Reactor Modeling}
 %\label{chap:benchmark}
 %\input{benchmark}
 %\glsresetall
-%
-%\chapter{Future Work}
-%\label{chap:future}
-%\input{future}
-%\glsresetall
-%
-%\chapter{Conclusion}
-%\label{chap:conclusion}
-%\input{conclusion}
-%\glsresetall
-%
-%\chapter*{Appendix}
-%\label{chap:appendix}
-%\input{appendix}
+
+\chapter{Proposed Work}
+\label{chap:models}
+\input{models}
+\glsresetall
 
 \backmatter
 
