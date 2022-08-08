@@ -17,7 +17,9 @@ burnup and structural corrosion fall outside the scope of this work. Lastly,
 this chapter provides a literature review of turbulence modeling and control
 rod modeling, and their relevance in \glspl{MSR} modeling.
 
-\section{Historical Molten Salt Reactor Development and Operation}
+\section{Molten Salt Reactors}
+
+\subsection{Historical Molten Salt Reactor Development and Operation}
 
 \gls{ORNL} researchers first conceived the \gls{MSR} concept in pursuit of a
 liquid fuel reactor for the US Aircraft Nuclear Propulsion program in
@@ -43,94 +45,60 @@ research into adapting \glspl{MSR} for civilian power generation
 research was that the thorium fuel cycle had a better breeding ratio than the
 $^{238}$U-to-$^{239}$Pu fuel cycle in thermal-spectrum reactors.
 Ultimately, these efforts culminated in the design, construction, and
-successful operation of the \gls{MSRE}. The \gls{MSRE} had a
-graphite-moderated design with a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture,
-initially rated at 10 MW$_{\text{th}}$ but later restricted to 8
-MW$_{\text{th}}$ due to a miscalculation of heat transfer capabilities
+successful operation of the \gls{MSRE}. The \gls{MSRE} had a 8 MW$_{\text{th}}$,
+graphite-moderated design with a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture
 \cite{haubenreich_experience_1970}. In January 1969, the \gls{MSRE} became the
-first reactor to run on $^{233}$U fuel.
+first reactor to run on $^{233}$U fuel bred from $^{232}$Th.
 
 Building on their experience with the \gls{MSRE}, \gls{ORNL} proposed a
 new program for the construction and operation of a demonstration reactor
 based on the \gls{MSBR} concept that they had
 developed \cite{macpherson_molten_1985}. The \gls{MSBR} is a thermal-spectrum,
 single fluid reactor with fertile $^{232}$Th isotopes mixed directly into the
-FLiBe molten salt for $^{233}$U breeding \cite{gehin_liquid_2016}. Like the
+FLiBe molten salt for $^{233}$U breeding \cite{robertson_conceptual_1971}. Like the
 \gls{MSRE}, the \gls{MSBR} relies on continuous online reprocessing to add
 fertile material and remove fission product neutron poisons. Researchers
 estimated the doubling time (the minimum amount of time required to produce
 enough fissile material to start up another \gls{MSBR}) to be
-approximately 22 years. However, \gls{ORNL} failed to secure funding for the
-new program in their two attempts in 1972 and 1974. Nevertheless, from a
-technical perspective, two independent
+approximately 22 years. While \gls{ORNL} failed to secure funding for the
+\gls{MSBR} program, two independent
 technology evaluation and design studies of the \gls{MSR} had reported
 favorably on the promise of the system \cite{macpherson_molten_1985}.
 
-In spite of this setback, research into \glspl{MSR} continued through the late
-1970s. In 1980, \gls{ORNL} published a report describing a new \gls{MSR}
-concept, called the \gls{DMSR} \cite{gehin_liquid_2016} with denatured
-$^{235}$U fuel (i.e. low-enriched uranium). The \gls{ORNL} researchers
-developed this design in response to the fuel reprocessing restrictions
-introduced by President Ford in 1976. The \gls{DMSR} would operate as a
-once-through
-converter system without fuel reprocessing. While the fuel consists of 19.75
-\% \gls{HALEU}, the initial core loading includes thorium
-to boost its conversion ratio throughout its lifetime. It has a continuous
-online feed consisting of \gls{HALEU} to maintain criticality, and denatured
-$^{235}$U to keep uranium enrichment levels below nuclear non-proliferation
-policy thresholds. The design also includes a gas sparging system for removing
-gaseous fission products, while noble metals plate out onto the walls of
-the coolant loop. The older \gls{MSBR} design had a significant drawback; the
-extensive neutron damage in the graphite moderator necessitated frequent
-replacement (every four years) throughout its operational lifetime. The
-\gls{DMSR} avoids this issue by running on a lower power density while
-maintaining
-the overall power output of 2250 MW$_{\text{th}}$. As a result, researchers
-projected that the graphite moderator would last for the entirety of the
-\gls{DMSR}'s design lifetime.
+Following a relative lull lasting until the late 20th century, researchers at \gls{CNRS} began
+research into \glspl{MSR} in 1997 \cite{heuer_simulation_2010}. Starting from the \gls{MSBR}
+design, they performed parametric studies on reactor safety, breeding, and other performance
+metrics \cite{mathieu_thorium_2006}. They found that graphite-moderated designs required careful
+consideration of the fuel-to-moderator ratio as some designs exhibited positive temperature
+feedback coefficients. Safer reactor configurations generally operated at very thermalized spectra
+owing to large neutron losses in the graphite, or at epithermal and fast spectra owing to
+$^{232}$Th resonance capture cross sections. Combined with findings on poor breeding performance
+with thermal spectra and accelerated graphite irradiation damage with fast spectra, the authors
+suggested eliminating the graphite moderator to optimize both reactor safety and breeding.
 
-A concurrent program at the UK Atomic Energy Authority led the
-development of a 2500 MW$_{\text{e}}$ lead-cooled Molten Chloride Fast Reactor
-concept \cite{smith_assessment_1974}. It is a dual fluid system,
-with separate loops for the fuel salt and the blanket salt. The blanket is a
-1 m-wide tank surrounding the core. The absence of moderators and the choice
-of chloride over fluoride salt resulted in a relatively hard neutron spectrum
-which favors $^{239}$Pu breeding over the thorium cycle. The UK researchers
-performed some experiments to study molten salt chemistry but they did not
-build reactor prototypes. The UK program eventually shut down just like its
-US counterpart partly due to the successful demonstration of the Prototype
-Fast Reactor which had achieved criticality in 1974.
-
-Following a lull lasting through the late 20th century, researchers at
-\gls{CNRS} began research into \glspl{MSR} in 1997
-\cite{heuer_simulation_2010}. Starting from the \gls{MSBR} design, they
-performed parametric studies based on safety, breeding, and
-other performance metrics \cite{mathieu_thorium_2006}. Their efforts
-culminated in the \gls{MSFR} concept, a fast-spectrum breeder \gls{MSR}
-designed to run on the thorium fuel cycle \cite{merle_optimized_2007}. In
-2008, the Generation IV International Forum highlighted the \gls{MSFR} among
-other \gls{MSR} designs for further development \cite{gif_generation_2008}.
-The \gls{MSFR} has also benefited from collaborative research through three
-European-funded projects, the \gls{EVOL} \cite{euratom_final_2015},
-\gls{SAMOFAR} \cite{kloosterman_20_2017}, and \gls{SAMOSAFER}
-\cite{cordis_severe_nodate} projects. Under the \gls{EVOL}
-project, researchers further optimized the \gls{MSFR} design based on
-neutronic and thermal-hydraulic safety analyses. They also diversified
-start-up fuel options beyond the original $^{233}$U-based fuel composition to
-include $^{235}$U, $^{239}$Pu, and \gls{TRU}, and established fuel
-reprocessing schemes for the \gls{MSFR}. The \gls{SAMOFAR} project, which
-started approximately two years after the end of the \gls{EVOL} project,
-supported more comprehensive safety assessments of the reactor and the
-reprocessing plant, and funded a number of experiments for validation of the
-\gls{MSFR}'s safety features. The ongoing \gls{SAMOSAFER} project funds further
-research activities with the goal of achieving modeling, analysis, and
-design improvements on various aspects of \gls{MSR} operation and safety. As
-opposed to the channel-type design of the \gls{MSRE} and \gls{MSBR}, the
-\gls{MSFR} reactor core consists of a single, large channel through which the
-salt flows as shown in Figure \ref{fig:msfr}. The omission of graphite channels
-avoids operational and design issues associated with graphite neutron damage
-and parasitic absorption and results in
-a harder neutron spectrum than the \gls{MSRE} and \gls{MSBR}.
+Their efforts culminated in the \gls{MSFR} concept, a fast-spectrum breeder \gls{MSR}
+designed to run on the thorium fuel cycle \cite{merle_optimized_2007}. As opposed to the
+multi-channel design of the \gls{MSRE} and \gls{MSBR}, the \gls{MSFR} reactor core consists of a
+single, large channel through which the salt flows as shown in Figure \ref{fig:msfr}. In 2008, the
+Generation IV International Forum highlighted the \gls{MSFR} among other \gls{MSR} designs for
+further development \cite{gif_generation_2008}. The \gls{MSFR} has also benefited from
+collaborative research through three projects, the \gls{EVOL} \cite{euratom_final_2015},
+\gls{SAMOFAR} \cite{kloosterman_20_2017}, and \gls{SAMOSAFER} \cite{cordis_severe_nodate} projects.
+Under the \gls{EVOL} project, researchers further optimized the \gls{MSFR} design based on
+neutronic and thermal-hydraulic safety analyses. One significant modification involved a transition
+from the original straight cylinder core design to curved walls in the reactor core to facilitate
+smoother fuel salt flow and prevent large eddies from forming in the core
+\cite{rouch_preliminary_2014}. Large eddies create hot, swirling pockets of fuel salt which could
+complicate reactor operation. For instance, changes in flow conditions, intended or otherwise,
+could cause the eddies to collapse and in turn introduce a localized pocket of hot fuel salt to the
+circulating fuel loop. Coupled with the strong temperature reactivity feedback in the \gls{MSFR},
+reactor could experience large power fluctuations every time the hot fuel salt passes through the
+core. The \gls{SAMOFAR} project, which started approximately two years after the end of the
+\gls{EVOL} project, supported more comprehensive safety assessments of the reactor and the
+reprocessing plant, and funded a number of experiments for validation of the \gls{MSFR}'s safety
+features. The ongoing \gls{SAMOSAFER} project funds further research activities with the goal of
+achieving modeling, analysis, and design improvements on various aspects of \gls{MSR} operation and
+safety.
 %
 \begin{figure}[htb!]
 	\centering
@@ -145,10 +113,9 @@ development. China launched their \gls{TMSR} program in 2011 to develop and
 construct both solid-fueled and liquid-fueled \gls{TMSR} designs
 \cite{zou_research_2019}. Latest updates at the time of writing indicate that a
 2-MW liquid-fueled prototype will complete construction by August
-2021, with tests expected to start the following month. This milestone places
-China ahead of other groups in the context of modern \gls{MSR} \gls{RD}
-efforts. India also signaled their interest especially in thorium-based
-reactors given their inherent and vast thorium reserves
+2021, with tests expected to start the following month. India also signaled
+their interest especially in thorium-based
+reactors given their vast thorium reserves
 \cite{jayaram_overview_1987}. They have developed conceptual designs of the
 \gls{IMSBR}, expected to run on a fast/epithermal neutron spectrum to avoid
 using graphite moderators given their tendency to deform under high neutron
@@ -167,6 +134,21 @@ Canada-based Terrestrial Energy is also developing their \gls{IMSR}
 replaceable \gls{IMSR} core-unit which holds the reactor core, pumps, heat
 exchangers, and control rods, runs for approximately 7 years before it is shut
 down and replaced after a cool-down period.
+
+With the renewed global interest in \glspl{MSR}, \gls{MSR} modeling software play an important role
+in supporting \gls{MSR} development. Reactor modeling can accelerate reactor design and
+optimization by enabling engineers to iterate through numerous design changes. \gls{MSR} modeling
+software are also essential tools in reactor safety analysis and licensing efforts as engineers
+must demonstrate and verify their \gls{MSR} designs remain safe under various accident scenarios.
+However, many reactor software were tailored for modeling solid-fueled reactors such as \glspl{LWR}
+which make up most of the world's operating reactor fleet. \glspl{MSR} possess unique features and
+physics which are typically not modeled in other reactor types. The \gls{ARE} and \gls{MSRE}
+projects first demonstrated the feasibility of a liquid-fueled reactor with fissile fuel dissolved
+in the molten salt coolant. The \gls{MSBR} design features $^{233}$U breeding from $^{232}$Th with
+online fuel reprocessing as opposed to batch-wise reprocessing of solid-fueled breeder reactors.
+The various modern \gls{MSR} designs feature numerous changes relative to the older \gls{MSRE} and
+\gls{MSBR} designs such as running on epithermal and fast neutron spectrums, different core
+structures, and different molten salt compositions.
 
 \gls{MSR} modeling software play an important role in supporting
 \gls{MSR} development. They accelerate reactor design and optimization by
