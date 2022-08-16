@@ -17,9 +17,7 @@ burnup and structural corrosion fall outside the scope of this work. Lastly,
 this chapter provides a literature review of turbulence modeling and control
 rod modeling, and their relevance in \glspl{MSR} modeling.
 
-\section{Molten Salt Reactors}
-
-\subsection{Historical Molten Salt Reactor Development and Operation}
+\section{Historical Molten Salt Reactor Development and Operation}
 
 \gls{ORNL} researchers first conceived the \gls{MSR} concept in pursuit of a
 liquid fuel reactor for the US Aircraft Nuclear Propulsion program in
@@ -48,7 +46,11 @@ Ultimately, these efforts culminated in the design, construction, and
 successful operation of the \gls{MSRE}. The \gls{MSRE} had a 8 MW$_{\text{th}}$,
 graphite-moderated design with a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture
 \cite{haubenreich_experience_1970}. In January 1969, the \gls{MSRE} became the
-first reactor to run on $^{233}$U fuel bred from $^{232}$Th.
+first reactor to run on $^{233}$U fuel bred from $^{232}$Th. Among the numerous experiments
+conducted on the \gls{MSRE}, the zero-power start-up and coast-down tests
+\cite{prince_zero-power_1968} and the natural circulation test \cite{briggs_molten-salt_1969}
+represent the most commonly referenced tests for MSR software validation due to their
+straightforward demonstrations of \gls{DNP} drift and passive cooling in an \gls{MSR}.
 
 Building on their experience with the \gls{MSRE}, \gls{ORNL} proposed a
 new program for the construction and operation of a demonstration reactor
@@ -85,7 +87,7 @@ further development \cite{gif_generation_2008}. The \gls{MSFR} has also benefite
 collaborative research through three projects, the \gls{EVOL} \cite{euratom_final_2015},
 \gls{SAMOFAR} \cite{kloosterman_20_2017}, and \gls{SAMOSAFER} \cite{cordis_severe_nodate} projects.
 Under the \gls{EVOL} project, researchers further optimized the \gls{MSFR} design based on
-neutronic and thermal-hydraulic safety analyses. One significant modification involved a transition
+neutronic and \gls{TH} safety analyses. One significant modification involved a transition
 from the original straight cylinder core design to curved walls in the reactor core to facilitate
 smoother fuel salt flow and prevent large eddies from forming in the core
 \cite{rouch_preliminary_2014}. Large eddies create hot, swirling pockets of fuel salt which could
@@ -98,7 +100,12 @@ core. The \gls{SAMOFAR} project, which started approximately two years after the
 reprocessing plant, and funded a number of experiments for validation of the \gls{MSFR}'s safety
 features. The ongoing \gls{SAMOSAFER} project funds further research activities with the goal of
 achieving modeling, analysis, and design improvements on various aspects of \gls{MSR} operation and
-safety.
+safety. Other than coupled neutronics and \gls{TH} studies, the latter two projects also
+conducted research and development on molten salt chemistry \cite{rodrigues_pyrochemical_2015,
+duran-klie_dynamic_2016, soucek_synthesis_2017, tosolin_synthesis_2018, tosolin_vaporization_2019},
+emergency salt drain plug design optimization \cite{tano_progress_2017, giraud_development_2019,
+tiberga_preliminary_2019} and fission product tracking in the molten salt coolant
+\cite{kalilainen_evaporation_2020, di_ronco_eulerian_2021, di_ronco_multiphysics_2022}.
 %
 \begin{figure}[htb!]
 	\centering
@@ -108,65 +115,62 @@ safety.
 	\label{fig:msfr}
 \end{figure}
 
-China and India have also started national programs supporting \gls{MSR}
-development. China launched their \gls{TMSR} program in 2011 to develop and
-construct both solid-fueled and liquid-fueled \gls{TMSR} designs
-\cite{zou_research_2019}. Latest updates at the time of writing indicate that a
-2-MW liquid-fueled prototype will complete construction by August
-2021, with tests expected to start the following month. India also signaled
-their interest especially in thorium-based
-reactors given their vast thorium reserves
-\cite{jayaram_overview_1987}. They have developed conceptual designs of the
-\gls{IMSBR}, expected to run on a fast/epithermal neutron spectrum to avoid
-using graphite moderators given their tendency to deform under high neutron
-fluence.
+China and India have also started national programs supporting \gls{MSR} development. China
+launched their \gls{TMSR} program in 2011 to develop and construct both solid-fueled and
+liquid-fueled \gls{TMSR} designs \cite{zou_research_2019}. They finished construction of the 2
+MW$_{\text{th}}$ TMSR-LF1 prototype in August 2021 and received approval from the Chinese Ministry
+of Ecology and Environment for reactor start-up in August 2022. India also signaled their interest
+especially in thorium-based reactors given their vast thorium reserves
+\cite{jayaram_overview_1987}. They have developed conceptual designs of the \gls{IMSBR}, expected
+to run on a fast/epithermal neutron spectrum to avoid using graphite moderators given their
+tendency to deform under high neutron fluence.
 
-In the US, Southern Company received funding from \gls{DOE}'s
-\gls{ARDP} \cite{doe_office_2021} to design, construct, and operate the
-\gls{MCRE}, a prototype chloride salt-based \gls{MSR} relevant to TerraPower's
-\gls{MCFR} \cite{terrapower_mcfr_2020}. This project builds on a prior
-five-year cost-sharing project for the development of the \gls{MCFR} involving
-TerraPower, Southern Company, Oak Ridge National Laboratory, Idaho National
-Laboratory, the Electric Power Research Institute, and Vanderbilt University.
-The \gls{MCFR} is a fast-spectrum \gls{MSR} similar to the \gls{MSFR}.
-Canada-based Terrestrial Energy is also developing their \gls{IMSR}
-\cite{leblanc_18_2017}, a small modular \gls{MSR} based on the \gls{MSRE}. The
-replaceable \gls{IMSR} core-unit which holds the reactor core, pumps, heat
-exchangers, and control rods, runs for approximately 7 years before it is shut
-down and replaced after a cool-down period.
+In the US, Southern Company received funding from \gls{DOE}'s \gls{ARDP} \cite{doe_office_2021} to
+design, construct, and operate the \gls{MCRE}, a prototype chloride salt-based \gls{MSR} similar to
+TerraPower's \gls{MCFR} \cite{terrapower_mcfr_2020}, at \gls{INL}. This project builds on a prior
+five-year cost-sharing project for the development of the \gls{MCFR} involving TerraPower, Southern
+Company, Oak Ridge National Laboratory, Idaho National Laboratory, the Electric Power Research
+Institute, and Vanderbilt University. The \gls{MCFR} is a fast-spectrum \gls{MSR} similar to the
+\gls{MSFR}. Canada-based Terrestrial Energy is also developing their \gls{IMSR}
+\cite{leblanc_18_2017}, a small modular \gls{MSR} based on the \gls{MSRE}. The replaceable
+\gls{IMSR} core-unit which holds the reactor core, pumps, heat exchangers, and control rods, runs
+for approximately 7 years before it is shut down and replaced after a cool-down period.
 
 With the renewed global interest in \glspl{MSR}, \gls{MSR} modeling software play an important role
-in supporting \gls{MSR} development. Reactor modeling can accelerate reactor design and
-optimization by enabling engineers to iterate through numerous design changes. \gls{MSR} modeling
-software are also essential tools in reactor safety analysis and licensing efforts as engineers
-must demonstrate and verify their \gls{MSR} designs remain safe under various accident scenarios.
-However, many reactor software were tailored for modeling solid-fueled reactors such as \glspl{LWR}
-which make up most of the world's operating reactor fleet. \glspl{MSR} possess unique features and
-physics which are typically not modeled in other reactor types. The \gls{ARE} and \gls{MSRE}
-projects first demonstrated the feasibility of a liquid-fueled reactor with fissile fuel dissolved
-in the molten salt coolant. The \gls{MSBR} design features $^{233}$U breeding from $^{232}$Th with
-online fuel reprocessing as opposed to batch-wise reprocessing of solid-fueled breeder reactors.
-The various modern \gls{MSR} designs feature numerous changes relative to the older \gls{MSRE} and
-\gls{MSBR} designs such as running on epithermal and fast neutron spectrums, different core
-structures, and different molten salt compositions.
+in supporting \gls{MSR} development. The \gls{ARE} and \gls{MSRE} projects first demonstrated the
+feasibility of a liquid-fueled reactor with fissile fuel dissolved in molten salt coolant. The
+\gls{MSBR} design features $^{233}$U breeding from $^{232}$Th with online fuel reprocessing as
+opposed to infrequent batch-wise reprocessing of solid-fueled breeder reactors. The various modern
+\gls{MSR} designs feature numerous changes relative to the older \gls{MSRE} and \gls{MSBR} designs
+such as running on epithermal and fast neutron spectrums, different core structures, and different
+molten salt compositions. However, the liquid fuel, online reprocessing capability, and other
+unique features of \glspl{MSR} render many existing reactor modeling software, tailored for
+modeling solid-fueled reactors, unsuitable for \gls{MSR} analysis. This fact is unsurprising
+considering the dominant market share of \glspl{LWR} in the global nuclear reactor fleet, the
+resultant research direction in the past few decades, and \glspl{MSR} being the sole reactor type
+to utilize liquid fuel. Accurate reactor modeling capabilities are important because they
+accelerate reactor design and optimization by enabling quicker iteration through numerous design
+changes. \gls{MSR} modeling software are also essential tools in reactor safety analysis and
+licensing efforts as reactor developers must demonstrate and verify their \gls{MSR} designs remain
+safe under various accident scenarios. The next two sections provide reviews of \gls{MSR}
+multiphysics modeling with respect to reactor accident analysis and control rod modeling in
+\gls{MSR} multiphysics simulations.
 
-\gls{MSR} modeling software play an important role in supporting
-\gls{MSR} development. They accelerate reactor design and optimization by
-enabling engineers to iterate through numerous design changes. \gls{MSR}
-modeling software are also essential tools in reactor safety analysis and
-licensing efforts as engineers must demonstrate and verify their \gls{MSR}
-designs remain safe under various accident scenarios. The next section
-identifies challenges in \gls{MSR} multiphysics modeling with respect to
-reactor accident analysis.
+\section{MSR Multiphysics Modeling}
 
-\section{Challenges in MSR Multiphysics Modeling} \label{sec:challenges}
+This section discusses the main challenges in \gls{MSR} multiphysics modeling on reactor accident
+timescales, followed by a review of existing \gls{MSR} multiphysics simulations and results in the
+literature. Lastly, I present verification and validation efforts related to \gls{MSR} multiphysics
+modeling.
+
+\subsection{Challenges in MSR Multiphysics Modeling} \label{sec:challenges}
 
 While modeling \glspl{MSR} is not necessarily more difficult than modeling
 solid-fueled reactors, we must adapt our software tools to accurately model the
 unique phenomena found in these circulating-fuel reactors. The differences in
 the challenges of simulating \glspl{MSR} compared to solid-fueled reactors stem
-mainly from the liquid fuel form of the fuel salt \cite{huff_identifying_2019,
-diamond_phenomena_2018}.
+mainly from the liquid fuel form of the fuel salt \cite{diamond_phenomena_2018,
+huff_identifying_2019}.
 
 Firstly, liquids generally exhibit greater thermal
 expansion per unit change in temperature than solids. A decrease in density of
@@ -185,7 +189,7 @@ Secondly, with the fuel
 salt also serving the role of providing cooling in the core, velocity flow
 profiles in the fuel salts strongly impact the temperature distribution via
 advection-dominated heat transfer \cite{diamond_phenomena_2018}. This contrasts
-with the relatively static temperature distribution shapes in fuel pins and
+with the relatively static temperature profiles in fuel pins and
 other forms of solid fuel matrixes physically separated from the coolant; 
 changes in coolant and the resultant changes in heat transfer rates in
 solid-fueled reactors are often reduced to empirical correlations governing
@@ -206,9 +210,21 @@ event compared to solid-fueled reactors, absent any temperature reactivity
 feedback. Thus, accurate \gls{MSR} transient simulations require accurate
 modeling of \gls{DNP} drift.
 
-As a result, multiphysics
-software must employ \textit{tight coupling schemes} to couple the neutronics
-and thermal-hydraulics governing equations to accurately capture the strong
+The existence of multiple, disparate physics in a single system constitutes a multiphysics system.
+Consequently, we need multiphysics software to accurately model a multiphysics system. Employing
+well-verified single-physics software for coupled multiphysics simulations does not guarantee
+stability, accuracy, or robustness \cite{keyes_multiphysics_2013}. Nevertheless, coupling separate
+single-physics software for multiphysics simulations is a viable and popular option with proper
+implementation. In the presence of strong coupling between different physics, extra care must be
+taken to accurately capture various multiphysics interactions. For instance, the two-way coupling
+between neutron flux and temperature in \glspl{MSR} described in this section necessitates robust
+coupling techniques. Naive multiphysics coupling algorithms may result in longer computation times
+at best and non-converging solves at worst.
+
+Regardless of whether one couples separate single-physics software together or develops an
+intrinsically multiphysics software, multiphysics software for modeling \glspl{MSR} must employ
+\textit{tight coupling schemes} to couple the neutronics
+and \gls{TH} governing equations to accurately capture the strong
 multiphysics interactions in transient \gls{MSR} simulations. Tightly coupled
 numerical models handle multiphysics interactions by either updating all state
 variables simultaneously in one monolithic solve (\textit{full coupling}) or
@@ -235,65 +251,100 @@ In contrast to tight coupling schemes, \textit{loose coupling schemes}
 solve each set of single-physics equations using state variable
 data from the previous timestep without iterative corrections within every
 timestep. Loosely coupled schemes are inappropriate for modeling \glspl{MSR}
-given the strong coupling between the neutronics and thermal-hydraulics.
+given the strong coupling between the neutronics and \gls{TH}.
 Aufiero et al. \cite{aufiero_development_2014} demonstrated a loose coupling
 approach that failed to reproduce the expected increase in reactor power
 in an \gls{MSR} in response to a 150 pcm reactivity insertion.
 
-Consequently, most MSR multiphysics simulation tools employ, at
+Consequently, MSR multiphysics simulation tools must employ, at
 the very least, tight coupling schemes through fixed point iterations. The
-next section explores various numerical coupling approaches in existing
-multiphysics \gls{MSR} simulation tools.
+next subsection reviews existing \gls{MSR} multiphysics simulations and results.
 
-\section{MSR Multiphysics Simulation Tools} \label{sec:msr-tools}
+\subsection{Review of MSR Multiphysics Simulations and Results} \label{sec:msr-tools}
 
-In recent years, several simulation tools have been developed for full-core
-modeling of fast-spectrum \glspl{MSR}. \textit{Tightly coupled} approaches,
-through segregated solvers, involve coupling separate single-physics neutronics
-and thermal-hydraulics software. For example, researchers at
-the \gls{TUD} coupled the 3D neutron diffusion software DALTON
-\cite{boer_validation_2010} and the \gls{CFD} software HEAT
-\cite{de_zwaan_static_2007} to perform a safety analysis of the \gls{MSFR}
-\cite{fiorina_modelling_2014}. In a later effort from the same institute,
-Tiberga et al. \cite{tiberga_discontinuous_2019} coupled PHANTOM-$S_N$ and
-DGFlows in their participation in the CNRS benchmark study
-\cite{tiberga_results_2020}. The CNRS benchmark, named after the \gls{CNRS}
-where it was originally developed, facilitates code-to-code verification of
-\gls{MSR} multiphysics software \cite{aufiero_testing_2018}. Another
-multiphysics package was developed at the Paul Scherrer Institute (PSI)
-coupling the thermal-hydraulics system software \gls{TRACE}
-\cite{nrc_trace_2007} with the
-nodal neutron diffusion software \gls{PARCS} \cite{downar_parcs_2010} for the
-safety analysis of the \gls{MSFR} \cite{pettersen_coupled_2016}. Coupling
-single-physics software to form an integrated multiphysics tool allows
-researchers to leverage on older, well-validated, single-physics software.
-These single-physics software are also highly optimized for solving specific
-types of \glspl{PDE} relevant to the investigated system.
+In the last two decades, several simulation tools have been developed for \gls{MSR} modeling. Given
+the focus on developing high-quality \gls{MSR} software to support reactor design optimization,
+this literature review omits MSR simulation work with zero-dimensional point reactor kinetics in
+favor of those with spatially-resolved neutronics methods.
+
+Most \gls{MSR} simulation tools employ tight, iterative coupling to couple separate neutronics and
+\gls{TH} solvers. In 2007, Krepel et al. \cite{krepel_dyn3d-msr_2007} extended the
+\gls{LWR} nodal diffusion code DYN3D to account for \gls{DNP} drift and fission energy deposition
+in the coolant for \gls{MSR} modeling. Dubbed \textit{DYN3D-MSR}, the code also contains the FLOCAL
+\gls{TH} model for coolant flow and conjugate heat transfer modeling. Their \gls{MSRE} and
+\gls{MSBR} models consisted of homogeneous hexagonal nodes (mesh elements) for the nodal diffusion
+calculation coupled to individual hexagonal unit cells comprising of graphite with circular fuel
+channels in the center for the \gls{TH} calculations. They simulated steady-state operation;
+start-up, coast-down, and natural circulation transients; and an overcooling transient in their
+\gls{MSRE} model. They also modeled steady-state operation and a single channel blockage transient
+in their \gls{MSBR} model. At the \gls{TUD}, Kophazi et al. \cite{kophazi_development_2009} coupled
+their in-house 3D neutron diffusion software DALTON \cite{boer_validation_2010} and \gls{TH}
+software THERM to develop a 3D \gls{MSR} simulation tool. They homogenized the heterogeneous fuel
+and graphite region of the \gls{MSRE} for the neutronics calculation, but they discretized the
+region into a Cartesian mesh and modeled a more accurate representation of the oblong fuel channels
+in the graphite core matrix as opposed to the circular shape by Krepel et al.
+\cite{krepel_dyn3d-msr_2007}. Both efforts by Krepel et al. and Kophazi et al. showed good
+agreement with \gls{MSRE} experimental data in their respective validation tests.
+The researchers from \gls{TUD} continued in their approach of coupling separate single-physics
+software to create \gls{MSR} simulation tools, as noted by the DALTON-HEAT
+\cite{de_zwaan_static_2007} coupling to model the \gls{MSFR} \cite{fiorina_modelling_2014}. The
+fast-spectrum \gls{MSFR} features a large pool of fuel salt in its single-channel design as opposed
+to the \gls{MSRE}'s multi-channel design. As a result, the authors had to incorporate
+multidimensional turbulent flow modeling to accurately model the complex flow profiles and
+turbulence effects in the \gls{MSFR} during steady-state operation and transient scenarios. In a
+later effort from the same institute, Tiberga et al. \cite{tiberga_discontinuous_2019} coupled
+PHANTOM-$S_N$ and DGFlows in their participation in the CNRS benchmark study
+\cite{tiberga_results_2020}. Developed at the \gls{CNRS}, the CNRS benchmark facilitates
+code-to-code verification of \gls{MSR} multiphysics software \cite{aufiero_testing_2018}.
+
+Another multiphysics package was developed at
+the \gls{PSI} by coupling the \gls{LWR} \gls{TH} system software \gls{TRACE} \cite{nrc_trace_2007}
+with the nodal neutron diffusion software \gls{PARCS} \cite{downar_parcs_2010} for a safety
+analysis of the \gls{MSFR} \cite{pettersen_coupled_2016}. The straight cylinder \gls{MSFR} design
+was approximated using hexagonal nodes in \gls{PARCS} while \gls{TRACE} simulated
+Reynolds-averaged, inviscid coolant flow. While modeling inviscid flow reduces computational costs
+by eliminating the need for expensive turbulence modeling, this approach neglects turbulent flow
+and turbulent mixing effects. More recently, Jaradat et al. \cite{jaradat_development_2021}
+extended the 3D $P_1$ and $SP_3$ nodal transport code PROTEUS-NODAL to support \gls{DNP} drift.
+Yang et al. \cite{yang_development_2022} then developed a coupled simulation tool of PROTEUS-NODAL
+and the system analysis code \gls{SAM}. They modeled the \gls{MSFR} on a 2D axisymmetric geometry
+and the \gls{MSRE} on a 3D R-$\theta$-Z geometry with twelve 1D flow channels. The \gls{SAM} flow
+model relied on the algebraic mixing length model for turbulence modeling. Both sets of results
+reproduced the expected trends observed in published experimental and simulation data. Coupling
+single-physics software to form integrated multiphysics tools allows researchers to leverage on
+existing well-validated, single-physics software. These single-physics software are also highly
+optimized for solving specific types of \glspl{PDE} relevant to the investigated system.
 
 With modern advancements in computing hardware and growing access to
 high-performance computing systems, others have developed multiphysics tools by
 coupling the \gls{CFD} software OpenFOAM
 \cite{the_openfoam_foundation_ltd_openfoam_2021} with the Monte Carlo particle
-transport software
-Serpent \cite{leppanen_serpent_2014}, thus achieving high-fidelity neutronics
-calculations in transient reactor analyses. Laureau et al.
-\cite{laureau_transient_2017} developed an innovative technique called the
+transport software Serpent \cite{leppanen_serpent_2014}, thus achieving
+high-fidelity neutronics calculations in transient reactor analyses. To that end,
+Serpent has a multiphysics interface supporting coupling
+with other physics software \cite{leppanen_development_2013}. Laureau et al.
+\cite{laureau_transient_2017} developed another technique called the
 \gls{TFM} method through the introduction of additional time-dependence
 operators to conventional fission matrices typically used to accelerate source
 convergence in Monte Carlo neutronics calculations. The \gls{TFM} method
 pre-calculates three \glspl{TFM} of the reactor system in Serpent and
 interpolates the matrix values during the actual transient calculations to
-incorporate the effects of temperature-induced density change and Doppler
-effect on the neutron cross sections and ultimately the neutron flux. Blanco
-\cite{blanco_neutronic_2020} took a more integrated approach by
+incorporate temperature-induced salt expansion and Doppler
+effects on the neutron cross sections and ultimately the neutron flux. Laureau et al. opted to
+subcycle the neutronics calculations by setting smaller timesteps than the \gls{TH} calculations
+to take advantage of the differing physics timescales. They demonstrated load-following capability
+and parametric studies of overcooling and reactivity insertion transients in the \gls{MSFR}.
+Blanco \cite{blanco_neutronic_2020} took a more direct approach by
 compiling Serpent as an internal \texttt{C}-based function within OpenFOAM's
 \texttt{C++}-based framework. This approach reduced the amount of required data
 transfers between Serpent and OpenFOAM as both software have access to shared
 memory during runtime. Their integrated tool employs the Quasi-Static
 method for transient neutronics calculations and runs Serpent Monte Carlo
 calculations several times per timestep until convergence is reached.
+Blanco demonstrated the Serpent-OpenFOAM tool on the CNRS benchmark specified by Tiberga et al.
+\cite{tiberga_results_2020}.
 
-Another \gls{MSR} simulation approach involves developing ``all-in-one''
+Another \gls{MSR} simulation approach involves developing inherently
 multiphysics software which handle all multiphysics calculations and data
 transfer internally. Among earlier efforts, Nicolino et al.
 \cite{nicolino_coupled_2008} and Zhang et al. \cite{zhang_development_2009}
@@ -304,7 +355,7 @@ pool-type \glspl{MSR}. They each independently developed unnamed multiphysics
 simulation tools and demonstrated their tools with non-moderated \gls{MSR}
 designs. Later, Li et al. \cite{li_transient_2015} demonstrated the
 steady-state and transient analysis capabilities of COUPLE, a neutronics and
-thermal-hydraulics software developed at the Karlsruhe Institute of Technology.
+\gls{TH} software developed at the Karlsruhe Institute of Technology.
 Others adopted extensible software frameworks for developing numerical solvers
 to develop multiphysics reactor analysis software. Examples of these software
 frameworks include the commercial COMSOL
@@ -321,214 +372,62 @@ modeling the \gls{MSRE} upper plenum, downcomer and lower plenum, primary heat
 exchanger, and secondary heat exchanger as 0D systems (lumped-parameter model),
 and substituting the 2D fuel channel with a 3D fuel channel which more closely
 resembled the actual fuel channels in the \gls{MSRE}
-\cite{zanetti_geometric_2015}. Beyond graphite-moderated \glspl{MSR}, they
-also modeled the \gls{MSFR} in the same publication which featured \gls{TUD}'s
-DALTON + HEAT coupled multiphysics tool.
-More recently, several European institutes (\gls{CNRS}, \gls{PoliMi},
-and the \gls{PSI}) have also developed coupled neutronics and
-thermal-hydraulics tools in OpenFOAM. Their tools share some
-similarities such as implementing the $SP_N$ simplified $P_N$ neutron transport
-model and leveraging OpenFOAM's turbulent flow modeling capabilities.
-Differences include fuel compressibility modeling and helium bubble tracking
-capabilities from \gls{PoliMi} \cite{cervi_development_2019}, fuel
-performance analysis capability from \gls{PSI} \cite{fiorina_creation_2018},
-and the aforementioned external coupling capability with Serpent from
-\gls{CNRS} \cite{blanco_neutronic_2020}.
+\cite{zanetti_geometric_2015}. Other than the \gls{MSRE}, they
+also modeled the \gls{MSFR} in a later publication which also featured \gls{TUD}'s
+DALTON-HEAT coupled multiphysics tool \cite{fiorina_modelling_2014}.
+
+Other institutes have dedicated significant development work towards
+OpenFOAM-based \gls{MSR} simulation tools. Aufiero et al.
+\cite{aufiero_development_2014} first introduced an OpenFOAM model developed
+at \gls{PoliMi}. Their model implemented a neutron diffusion model and a
+\gls{RANS}-based turbulence model with incompressible flow to demonstrate 2D
+and 3D transient analyses of the \gls{MSFR}. Later advancements in the
+\gls{PoliMi} solver include a fuel compressibility model with helium bubble
+tracking to study fuel compressibility effects
+\cite{cervi_development_2019} and a $SP_3$ neutron transport
+model for improved neutronics calculations \cite{cervi_development_2019-1} in
+the \gls{MSFR}. GeN-Foam is another OpenFOAM-based tool developed by Fiorina
+et al. \cite{fiorina_gen-foam_2015} as a general reactor multiphysics solver
+applicable to \glspl{MSR} and other reactor types. GeN-Foam features neutron
+diffusion, $SP_3$, and $S_N$ neutronics models
+\cite{fiorina_development_2016,fiorina_gen-foam_2015,fiorina_detailed_2019},
+and thermo-mechanical modeling for reactor expansion effects. Using GeN-Foam,
+Altahhan et al. \cite{altahhan_preliminary_2020} developed and optimized a
+liquid-fuel \gls{MSR} design while Shi \& Fratoni \cite{shi_gen-foam_2021}
+benchmarked precursor drift effects in an \gls{MSRE} model.
 
 Finally, within the MOOSE framework, simulation tools capable of modeling
-\glspl{MSR} include: Rattlesnake \cite{wang_rattlesnake_2021}; and Moltres
+\glspl{MSR} include: Griffin \cite{wang_rattlesnake_2021}; and Moltres
 \cite{lindsay_moltres_2017}\textemdash the subject of this work.
-Rattlesnake primarily tackles radiation transport problems, but the MOOSE
-framework facilitates multiphysics coupling
-with MOOSE-based applications for other physics
-such that all applications share the same data structure. This eliminates
+Griffin primarily tackles radiation transport problems, but the MOOSE
+framework facilitates multiphysics coupling with MOOSE-based applications for other physics
+such that all applications share the same data structure. This feature eliminates
 computational costs from external data transfers and optionally allowing for
 \textit{fully coupled} solves in which the application solves all physics
 simultaneously. Similarly, Moltres benefits from the highly-integrated
 cross-compatibility
 within the ecosystem of MOOSE-based applications. Abou-Jaoude et al.
-\cite{abou-jaoude_coupled_2020} coupled Rattlesnake with Pronghorn, another
-MOOSE-based application for advanced reactor thermal-hydraulics modeling, to
+\cite{abou-jaoude_coupled_2020} coupled Griffin with Pronghorn, another
+MOOSE-based application for advanced reactor \gls{TH} modeling, to
 demonstrate several steady-state \gls{MSR} simulation capabilities defined in
 the CNRS benchmark. Lindsay et al.
 \cite{lindsay_introduction_2018} first demonstrated Moltres' \gls{MSR} modeling
 capabilities on 2D axisymmetric and 3D Cartesian models of the \gls{MSRE} with
-fixed velocity flow on a fully coupled neutronics and thermal-hydraulics solve.
-We later demonstrated some of Moltres' more recent developments through
+fixed velocity flow on a fully coupled neutronics and \gls{TH} solve.
+I later demonstrated some of Moltres' more recent developments through
 modeling a 2D axisymmetric model of the \gls{MSFR} for steady-state operation
 and transient accident analysis \cite{park_advancement_2020}. The latter study
 introduced looped \gls{DNP} flow, coupling the \gls{DNP} drift and temperature 
 advection-diffusion to incompressible flow, and decay heat modeling
-capabilities. The proposed work aims to continue Moltres development for
+capabilities.
+
+The proposed work aims to continue Moltres development for
 multiphysics \gls{MSR} analysis. Chapter \ref{chap:moltres} describes Moltres
 and its existing capabilities for reactor analysis.
 
-\section{Turbulence Modeling in MSRs}
+\section{Control Rod Modeling in MSRs}
 
-In fluid dynamics, turbulent flow is characterized by unsteady, irregular, and
-chaotic fluid motion as opposed to neat, parallel flow layers in laminar flow
-\cite{pope_turbulent_2000}. The transition from laminar to turbulent flow
-typically occur at Reynolds numbers between 2000 and 4000, depending on the
-setup \cite{pope_turbulent_2000}. Turbulent flows are expected in \glspl{MSR}.
-Kedl \cite{kedl_fluid_1970} reports expected Reynolds numbers in the \gls{MSRE}
-ranging from 1000 in the regular fuel coolant channels to over 10000 in the
-flow distributor volute and core wall cooling annulus regions. For the
-\gls{MSFR}, salt flow in the central core region is highly turbulent and
-reaches Reynolds numbers on the order of $10^5$.
-
-\subsection{Turbulence Models}
-
-Numerous types of turbulence models exist for various turbulent flow
-applications. The most common turbulence models can be classified into the
-following categories by order of increasing computational complexity:
-%
-\begin{itemize}
-    \item \gls{RANS}-based models
-    \begin{itemize}
-        \item Eddy viscosity models
-        \begin{itemize}
-            \item Algebraic models
-            \item One- and two-equation models
-        \end{itemize}
-        \item \gls{RSM}
-    \end{itemize}
-    \item \gls{DES}
-    \item \gls{LES}
-    \item \gls{DNS}
-\end{itemize}
-
-\gls{RANS}-based models are based on the \gls{RANS} equations obtained from
-applying time-averaging to the equations of fluid flow. The \gls{RANS}
-equations separate flow into time-averaged $U$ and fluctuating $u$ components
-and can be writtin in Einstein notation and Cartesian coordinates as:
-%
-\begin{align}
-    \frac{\partial U_i}{\partial t} + U_j \frac{\partial u_i}{\partial x_j} =&
-    -\frac{1}{\rho} \frac{\partial P}{\partial x_i} + \nu \nabla^2 U_i -
-    \frac{\partial \langle u_i u_j \rangle}{x_j}
-    \shortintertext{where}
-    \langle \cdot \rangle =& \mbox{ time-averaging operator,} \nonumber \\
-    \rho =& \mbox{ fluid density,} \nonumber \\
-    P =& \mbox{ time-averaged pressure field,} \nonumber \\
-    \nu =& \mbox{ kinematic viscosity.} \nonumber
-\end{align}
-
-Eddy viscosity models, which comprise of the most widely used turbulence models
-in use today \cite{rodi_turbulence_2017}, operate on the eddy viscosity
-hypothesis which states that the Reynolds stresses in the \gls{RANS} equations
-are given by:
-%
-\begin{align}
-    \langle u_iu_j \rangle =& \frac{2}{3}k \delta_{ij} - \nu_T \left(
-    \frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}
-    \right)
-    \shortintertext{where}
-    k =& \mbox{ mean turbulent kinetic energy,} \nonumber \\
-    \delta_{ij} =& \mbox{ Kronecker delta,} \nonumber \\
-    \nu_T =& \mbox{ eddy viscosity.} \nonumber \\
-\end{align}
-
-The various eddy viscosity models mainly differ in their approach towards
-the closure problem of calculating the eddy viscosity. As the name suggests,
-algebraic models rely on algebraic equations to calculate the eddy viscosity
-distribution directly from flow variables. As a result, algebraic models are
-the least computationally intensive models for turbulence. Algebraic models
-can be further categorized into two types: uniform eddy viscosity models
-and mixing length models. Uniform eddy viscosity models apply a uniform eddy
-viscosity throughout the problem domain. The uniform eddy viscosity is
-calculated from flow parameters such as the characteristic velocity, the
-characteristic flow width, and empirically determined turbulent Reynolds
-number. Given that eddy viscosities usually vary significantly in most types of
-flow, uniform eddy viscosity models have a very limited range of applicability
-\cite{pope_turbulent_2000}. Mixing length models add a level of complexity by
-relating the eddy viscosity to spatially-varying flow parameters such as the
-mean velocity gradient (Prandtl \cite{prandtl_7_1925} and Cebeci-Smith
-\cite{smith_numerical_1967} models) or the mean rate of strain (Baldwin-Lomax
-\cite{baldwin_thin-layer_1978} model) and an empirical mixing length parameter.
-Combined with empirical data for the mixing length parameter, these
-models provide better approximations of free shear flows, but still
-underperform for more complex flows involving flow separation and significant streamline curvature.
-
-One- and two-equation turbulence models introduce differential equations to
-describing turbulence quantities such as the turbulence kinetic energy and the
-turbulence rate of dissipation to obtain the eddy viscosity distribution. The
-most common and best performing one-equation model is the Spalart-Allmaras
-model which provides an equation for the eddy viscosity directly with several
-closure coefficients and functions \cite{wilcox_turbulence_2006}. The
-Spalart-Allmaras model is considered ``complete'' as it does not involve any
-adjustable coefficients or functions. Calibrated for free shear flows in
-aeronautical applications, the model performs modestly better than algebraic
-models in these applications \cite{pope_turbulent_2000}, but it still deviates
-significantly from experimental data
-for separated flows \cite{wilcox_turbulence_2006}.
-
-Investigations with
-one-equation models reveal the need for an extra equation to account for
-turbulent length scales separately from turbulent velocity. Thus, two-equation
-models became the most widely adopted turbulence model in the late 20th century
-\cite{pope_turbulent_2000}. Two-equation models include the $k$-$\epsilon$,
-$k$-$\omega$, and $k$-$\tau$ models. The variables $k$, $\epsilon$, $\omega$,
-and $\tau$ correspond to turbulent kinetic energy, turbulent dissipation,
-specific turbulent dissipation rate, and turbulent time scale, respectively.
-While none of these models perform universally well, they are generally more
-accurate than the algebraic and one-equation models. Successive contributions
-and modifications to the two-equation models through the years have also
-improved their performance in predicting various types of turbulent flow. Their
-moderate computational expense compared to expensive, high-fidelity turbulence
-models favor their adoption in most commercial \gls{CFD} software for
-engineering applications \cite{pope_turbulent_2000}.
-
-\glspl{RSM} directly computes the individual components $\langle u_i u_j
-\rangle$ of the Reynolds stress tensor instead of approximating it with a
-single, isotropic eddy viscosity term. As a consequence, \glspl{RSM} provide
-more realistic predictions for flows with significant rotational motion and
-sudden changes in the mean strain rate, albeit at greater computational
-expense, compared to the one- and two-equation models
-\cite{wilcox_turbulence_2006}. Smaller improvements are observed in modeling
-free shear flows and backward-facing step flows \cite{wilcox_turbulence_2006}.
-
-Due to the much higher computational cost for \gls{DES}, \gls{LES}, and
-\gls{DNS}, these models have limited applicability in routine, high-Reynolds
-number engineering problems today. However, given their high accuracy, these
-models are useful for flow problems with relatively simple geometries and at
-low Reynolds numbers and validating the lower-fidelity turbulence models
-\cite{zhiyin_large-eddy_2015}.
-
-\subsection{Turbulence Modeling in MSR Simulation Tools}
-
-For MSR modeling, the $k$-$\epsilon$ and $k$-$\omega$ turbulence models are the
-most commonly used models as shown in published work with COMSOL
-\cite{fiorina_modelling_2014}, OpenFOAM \cite{aufiero_development_2014}, and
-\gls{TUD}'s in-house codes \cite{fiorina_modelling_2014,tiberga_results_2020}.
-Podila et al. \cite{podila_cfd_2019} performed \gls{CFD} simulations of the
-\gls{MSRE} core with six different turbulence models, namely a Spalart-Allmaras
-model, two variants of the $k$-$\epsilon$ model, a $k$-$\omega$ model, and two
-variants of \glspl{RSM}. Their results showed relatively small differences
-in graphite and fuel temperatures among different turbulence models. However,
-they observed significant differences in the turbulence intensities near the
-wall. Given the lack of experimental data for model validation, the authors
-could not make a clear assessment of the models' accuracies. Nevertheless, the
-close agreement of the fuel temperatures imply that the discrepancies in the
-turbulent intensities near the wall have a negligible impact on the overall
-distribution of advected quantities in the \gls{MSRE}. Podila et al.
-\cite{podila_cfd_2019} opted to use a $k$-$\epsilon$ model for subsequent
-calculations in their work given its lowest computational cost and the close
-agreement in the temperature distributions.
-
-Amongst other \gls{MSR} simulation tools, the $k$-$\epsilon$ and $k$-$\omega$
-turbulence models are the most commonly used models as shown in published work
-with COMSOL \cite{fiorina_modelling_2014}, OpenFOAM
-\cite{aufiero_development_2014}, and \gls{TUD}'s in-house codes
-\cite{fiorina_modelling_2014,tiberga_results_2020}. Fiorina et al.
-\cite{fiorina_modelling_2014} compared the flow distribution from both models
-in a 2D axisymmetric \gls{MSFR} geometry and observed that the $k$-$\omega$
-model produced a wider recirculation zone near the outer wall, an additional
-recirculation zone near the top wall, and significantly higher maximum
-temperatures within the former recirculation zone. Thus, their work highlights
-the difficulties of modeling separated flows and calls for extra attention
-towards the choice of turbulence model in \glspl{MSR}.
-
-\section{Control Rod Modeling}
+\subsection{Control Rods in MSRs}
 
 Most reactor designs have control rods to control the fission rate or completely shut down the
 reactor by inserting the rods further into the reactor core. As such, control rods consist of
@@ -556,6 +455,8 @@ work is to improve diffusion-based control rod modeling in Moltres for \gls{MSR}
 literature review also explores existing methods developed for other reactor types.
 
 [Insert control rod illustration]
+
+
 
 \subsection{Challenges of Control Rod Modeling} \label{sec:challenges-control-rod}
 
@@ -631,7 +532,7 @@ finite energy ranges across the entire energy spectrum to form multigroup equati
 The subscript $g$ denotes the corresponding quantity for neutrons in energy group $g$.
 Overall, neutron transport methods are very computationally expensive and thus are mainly used for
 time-independent neutronic analyses. For time-dependent multiphysics simulations coupling
-neutronics to thermal-hydraulics and other physics present in nuclear reactors, most reactor codes
+neutronics to \gls{TH} and other physics present in nuclear reactors, most reactor codes
 rely on the neutron diffusion equation for modeling neutronics. The multigroup neutron diffusion
 equations are \glspl{PDE} derived from Eq. \ref{eq:mg-bte} by making
 simplifying assumptions on the angular dependence in the scattering cross section and integrating
@@ -691,7 +592,7 @@ macroscopic neutron cross section values for various neutron interactions such a
 scattering, absorption, and fission. Macroscopic cross sections represent the probability that a
 neutron, in a given energy range, will undergo the associated interaction per unit distance
 traveled in the material. Group constants also broadly include neutron diffusion
-coefficients/constants and delayed neutron precursor data. While advanced coarse-mesh and nodal
+coefficients/constants and \gls{DNP} data. While advanced coarse-mesh and nodal
 methods provide reasonable flux solutions for calculating global and intermediate-scale quantities,
 they do not capture detailed heterogeneous flux distribution within each coarse mesh subregion.
 
@@ -1164,3 +1065,168 @@ homogenization or the diffusion approximation. However, the improved solutions, 
 \gls{SPH} method, can still deviate significantly from reference transport calculations. A super
 cell, similar to the one adopted by \gls{MECS}, can be used to reduce errors within and near
 control rod cells \cite{ortensi_newton_2018}.
+
+\section{Turbulence Modeling in MSRs}
+
+In fluid dynamics, turbulent flow is characterized by unsteady, irregular, and
+chaotic fluid motion as opposed to neat, parallel flow layers in laminar flow
+\cite{pope_turbulent_2000}. The transition from laminar to turbulent flow
+typically occur at Reynolds numbers between 2000 and 4000, depending on the
+setup \cite{pope_turbulent_2000}. Turbulent flows are expected in \glspl{MSR}.
+Kedl \cite{kedl_fluid_1970} reports expected Reynolds numbers in the \gls{MSRE}
+ranging from 1000 in the regular fuel coolant channels to over 10000 in the
+flow distributor volute and core wall cooling annulus regions. For the
+\gls{MSFR}, salt flow in the central core region is highly turbulent and
+reaches Reynolds numbers on the order of $10^5$.
+
+\subsection{Turbulence Models}
+
+Numerous types of turbulence models exist for various turbulent flow
+applications. The most common turbulence models can be classified into the
+following categories by order of increasing computational complexity:
+%
+\begin{itemize}
+    \item \gls{RANS}-based models
+    \begin{itemize}
+        \item Eddy viscosity models
+        \begin{itemize}
+            \item Algebraic models
+            \item One- and two-equation models
+        \end{itemize}
+        \item \gls{RSM}
+    \end{itemize}
+    \item \gls{DES}
+    \item \gls{LES}
+    \item \gls{DNS}
+\end{itemize}
+
+\gls{RANS}-based models are based on the \gls{RANS} equations obtained from
+applying time-averaging to the equations of fluid flow. The \gls{RANS}
+equations separate flow into time-averaged $U$ and fluctuating $u$ components
+and can be writtin in Einstein notation and Cartesian coordinates as:
+%
+\begin{align}
+    \frac{\partial U_i}{\partial t} + U_j \frac{\partial u_i}{\partial x_j} =&
+    -\frac{1}{\rho} \frac{\partial P}{\partial x_i} + \nu \nabla^2 U_i -
+    \frac{\partial \langle u_i u_j \rangle}{x_j}
+    \shortintertext{where}
+    \langle \cdot \rangle =& \mbox{ time-averaging operator,} \nonumber \\
+    \rho =& \mbox{ fluid density,} \nonumber \\
+    P =& \mbox{ time-averaged pressure field,} \nonumber \\
+    \nu =& \mbox{ kinematic viscosity.} \nonumber
+\end{align}
+
+Eddy viscosity models, which comprise of the most widely used turbulence models
+in use today \cite{rodi_turbulence_2017}, operate on the eddy viscosity
+hypothesis which states that the Reynolds stresses in the \gls{RANS} equations
+are given by:
+%
+\begin{align}
+    \langle u_iu_j \rangle =& \frac{2}{3}k \delta_{ij} - \nu_T \left(
+    \frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}
+    \right)
+    \shortintertext{where}
+    k =& \mbox{ mean turbulent kinetic energy,} \nonumber \\
+    \delta_{ij} =& \mbox{ Kronecker delta,} \nonumber \\
+    \nu_T =& \mbox{ eddy viscosity.} \nonumber \\
+\end{align}
+
+The various eddy viscosity models mainly differ in their approach towards
+the closure problem of calculating the eddy viscosity. As the name suggests,
+algebraic models rely on algebraic equations to calculate the eddy viscosity
+distribution directly from flow variables. As a result, algebraic models are
+the least computationally intensive models for turbulence. Algebraic models
+can be further categorized into two types: uniform eddy viscosity models
+and mixing length models. Uniform eddy viscosity models apply a uniform eddy
+viscosity throughout the problem domain. The uniform eddy viscosity is
+calculated from flow parameters such as the characteristic velocity, the
+characteristic flow width, and empirically determined turbulent Reynolds
+number. Given that eddy viscosities usually vary significantly in most types of
+flow, uniform eddy viscosity models have a very limited range of applicability
+\cite{pope_turbulent_2000}. Mixing length models add a level of complexity by
+relating the eddy viscosity to spatially-varying flow parameters such as the
+mean velocity gradient (Prandtl \cite{prandtl_7_1925} and Cebeci-Smith
+\cite{smith_numerical_1967} models) or the mean rate of strain (Baldwin-Lomax
+\cite{baldwin_thin-layer_1978} model) and an empirical mixing length parameter.
+Combined with empirical data for the mixing length parameter, these
+models provide better approximations of free shear flows, but still
+underperform for more complex flows involving flow separation and significant streamline curvature.
+
+One- and two-equation turbulence models introduce differential equations to
+describing turbulence quantities such as the turbulence kinetic energy and the
+turbulence rate of dissipation to obtain the eddy viscosity distribution. The
+most common and best performing one-equation model is the Spalart-Allmaras
+model which provides an equation for the eddy viscosity directly with several
+closure coefficients and functions \cite{wilcox_turbulence_2006}. The
+Spalart-Allmaras model is considered ``complete'' as it does not involve any
+adjustable coefficients or functions. Calibrated for free shear flows in
+aeronautical applications, the model performs modestly better than algebraic
+models in these applications \cite{pope_turbulent_2000}, but it still deviates
+significantly from experimental data
+for separated flows \cite{wilcox_turbulence_2006}.
+
+Investigations with
+one-equation models reveal the need for an extra equation to account for
+turbulent length scales separately from turbulent velocity. Thus, two-equation
+models became the most widely adopted turbulence model in the late 20th century
+\cite{pope_turbulent_2000}. Two-equation models include the $k$-$\epsilon$,
+$k$-$\omega$, and $k$-$\tau$ models. The variables $k$, $\epsilon$, $\omega$,
+and $\tau$ correspond to turbulent kinetic energy, turbulent dissipation,
+specific turbulent dissipation rate, and turbulent time scale, respectively.
+While none of these models perform universally well, they are generally more
+accurate than the algebraic and one-equation models. Successive contributions
+and modifications to the two-equation models through the years have also
+improved their performance in predicting various types of turbulent flow. Their
+moderate computational expense compared to expensive, high-fidelity turbulence
+models favor their adoption in most commercial \gls{CFD} software for
+engineering applications \cite{pope_turbulent_2000}.
+
+\glspl{RSM} directly computes the individual components $\langle u_i u_j
+\rangle$ of the Reynolds stress tensor instead of approximating it with a
+single, isotropic eddy viscosity term. As a consequence, \glspl{RSM} provide
+more realistic predictions for flows with significant rotational motion and
+sudden changes in the mean strain rate, albeit at greater computational
+expense, compared to the one- and two-equation models
+\cite{wilcox_turbulence_2006}. Smaller improvements are observed in modeling
+free shear flows and backward-facing step flows \cite{wilcox_turbulence_2006}.
+
+Due to the much higher computational cost for \gls{DES}, \gls{LES}, and
+\gls{DNS}, these models have limited applicability in routine, high-Reynolds
+number engineering problems today. However, given their high accuracy, these
+models are useful for flow problems with relatively simple geometries and at
+low Reynolds numbers and validating the lower-fidelity turbulence models
+\cite{zhiyin_large-eddy_2015}.
+
+\subsection{Turbulence Modeling in MSR Simulation Tools}
+
+For MSR modeling, the $k$-$\epsilon$ and $k$-$\omega$ turbulence models are the
+most commonly used models as shown in published work with COMSOL
+\cite{fiorina_modelling_2014}, OpenFOAM \cite{aufiero_development_2014}, and
+\gls{TUD}'s in-house codes \cite{fiorina_modelling_2014,tiberga_results_2020}.
+Podila et al. \cite{podila_cfd_2019} performed \gls{CFD} simulations of the
+\gls{MSRE} core with six different turbulence models, namely a Spalart-Allmaras
+model, two variants of the $k$-$\epsilon$ model, a $k$-$\omega$ model, and two
+variants of \glspl{RSM}. Their results showed relatively small differences
+in graphite and fuel temperatures among different turbulence models. However,
+they observed significant differences in the turbulence intensities near the
+wall. Given the lack of experimental data for model validation, the authors
+could not make a clear assessment of the models' accuracies. Nevertheless, the
+close agreement of the fuel temperatures imply that the discrepancies in the
+turbulent intensities near the wall have a negligible impact on the overall
+distribution of advected quantities in the \gls{MSRE}. Podila et al.
+\cite{podila_cfd_2019} opted to use a $k$-$\epsilon$ model for subsequent
+calculations in their work given its lowest computational cost and the close
+agreement in the temperature distributions.
+
+Amongst other \gls{MSR} simulation tools, the $k$-$\epsilon$ and $k$-$\omega$
+turbulence models are the most commonly used models as shown in published work
+with COMSOL \cite{fiorina_modelling_2014}, OpenFOAM
+\cite{aufiero_development_2014}, and \gls{TUD}'s in-house codes
+\cite{fiorina_modelling_2014,tiberga_results_2020}. Fiorina et al.
+\cite{fiorina_modelling_2014} compared the flow distribution from both models
+in a 2D axisymmetric \gls{MSFR} geometry and observed that the $k$-$\omega$
+model produced a wider recirculation zone near the outer wall, an additional
+recirculation zone near the top wall, and significantly higher maximum
+temperatures within the former recirculation zone. Thus, their work highlights
+the difficulties of modeling separated flows and calls for extra attention
+towards the choice of turbulence model in \glspl{MSR}.
