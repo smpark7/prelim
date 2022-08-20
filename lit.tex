@@ -276,7 +276,7 @@ favor of those with spatially-resolved neutronics methods.
 Most \gls{MSR} simulation tools employ tight, iterative coupling to couple separate neutronics and
 \gls{TH} solvers. In 2007, Krepel et al. \cite{krepel_dyn3d-msr_2007} extended the
 \gls{LWR} nodal diffusion code DYN3D to account for \gls{DNP} drift and fission energy deposition
-in the coolant for \gls{MSR} modeling. Dubbed \textit{DYN3D-MSR}, the code also contains the FLOCAL
+in the coolant for \gls{MSR} modeling. The extended DYN3D-MSR code also contains the FLOCAL
 \gls{TH} model for coolant flow and conjugate heat transfer modeling. Their \gls{MSRE} and
 \gls{MSBR} models consisted of homogeneous hexagonal nodes (mesh elements) for the nodal diffusion
 calculation coupled to individual hexagonal unit cells comprising of graphite with circular fuel
@@ -471,7 +471,7 @@ Neutronic benchmark studies of the \gls{MSRE} and the \gls{MSFR} by Fratoni et a
 \cite{fratoni_molten_2020} and Brovchenko et al. \cite{brovchenko_neutronic_2019} measured the
 delayed neutron losses due to the decay of \glspl{DNP} flowing out of the active core region.
 Fratoni et al. sought to establish a standard validation platform for \gls{MSR} neutronics
-simulation tools with \gls{MSRE} experimental data by inclusion in the \gls{IRPhEP} handbook.
+simulation tools with \gls{MSRE} experimental data for inclusion in the \gls{IRPhEP} handbook.
 They characterized and validated a model of the \gls{MSRE} in the Monte Carlo particle transport
 code Serpent. On the other hand, the \gls{MSFR} benchmark by Brovchenko et al. featured results
 from multiple \gls{MSR} simulation tools by several collaborators. Their assessment found that
@@ -492,6 +492,184 @@ procedure for delayed neutron loss should ideally provide well-defined problems 
 input data. It is also helpful to perform model verification studies on simpler problems like the
 bare homogeneous problem domain in the CNRS benchmark before embarking on more complicated
 validation studies which require accurate models of the reference experiments.
+
+\section{Turbulence Modeling in MSRs}
+
+In fluid dynamics, turbulent flow is characterized by unsteady, irregular, and
+chaotic fluid motion as opposed to neat, parallel flow layers in laminar flow
+\cite{pope_turbulent_2000}. The transition from laminar to turbulent flow
+typically occur at Reynolds numbers between 2000 and 4000, depending on the
+setup \cite{pope_turbulent_2000}. Turbulent flows are expected in \glspl{MSR}.
+Kedl \cite{kedl_fluid_1970} reports expected Reynolds numbers in the \gls{MSRE}
+ranging from 1000 in the regular fuel coolant channels to over 10000 in the
+flow distributor volute and core wall cooling annulus regions. For the
+\gls{MSFR}, salt flow in the central core region is highly turbulent and
+reaches Reynolds numbers on the order of $10^5$.
+
+\subsection{Turbulence Models}
+
+Numerous types of turbulence models exist for various turbulent flow
+applications. The most common turbulence models can be classified into the
+following categories by order of increasing computational complexity:
+%
+\begin{itemize}
+    \item \gls{RANS}-based models
+    \begin{itemize}
+        \item Eddy viscosity models
+        \begin{itemize}
+            \item Algebraic models
+            \item One- and two-equation models
+        \end{itemize}
+        \item \gls{RSM}
+    \end{itemize}
+    \item \gls{DES}
+    \item \gls{LES}
+    \item \gls{DNS}
+\end{itemize}
+
+\gls{RANS}-based models are based on the \gls{RANS} equations obtained from
+applying time-averaging to the equations of fluid flow. The \gls{RANS}
+equations separate flow into time-averaged $U$ and fluctuating $u$ components
+and can be writtin in Einstein notation and Cartesian coordinates as:
+%
+\begin{align}
+    \frac{\partial U_i}{\partial t} + U_j \frac{\partial u_i}{\partial x_j} =&
+    -\frac{1}{\rho} \frac{\partial P}{\partial x_i} + \nu \nabla^2 U_i -
+    \frac{\partial \langle u_i u_j \rangle}{x_j}
+    \shortintertext{where}
+    \langle \cdot \rangle =& \mbox{ time-averaging operator,} \nonumber \\
+    \rho =& \mbox{ fluid density,} \nonumber \\
+    P =& \mbox{ time-averaged pressure field,} \nonumber \\
+    \nu =& \mbox{ kinematic viscosity.} \nonumber
+\end{align}
+
+Eddy viscosity models, which comprise of the most widely used turbulence models
+in use today \cite{rodi_turbulence_2017}, operate on the eddy viscosity
+hypothesis which states that the Reynolds stresses in the \gls{RANS} equations
+are given by:
+%
+\begin{align}
+    \langle u_iu_j \rangle =& \frac{2}{3}k \delta_{ij} - \nu_T \left(
+    \frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}
+    \right)
+    \shortintertext{where}
+    k =& \mbox{ mean turbulent kinetic energy,} \nonumber \\
+    \delta_{ij} =& \mbox{ Kronecker delta,} \nonumber \\
+    \nu_T =& \mbox{ eddy viscosity.} \nonumber \\
+\end{align}
+
+The various eddy viscosity models mainly differ in their approach towards
+the closure problem of calculating the eddy viscosity. As the name suggests,
+algebraic models rely on algebraic equations to calculate the eddy viscosity
+distribution directly from flow variables. As a result, algebraic models are
+the least computationally intensive models for turbulence. Algebraic models
+can be further categorized into two types: uniform eddy viscosity models
+and mixing length models. Uniform eddy viscosity models apply a uniform eddy
+viscosity throughout the problem domain. The uniform eddy viscosity is
+calculated from flow parameters such as the characteristic velocity, the
+characteristic flow width, and empirically determined turbulent Reynolds
+number. Given that eddy viscosities usually vary significantly in most types of
+flow, uniform eddy viscosity models have a very limited range of applicability
+\cite{pope_turbulent_2000}. Mixing length models add a level of complexity by
+relating the eddy viscosity to spatially-varying flow parameters such as the
+mean velocity gradient (Prandtl \cite{prandtl_7_1925} and Cebeci-Smith
+\cite{smith_numerical_1967} models) or the mean rate of strain (Baldwin-Lomax
+\cite{baldwin_thin-layer_1978} model) and an empirical mixing length parameter.
+Combined with empirical data for the mixing length parameter, these
+models provide better approximations of free shear flows, but still
+underperform for more complex flows involving flow separation and significant streamline curvature.
+
+One- and two-equation turbulence models introduce differential equations to
+describing turbulence quantities such as the turbulence kinetic energy and the
+turbulence rate of dissipation to obtain the eddy viscosity distribution. The
+most common and best performing one-equation model is the Spalart-Allmaras
+model which provides an equation for the eddy viscosity directly with several
+closure coefficients and functions \cite{wilcox_turbulence_2006}. The
+Spalart-Allmaras model is considered ``complete'' as it does not involve any
+adjustable coefficients or functions. Calibrated for free shear flows in
+aeronautical applications, the model performs modestly better than algebraic
+models in these applications \cite{pope_turbulent_2000}, but it still deviates
+significantly from experimental data
+for separated flows \cite{wilcox_turbulence_2006}.
+
+Investigations with
+one-equation models reveal the need for an extra equation to account for
+turbulent length scales separately from turbulent velocity. Thus, two-equation
+models became the most widely adopted turbulence model in the late 20th century
+\cite{pope_turbulent_2000}. Two-equation models include the $k$-$\epsilon$,
+$k$-$\omega$, and $k$-$\tau$ models. The variables $k$, $\epsilon$, $\omega$,
+and $\tau$ correspond to turbulent kinetic energy, turbulent dissipation,
+specific turbulent dissipation rate, and turbulent time scale, respectively.
+While none of these models perform universally well, they are generally more
+accurate than the algebraic and one-equation models. Successive contributions
+and modifications to the two-equation models through the years have also
+improved their performance in predicting various types of turbulent flow. Their
+moderate computational expense compared to expensive, high-fidelity turbulence
+models favor their adoption in most commercial \gls{CFD} software for
+engineering applications \cite{pope_turbulent_2000}.
+
+\glspl{RSM} directly computes the individual components $\langle u_i u_j
+\rangle$ of the Reynolds stress tensor instead of approximating it with a
+single, isotropic eddy viscosity term. As a consequence, \glspl{RSM} provide
+more realistic predictions for flows with significant rotational motion and
+sudden changes in the mean strain rate, albeit at greater computational
+expense, compared to the one- and two-equation models
+\cite{wilcox_turbulence_2006}. Smaller improvements are observed in modeling
+free shear flows and backward-facing step flows \cite{wilcox_turbulence_2006}.
+
+Due to the much higher computational cost for \gls{DES}, \gls{LES}, and
+\gls{DNS}, these models have limited applicability in routine, high-Reynolds
+number engineering problems today. However, given their high accuracy, these
+models are useful for flow problems with relatively simple geometries and at
+low Reynolds numbers and validating the lower-fidelity turbulence models
+\cite{zhiyin_large-eddy_2015}.
+
+\subsection{Turbulence Modeling in MSR Simulation Tools}
+
+For MSR modeling, the $k$-$\epsilon$ and $k$-$\omega$ turbulence models are the
+most commonly used models as shown in published work with COMSOL
+\cite{fiorina_modelling_2014}, OpenFOAM \cite{aufiero_development_2014}, and
+\gls{TUD}'s in-house codes \cite{fiorina_modelling_2014,tiberga_results_2020}.
+Podila et al. \cite{podila_cfd_2019} performed \gls{CFD} simulations of the
+\gls{MSRE} core with six different turbulence models, namely a Spalart-Allmaras
+model, two variants of the $k$-$\epsilon$ model, a $k$-$\omega$ model, and two
+variants of \glspl{RSM}. Their results showed relatively small differences
+in graphite and fuel temperatures among different turbulence models. However,
+they observed significant differences in the turbulence intensities near the
+wall. Given the lack of experimental data for model validation, the authors
+could not make a clear assessment of the models' accuracies. Nevertheless, the
+close agreement of the fuel temperatures imply that the discrepancies in the
+turbulent intensities near the wall have a negligible impact on the overall
+distribution of advected quantities in the \gls{MSRE}. Podila et al.
+\cite{podila_cfd_2019} opted to use a $k$-$\epsilon$ model for subsequent
+calculations in their work given its lowest computational cost amongst the
+two-equation models and the close agreement in the temperature distributions.
+
+Amongst other \gls{MSR} simulation tools, the $k$-$\epsilon$ and $k$-$\omega$
+turbulence models are the most commonly used models as shown in published work
+with COMSOL \cite{fiorina_modelling_2014}, OpenFOAM
+\cite{aufiero_development_2014}, and \gls{TUD}'s in-house codes
+\cite{fiorina_modelling_2014,tiberga_results_2020}. Fiorina et al.
+\cite{fiorina_modelling_2014} compared the flow distribution from both models
+in a 2D axisymmetric \gls{MSFR} geometry and observed that the $k$-$\omega$
+model produced a wider recirculation zone near the outer wall, an additional
+recirculation zone near the top wall, and significantly higher maximum
+temperatures within the former recirculation zone. In a recent study by
+Laureau et al. \cite{laureau_unmoderated_2022}, the authors applied a \gls{DES} model to model
+eddies in the \gls{MSFR}. Given the high computational costs required to obtain reasonably small
+stochastic uncertainties from Monte Carlo calculations on arbitrarily varying temperature fields,
+they created a reduced order model relating local reactivity feedback estimates to the nominal
+temperature field to obtain the effective temperature field. Additionally, they fixed the total
+reactor power output to 3 GW to further reduce costs. With this multiphysics model, they found
+the pre-existing \gls{MSFR} model was prone to large power fluctuations up to 7.5\% under
+steady-state operation. Previous studies with lower-fidelity models, including the two-equation
+models, failed to capture this effect due to the time-averaging assumption required in those
+models. After replacing the large inlet pipes with multiple blade-like inlet channels in the
+\gls{MSFR} model, they managed to reduce power fluctuations to 1.2\%.
+
+In essence, the existing literature on turbulence flows in \glspl{MSR} work highlight
+the importance of modeling turbulent flows and calls for extra care towards the choice of
+turbulence model depending on the \glspl{MSR} design and the phenomenon being studied.
 
 \section{Control Rod Modeling in MSRs}
 
@@ -522,16 +700,62 @@ centrally in graphite-moderated core with fuel salt channels.
 
 [Insert control rod illustration]
 
-% Add MSR control rod lit review
+There is a notable lack of research efforts into improving control rod modeling in \glspl{MSR}.
+The self-regulating nature and low excess reactivity of \glspl{MSR} reduces or even eliminates the
+need for control rods \cite{dolan_1_2017}. This characteristic arises from the strongly negative
+temperature reactivity feedback and the strong coupling to flow and heat removal rates. \gls{MSR}
+reactor designers rely on these passive mechanisms for reactor safety. In addition, they propose
+load-following operation by adjusting pump speeds and the temperature of the intermediate coolant
+loop. Laureau et al. \cite{laureau_transient_2017} demonstrated simple power ramp-up and ramp-down
+with the \gls{MSFR} by varying the temperature of the secondary coolant. Examples of \gls{MSR}
+designs with no control rods include the fast-spectrum \gls{MSFR} and TerraPower's \gls{MCFR}
+\cite{terrapower_terrapower_2021}. However, \gls{MSR} power control schemes which rely heavily on
+these mechanisms may not be suitable for all accident scenarios. Control rod insertion can provide
+an additional means of reactor shutdown without resorting to draining the fuel salt and
+complicating reactor restart procedures. We also note that thermal \gls{MSR} designs like the
+\gls{MSRE}, \gls{MSBR}, and TMSR-LF1 designs still include control rods as essential components in
+their designs, partly due to their less negative temperature reactivity feedback coefficients
+compared to their fast-spectrum counterparts. Thus, the existing literature on control rod modeling
+in \glspl{MSR} are based on thermal-spectrum \glspl{MSR}.
 
+Few \gls{MSR} multiphysics studies explicitly include control rods in their models. For instance,
+for the \gls{MSRE} pump start-up and coast-down experiments at \gls{ORNL} which involved control
+rod movement, most numerical studies simulate the reactivity effects of the control rods by scaling
+the neutron source term by the neutron multiplication factor to keep their reactor model at
+criticality \cite{delpech_benchmark_2003, krepel_dyn3d-msr_2007}. Some studies include control rod
+models in their steady-state calculations, but they resort to neutron source term scaling for the
+transient calculations due to the inaccuracy of neutron diffusion, $P_1$, and $SP_N$ methods in
+highly neutron absorbing regions \cite{kophazi_development_2009, jaradat_development_2021,
+yang_development_2022}. Kophazi et al. \cite{kophazi_development_2009} modeled annular control rods
+as homogenized hexahedrals in their 3D Cartesian geometry of the \gls{MSRE}. They
+homogenized fuel and graphite regions in the rest of the reactor model as mentioned in Subsection
+\ref{sec:msr-tools}. To reduce errors introduced by the neutron diffusion method, they imposed
+simple albedo boundary conditions for the thermal neutron group. Jaradat et al.
+\cite{jaradat_development_2021} and Yang et al. \cite{yang_development_2022} modeled the \gls{MSRE}
+control rods as homogenized wedges in their R-$\theta$-Z mesh due to the constraints of the nodal
+neutronics solver. Cui et al. \cite{cui_development_2021} also homogenized the control rods as
+regular hexahedral nodes in accordance to their nodal solver in Cartesian geometry. A disadvantage
+of homogenization-based methods is that it removes some of the heterogeneity in the flux and
+temperature. The heterogeneous temperature distribution is especially important in \glspl{MSR} due
+to the collocation of fuel and coolant, and the positive temperature reactivity feedback observed
+in graphite under certain conditions \cite{mathieu_thorium_2006}.
 
-While the objective of the proposed
-work is to improve diffusion-based control rod modeling in Moltres for \gls{MSR}-like designs, this
-literature review also explores existing methods developed for other reactor types.
+[Insert figures of the control rod models by Kophazi, Jaradat, \& Cui]
+
+In theory, multiphysics simulation tools with Monte Carlo neutron transport such as the
+Serpent-OpenFOAM tool developed by Blanco \cite{blanco_neutronic_2020} could boast excellent
+control rod modeling performance. However, the computational cost would be extremely high for
+reactor geometries much more complex than the 2 m$\times$2 m homogeneous domain of the CNRS
+benchmark (Subsection \ref{sec:msr-tools}). Other high-fidelity neutronics methods such as the
+$S_N$ and $P_N$ methods are also typically too computationally expensive for time-dependent
+multiphysics simulations. On the other hand, less taxing methods such as the neutron diffusion
+method cannot model control rods accurately. The remainder of this section describes the challenges
+of control rod modeling with neutron diffusion, and reviews existing transport correction
+techniques for improving neutron diffusion method performance in control rod modeling.
 
 \subsection{Challenges in Control Rod Modeling} \label{sec:challenges-control-rod}
 
-In reactor design studies, we aim to determine control rod worth which is measured as the reduction
+In reactor design, we aim to determine control rod worth which is measured as the reduction
 in the neutron multiplication factor $k_{eff}$ due to the presence of the control rod in the
 reactor. We are also interested in the accompanying change in flux shape in the vicinity of the
 control rod. Neutrons entering the control rods have a higher chance of being absorbed than
@@ -675,7 +899,9 @@ solution accuracy in highly absorbing and near-interface regions.
 Therefore, this literature review focuses on hybrid diffusion-transport methods developed to relay
 transport corrections in the form of more accurate neutron flux and current estimates to
 diffusion-based solvers. The methods differ mainly in how they incorporate corrections into a
-diffusion-based solver.
+diffusion-based solver. While the focus of this work is on improving diffusion-based control rod
+modeling in Moltres for \gls{MSR}-like designs, this literature review explores existing methods
+developed for other reactor types as no advanced techniques have been applied on \glspl{MSR}.
 
 \subsubsection{Absorber Blackness and Linear Extrapolation Length}
 
@@ -1143,176 +1369,41 @@ and temperature. The heterogeneous temperature distribution is especially import
 due to the collocation of fuel and coolant, and the positive temperature reactivity feedback
 observed in graphite under certain conditions \cite{mathieu_thorium_2006}.
 
-\section{Turbulence Modeling in MSRs}
-
-In fluid dynamics, turbulent flow is characterized by unsteady, irregular, and
-chaotic fluid motion as opposed to neat, parallel flow layers in laminar flow
-\cite{pope_turbulent_2000}. The transition from laminar to turbulent flow
-typically occur at Reynolds numbers between 2000 and 4000, depending on the
-setup \cite{pope_turbulent_2000}. Turbulent flows are expected in \glspl{MSR}.
-Kedl \cite{kedl_fluid_1970} reports expected Reynolds numbers in the \gls{MSRE}
-ranging from 1000 in the regular fuel coolant channels to over 10000 in the
-flow distributor volute and core wall cooling annulus regions. For the
-\gls{MSFR}, salt flow in the central core region is highly turbulent and
-reaches Reynolds numbers on the order of $10^5$.
-
-\subsection{Turbulence Models}
-
-Numerous types of turbulence models exist for various turbulent flow
-applications. The most common turbulence models can be classified into the
-following categories by order of increasing computational complexity:
-%
-\begin{itemize}
-    \item \gls{RANS}-based models
-    \begin{itemize}
-        \item Eddy viscosity models
-        \begin{itemize}
-            \item Algebraic models
-            \item One- and two-equation models
-        \end{itemize}
-        \item \gls{RSM}
-    \end{itemize}
-    \item \gls{DES}
-    \item \gls{LES}
-    \item \gls{DNS}
-\end{itemize}
-
-\gls{RANS}-based models are based on the \gls{RANS} equations obtained from
-applying time-averaging to the equations of fluid flow. The \gls{RANS}
-equations separate flow into time-averaged $U$ and fluctuating $u$ components
-and can be writtin in Einstein notation and Cartesian coordinates as:
-%
-\begin{align}
-    \frac{\partial U_i}{\partial t} + U_j \frac{\partial u_i}{\partial x_j} =&
-    -\frac{1}{\rho} \frac{\partial P}{\partial x_i} + \nu \nabla^2 U_i -
-    \frac{\partial \langle u_i u_j \rangle}{x_j}
-    \shortintertext{where}
-    \langle \cdot \rangle =& \mbox{ time-averaging operator,} \nonumber \\
-    \rho =& \mbox{ fluid density,} \nonumber \\
-    P =& \mbox{ time-averaged pressure field,} \nonumber \\
-    \nu =& \mbox{ kinematic viscosity.} \nonumber
-\end{align}
-
-Eddy viscosity models, which comprise of the most widely used turbulence models
-in use today \cite{rodi_turbulence_2017}, operate on the eddy viscosity
-hypothesis which states that the Reynolds stresses in the \gls{RANS} equations
-are given by:
-%
-\begin{align}
-    \langle u_iu_j \rangle =& \frac{2}{3}k \delta_{ij} - \nu_T \left(
-    \frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}
-    \right)
-    \shortintertext{where}
-    k =& \mbox{ mean turbulent kinetic energy,} \nonumber \\
-    \delta_{ij} =& \mbox{ Kronecker delta,} \nonumber \\
-    \nu_T =& \mbox{ eddy viscosity.} \nonumber \\
-\end{align}
-
-The various eddy viscosity models mainly differ in their approach towards
-the closure problem of calculating the eddy viscosity. As the name suggests,
-algebraic models rely on algebraic equations to calculate the eddy viscosity
-distribution directly from flow variables. As a result, algebraic models are
-the least computationally intensive models for turbulence. Algebraic models
-can be further categorized into two types: uniform eddy viscosity models
-and mixing length models. Uniform eddy viscosity models apply a uniform eddy
-viscosity throughout the problem domain. The uniform eddy viscosity is
-calculated from flow parameters such as the characteristic velocity, the
-characteristic flow width, and empirically determined turbulent Reynolds
-number. Given that eddy viscosities usually vary significantly in most types of
-flow, uniform eddy viscosity models have a very limited range of applicability
-\cite{pope_turbulent_2000}. Mixing length models add a level of complexity by
-relating the eddy viscosity to spatially-varying flow parameters such as the
-mean velocity gradient (Prandtl \cite{prandtl_7_1925} and Cebeci-Smith
-\cite{smith_numerical_1967} models) or the mean rate of strain (Baldwin-Lomax
-\cite{baldwin_thin-layer_1978} model) and an empirical mixing length parameter.
-Combined with empirical data for the mixing length parameter, these
-models provide better approximations of free shear flows, but still
-underperform for more complex flows involving flow separation and significant streamline curvature.
-
-One- and two-equation turbulence models introduce differential equations to
-describing turbulence quantities such as the turbulence kinetic energy and the
-turbulence rate of dissipation to obtain the eddy viscosity distribution. The
-most common and best performing one-equation model is the Spalart-Allmaras
-model which provides an equation for the eddy viscosity directly with several
-closure coefficients and functions \cite{wilcox_turbulence_2006}. The
-Spalart-Allmaras model is considered ``complete'' as it does not involve any
-adjustable coefficients or functions. Calibrated for free shear flows in
-aeronautical applications, the model performs modestly better than algebraic
-models in these applications \cite{pope_turbulent_2000}, but it still deviates
-significantly from experimental data
-for separated flows \cite{wilcox_turbulence_2006}.
-
-Investigations with
-one-equation models reveal the need for an extra equation to account for
-turbulent length scales separately from turbulent velocity. Thus, two-equation
-models became the most widely adopted turbulence model in the late 20th century
-\cite{pope_turbulent_2000}. Two-equation models include the $k$-$\epsilon$,
-$k$-$\omega$, and $k$-$\tau$ models. The variables $k$, $\epsilon$, $\omega$,
-and $\tau$ correspond to turbulent kinetic energy, turbulent dissipation,
-specific turbulent dissipation rate, and turbulent time scale, respectively.
-While none of these models perform universally well, they are generally more
-accurate than the algebraic and one-equation models. Successive contributions
-and modifications to the two-equation models through the years have also
-improved their performance in predicting various types of turbulent flow. Their
-moderate computational expense compared to expensive, high-fidelity turbulence
-models favor their adoption in most commercial \gls{CFD} software for
-engineering applications \cite{pope_turbulent_2000}.
-
-\glspl{RSM} directly computes the individual components $\langle u_i u_j
-\rangle$ of the Reynolds stress tensor instead of approximating it with a
-single, isotropic eddy viscosity term. As a consequence, \glspl{RSM} provide
-more realistic predictions for flows with significant rotational motion and
-sudden changes in the mean strain rate, albeit at greater computational
-expense, compared to the one- and two-equation models
-\cite{wilcox_turbulence_2006}. Smaller improvements are observed in modeling
-free shear flows and backward-facing step flows \cite{wilcox_turbulence_2006}.
-
-Due to the much higher computational cost for \gls{DES}, \gls{LES}, and
-\gls{DNS}, these models have limited applicability in routine, high-Reynolds
-number engineering problems today. However, given their high accuracy, these
-models are useful for flow problems with relatively simple geometries and at
-low Reynolds numbers and validating the lower-fidelity turbulence models
-\cite{zhiyin_large-eddy_2015}.
-
-\subsection{Turbulence Modeling in MSR Simulation Tools}
-
-For MSR modeling, the $k$-$\epsilon$ and $k$-$\omega$ turbulence models are the
-most commonly used models as shown in published work with COMSOL
-\cite{fiorina_modelling_2014}, OpenFOAM \cite{aufiero_development_2014}, and
-\gls{TUD}'s in-house codes \cite{fiorina_modelling_2014,tiberga_results_2020}.
-Podila et al. \cite{podila_cfd_2019} performed \gls{CFD} simulations of the
-\gls{MSRE} core with six different turbulence models, namely a Spalart-Allmaras
-model, two variants of the $k$-$\epsilon$ model, a $k$-$\omega$ model, and two
-variants of \glspl{RSM}. Their results showed relatively small differences
-in graphite and fuel temperatures among different turbulence models. However,
-they observed significant differences in the turbulence intensities near the
-wall. Given the lack of experimental data for model validation, the authors
-could not make a clear assessment of the models' accuracies. Nevertheless, the
-close agreement of the fuel temperatures imply that the discrepancies in the
-turbulent intensities near the wall have a negligible impact on the overall
-distribution of advected quantities in the \gls{MSRE}. Podila et al.
-\cite{podila_cfd_2019} opted to use a $k$-$\epsilon$ model for subsequent
-calculations in their work given its lowest computational cost and the close
-agreement in the temperature distributions.
-
-Amongst other \gls{MSR} simulation tools, the $k$-$\epsilon$ and $k$-$\omega$
-turbulence models are the most commonly used models as shown in published work
-with COMSOL \cite{fiorina_modelling_2014}, OpenFOAM
-\cite{aufiero_development_2014}, and \gls{TUD}'s in-house codes
-\cite{fiorina_modelling_2014,tiberga_results_2020}. Fiorina et al.
-\cite{fiorina_modelling_2014} compared the flow distribution from both models
-in a 2D axisymmetric \gls{MSFR} geometry and observed that the $k$-$\omega$
-model produced a wider recirculation zone near the outer wall, an additional
-recirculation zone near the top wall, and significantly higher maximum
-temperatures within the former recirculation zone. Thus, their work highlights
-the difficulties of modeling separated flows and calls for extra attention
-towards the choice of turbulence model in \glspl{MSR}.
-
 \section{Summary}
 
 In the last two decades, a growing number of \gls{MSR} multiphysics software have been developed by
 extending existing reactor software such as DALTON and \gls{TRACE} for \gls{MSR} modeling or
 building on general multiphysics software frameworks such as OpenFOAM and \gls{MOOSE}. The
 resultant software have a wide range of capabilities arising from their calculation schemes,
-constraints from legacy code, and simplifying assumptions to balance computational costs. Reactor
-software developers 
+constraints from legacy code, and simplifying assumptions to balance computational costs. Several
+research efforts have been targeted at establishing benchmarks for \gls{MSR} simulation tool
+\gls{VV}, notably with the CNRS benchmark \cite{tiberga_results_2020} and neutronics benchmarks of
+the \gls{MSRE} \cite{fratoni_molten_2020} and the \gls{MSFR} \cite{brovchenko_neutronic_2019}.
+While these efforts have plugged significant technical gaps, more can be done to develop open
+\gls{VV} procedures for \gls{MSR} multiphysics modeling, particularly for model verification of
+\gls{DNP} drift out of the active core region. Among other considerations, the proposed
+verification model should provide the necessary group constant input data for other multiphysics
+simulation tools to replicate the results without discrepancies propagating from using different
+nuclear databases or stochastic uncertainties from Monte Carlo simulations.
+
+On the \gls{TH} side of \gls{MSR} multiphysics, turbulent flow is a complex, yet important
+phenomenon to include in our simulation models to obtain accurate predictions of \gls{MSR} behavior
+under various operating conditions. Most \gls{MSR} multiphysics studies with turbulence models rely
+on the two-equation turbulence models which provide acceptable estimates of time-averaged flow
+characteristics. One study \cite{podila_cfd_2019} showed close agreement in the\gls{MSRE}
+temperature distribution with various one-equation, two-equation, and the \gls{RSM} turbulence
+models despite relatively larger differences observed in turbulence intensities near the walls.
+This observation suggests one-equation models may be adequate for \gls{MSR} designs and simulations
+with weaker turbulent effects, although other analyses may require even more accurate turbulence
+models like \gls{DES} to properly capture turbulent effects without time averaging.
+
+Lastly, there is a dearth of research into accurate control rod modeling in \gls{MSR} multiphysics
+simulations. Control rods induce highly anisotropic fluxes within themselves and their vicinities.
+Unfortunately, higher-fidelity neutron transport methods are typically too computationally
+expensive for use in \gls{MSR} multiphysics simulations, while cheaper methods like neutron
+diffusion perform poorly in regions with highly anisotropic fluxes. However, transport correction
+techniques can be applied to augment neutron diffusion calculations in these regions. While none
+have been applied to \gls{MSR} multiphysics simulations other than albedo boundary conditions,
+various techniques have been proposed and implemented for other reactor types. Inspiration may be
+gleaned from these techniques to improve control rod modeling in \glspl{MSR} with the neutron
+diffusion method.
