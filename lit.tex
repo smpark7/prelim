@@ -19,6 +19,8 @@ rod modeling, and their relevance in \glspl{MSR} modeling.
 
 \section{Historical Molten Salt Reactor Development and Operation}
 
+\subsection{Conceptualization and Proof-of-Concept}
+
 \gls{ORNL} researchers first conceived the \gls{MSR} concept in pursuit of a
 liquid fuel reactor for the US Aircraft Nuclear Propulsion program in
 the 1950s \cite{rosenthal_molten-salt_1970}. Due to high temperature
@@ -43,94 +45,71 @@ research into adapting \glspl{MSR} for civilian power generation
 research was that the thorium fuel cycle had a better breeding ratio than the
 $^{238}$U-to-$^{239}$Pu fuel cycle in thermal-spectrum reactors.
 Ultimately, these efforts culminated in the design, construction, and
-successful operation of the \gls{MSRE}. The \gls{MSRE} had a
-graphite-moderated design with a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture,
-initially rated at 10 MW$_{\text{th}}$ but later restricted to 8
-MW$_{\text{th}}$ due to a miscalculation of heat transfer capabilities
+successful operation of the \gls{MSRE}. The \gls{MSRE} had a 8 MW$_{\text{th}}$,
+graphite-moderated design with a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture
 \cite{haubenreich_experience_1970}. In January 1969, the \gls{MSRE} became the
-first reactor to run on $^{233}$U fuel.
+first reactor to run on $^{233}$U fuel bred from $^{232}$Th. Among the numerous experiments
+conducted on the \gls{MSRE}, the zero-power start-up and coast-down tests
+\cite{prince_zero-power_1968} and the natural circulation test \cite{briggs_molten-salt_1969}
+represent the most commonly referenced tests for MSR software validation due to their
+straightforward demonstrations of \gls{DNP} drift and passive cooling in an \gls{MSR}.
 
 Building on their experience with the \gls{MSRE}, \gls{ORNL} proposed a
 new program for the construction and operation of a demonstration reactor
 based on the \gls{MSBR} concept that they had
 developed \cite{macpherson_molten_1985}. The \gls{MSBR} is a thermal-spectrum,
 single fluid reactor with fertile $^{232}$Th isotopes mixed directly into the
-FLiBe molten salt for $^{233}$U breeding \cite{gehin_liquid_2016}. Like the
+FLiBe molten salt for $^{233}$U breeding \cite{robertson_conceptual_1971}. Like the
 \gls{MSRE}, the \gls{MSBR} relies on continuous online reprocessing to add
 fertile material and remove fission product neutron poisons. Researchers
 estimated the doubling time (the minimum amount of time required to produce
 enough fissile material to start up another \gls{MSBR}) to be
-approximately 22 years. However, \gls{ORNL} failed to secure funding for the
-new program in their two attempts in 1972 and 1974. Nevertheless, from a
-technical perspective, two independent
+approximately 22 years. While \gls{ORNL} failed to secure funding for the
+\gls{MSBR} program, two independent
 technology evaluation and design studies of the \gls{MSR} had reported
 favorably on the promise of the system \cite{macpherson_molten_1985}.
 
-In spite of this setback, research into \glspl{MSR} continued through the late
-1970s. In 1980, \gls{ORNL} published a report describing a new \gls{MSR}
-concept, called the \gls{DMSR} \cite{gehin_liquid_2016} with denatured
-$^{235}$U fuel (i.e. low-enriched uranium). The \gls{ORNL} researchers
-developed this design in response to the fuel reprocessing restrictions
-introduced by President Ford in 1976. The \gls{DMSR} would operate as a
-once-through
-converter system without fuel reprocessing. While the fuel consists of 19.75
-\% \gls{HALEU}, the initial core loading includes thorium
-to boost its conversion ratio throughout its lifetime. It has a continuous
-online feed consisting of \gls{HALEU} to maintain criticality, and denatured
-$^{235}$U to keep uranium enrichment levels below nuclear non-proliferation
-policy thresholds. The design also includes a gas sparging system for removing
-gaseous fission products, while noble metals plate out onto the walls of
-the coolant loop. The older \gls{MSBR} design had a significant drawback; the
-extensive neutron damage in the graphite moderator necessitated frequent
-replacement (every four years) throughout its operational lifetime. The
-\gls{DMSR} avoids this issue by running on a lower power density while
-maintaining
-the overall power output of 2250 MW$_{\text{th}}$. As a result, researchers
-projected that the graphite moderator would last for the entirety of the
-\gls{DMSR}'s design lifetime.
+\subsection{Modern MSR Research and Development}
 
-A concurrent program at the UK Atomic Energy Authority led the
-development of a 2500 MW$_{\text{e}}$ lead-cooled Molten Chloride Fast Reactor
-concept \cite{smith_assessment_1974}. It is a dual fluid system,
-with separate loops for the fuel salt and the blanket salt. The blanket is a
-1 m-wide tank surrounding the core. The absence of moderators and the choice
-of chloride over fluoride salt resulted in a relatively hard neutron spectrum
-which favors $^{239}$Pu breeding over the thorium cycle. The UK researchers
-performed some experiments to study molten salt chemistry but they did not
-build reactor prototypes. The UK program eventually shut down just like its
-US counterpart partly due to the successful demonstration of the Prototype
-Fast Reactor which had achieved criticality in 1974.
+Following a relative lull lasting until the late 20th century, researchers at \gls{CNRS} began
+research into \glspl{MSR} in 1997 \cite{heuer_simulation_2010}. Starting from the \gls{MSBR}
+design, they performed parametric studies on reactor safety, breeding, and other performance
+metrics \cite{mathieu_thorium_2006}. They found that graphite-moderated designs required careful
+consideration of the fuel-to-moderator ratio as some designs exhibited positive temperature
+feedback coefficients. Safer reactor configurations generally operated at very thermalized spectra
+owing to large neutron losses in the graphite, or at epithermal and fast spectra owing to
+$^{232}$Th resonance capture cross sections. Combined with findings on poor breeding performance
+with thermal spectra and accelerated graphite irradiation damage with fast spectra, the authors
+suggested eliminating the graphite moderator to optimize both reactor safety and breeding.
 
-Following a lull lasting through the late 20th century, researchers at
-\gls{CNRS} began research into \glspl{MSR} in 1997
-\cite{heuer_simulation_2010}. Starting from the \gls{MSBR} design, they
-performed parametric studies based on safety, breeding, and
-other performance metrics \cite{mathieu_thorium_2006}. Their efforts
-culminated in the \gls{MSFR} concept, a fast-spectrum breeder \gls{MSR}
-designed to run on the thorium fuel cycle \cite{merle_optimized_2007}. In
-2008, the Generation IV International Forum highlighted the \gls{MSFR} among
-other \gls{MSR} designs for further development \cite{gif_generation_2008}.
-The \gls{MSFR} has also benefited from collaborative research through three
-European-funded projects, the \gls{EVOL} \cite{euratom_final_2015},
-\gls{SAMOFAR} \cite{kloosterman_20_2017}, and \gls{SAMOSAFER}
-\cite{cordis_severe_nodate} projects. Under the \gls{EVOL}
-project, researchers further optimized the \gls{MSFR} design based on
-neutronic and thermal-hydraulic safety analyses. They also diversified
-start-up fuel options beyond the original $^{233}$U-based fuel composition to
-include $^{235}$U, $^{239}$Pu, and \gls{TRU}, and established fuel
-reprocessing schemes for the \gls{MSFR}. The \gls{SAMOFAR} project, which
-started approximately two years after the end of the \gls{EVOL} project,
-supported more comprehensive safety assessments of the reactor and the
-reprocessing plant, and funded a number of experiments for validation of the
-\gls{MSFR}'s safety features. The ongoing \gls{SAMOSAFER} project funds further
-research activities with the goal of achieving modeling, analysis, and
-design improvements on various aspects of \gls{MSR} operation and safety. As
-opposed to the channel-type design of the \gls{MSRE} and \gls{MSBR}, the
-\gls{MSFR} reactor core consists of a single, large channel through which the
-salt flows as shown in Figure \ref{fig:msfr}. The omission of graphite channels
-avoids operational and design issues associated with graphite neutron damage
-and parasitic absorption and results in
-a harder neutron spectrum than the \gls{MSRE} and \gls{MSBR}.
+Their efforts culminated in the \gls{MSFR} concept, a fast-spectrum breeder \gls{MSR}
+designed to run on the thorium fuel cycle \cite{merle_optimized_2007}. As opposed to the
+multi-channel design of the \gls{MSRE} and \gls{MSBR}, the \gls{MSFR} reactor core consists of a
+single, large channel through which the salt flows as shown in Figure \ref{fig:msfr}. In 2008, the
+Generation IV International Forum highlighted the \gls{MSFR} among other \gls{MSR} designs for
+further development \cite{gif_generation_2008}. The \gls{MSFR} has also benefited from
+collaborative research through three projects, the \gls{EVOL} \cite{euratom_final_2015},
+\gls{SAMOFAR} \cite{kloosterman_20_2017}, and \gls{SAMOSAFER} \cite{cordis_severe_nodate} projects.
+Under the \gls{EVOL} project, researchers further optimized the \gls{MSFR} design based on
+neutronic and \gls{TH} safety analyses. One significant modification involved a transition
+from the original straight cylinder core design to curved walls in the reactor core to facilitate
+smoother fuel salt flow and prevent large eddies from forming in the core
+\cite{rouch_preliminary_2014}. Large eddies create hot, swirling pockets of fuel salt which could
+complicate reactor operation. For instance, changes in flow conditions, intended or otherwise,
+could cause the eddies to collapse and in turn introduce a localized pocket of hot fuel salt to the
+circulating fuel loop. Coupled with the strong temperature reactivity feedback in the \gls{MSFR},
+reactor could experience large power fluctuations every time the hot fuel salt passes through the
+core. The \gls{SAMOFAR} project, which started approximately two years after the end of the
+\gls{EVOL} project, supported more comprehensive safety assessments of the reactor and the
+reprocessing plant, and funded a number of experiments for validation of the \gls{MSFR}'s safety
+features. The ongoing \gls{SAMOSAFER} project funds further research activities with the goal of
+achieving modeling, analysis, and design improvements on various aspects of \gls{MSR} operation and
+safety. Other than coupled neutronics and \gls{TH} studies, the latter two projects also
+conducted research and development on molten salt chemistry \cite{rodrigues_pyrochemical_2015,
+duran-klie_dynamic_2016, soucek_synthesis_2017, tosolin_synthesis_2018, tosolin_vaporization_2019},
+emergency salt drain plug design optimization \cite{tano_progress_2017, giraud_development_2019,
+tiberga_preliminary_2019} and fission product tracking in the molten salt coolant
+\cite{kalilainen_evaporation_2020, di_ronco_eulerian_2021, di_ronco_multiphysics_2022}.
 %
 \begin{figure}[htb!]
 	\centering
@@ -140,51 +119,64 @@ a harder neutron spectrum than the \gls{MSRE} and \gls{MSBR}.
 	\label{fig:msfr}
 \end{figure}
 
-China and India have also started national programs supporting \gls{MSR}
-development. China launched their \gls{TMSR} program in 2011 to develop and
-construct both solid-fueled and liquid-fueled \gls{TMSR} designs
-\cite{zou_research_2019}. Latest updates at the time of writing indicate that a
-2-MW liquid-fueled prototype will complete construction by August
-2021, with tests expected to start the following month. This milestone places
-China ahead of other groups in the context of modern \gls{MSR} \gls{RD}
-efforts. India also signaled their interest especially in thorium-based
-reactors given their inherent and vast thorium reserves
-\cite{jayaram_overview_1987}. They have developed conceptual designs of the
-\gls{IMSBR}, expected to run on a fast/epithermal neutron spectrum to avoid
-using graphite moderators given their tendency to deform under high neutron
-fluence.
+China and India have also started national programs supporting \gls{MSR} development. China
+launched their \gls{TMSR} program in 2011 to develop and construct both solid-fueled and
+liquid-fueled \gls{TMSR} designs \cite{zou_research_2019}. They finished construction of the 2
+MW$_{\text{th}}$ TMSR-LF1 prototype in August 2021 and received approval from the Chinese Ministry
+of Ecology and Environment for reactor start-up in August 2022. India also signaled their interest
+especially in thorium-based reactors given their vast thorium reserves
+\cite{jayaram_overview_1987}. They have developed conceptual designs of the \gls{IMSBR}, expected
+to run on a fast/epithermal neutron spectrum to avoid using graphite moderators given their
+tendency to deform under high neutron fluence.
 
-In the US, Southern Company received funding from \gls{DOE}'s
-\gls{ARDP} \cite{doe_office_2021} to design, construct, and operate the
-\gls{MCRE}, a prototype chloride salt-based \gls{MSR} relevant to TerraPower's
-\gls{MCFR} \cite{terrapower_mcfr_2020}. This project builds on a prior
-five-year cost-sharing project for the development of the \gls{MCFR} involving
-TerraPower, Southern Company, Oak Ridge National Laboratory, Idaho National
-Laboratory, the Electric Power Research Institute, and Vanderbilt University.
-The \gls{MCFR} is a fast-spectrum \gls{MSR} similar to the \gls{MSFR}.
-Canada-based Terrestrial Energy is also developing their \gls{IMSR}
-\cite{leblanc_18_2017}, a small modular \gls{MSR} based on the \gls{MSRE}. The
-replaceable \gls{IMSR} core-unit which holds the reactor core, pumps, heat
-exchangers, and control rods, runs for approximately 7 years before it is shut
-down and replaced after a cool-down period.
+In the US, Southern Company received funding from \gls{DOE}'s \gls{ARDP} \cite{doe_office_2021} to
+design, construct, and operate the \gls{MCRE}, a prototype chloride salt-based \gls{MSR} similar to
+TerraPower's \gls{MCFR} \cite{terrapower_mcfr_2020}, at \gls{INL}. This project builds on a prior
+five-year cost-sharing project for the development of the \gls{MCFR} involving TerraPower, Southern
+Company, Oak Ridge National Laboratory, Idaho National Laboratory, the Electric Power Research
+Institute, and Vanderbilt University. The \gls{MCFR} is a fast-spectrum \gls{MSR} similar to the
+\gls{MSFR}. Canada-based Terrestrial Energy is also developing their \gls{IMSR}
+\cite{leblanc_18_2017}, a small modular \gls{MSR} based on the \gls{MSRE}. The replaceable
+\gls{IMSR} core-unit which holds the reactor core, pumps, heat exchangers, and control rods, runs
+for approximately 7 years before it is shut down and replaced after a cool-down period.
 
-\gls{MSR} modeling software play an important role in supporting
-\gls{MSR} development. They accelerate reactor design and optimization by
-enabling engineers to iterate through numerous design changes. \gls{MSR}
-modeling software are also essential tools in reactor safety analysis and
-licensing efforts as engineers must demonstrate and verify their \gls{MSR}
-designs remain safe under various accident scenarios. The next section
-identifies challenges in \gls{MSR} multiphysics modeling with respect to
-reactor accident analysis.
+\subsection{Summary}
 
-\section{Challenges in MSR Multiphysics Modeling} \label{sec:challenges}
+With the renewed global interest in \glspl{MSR}, \gls{MSR} modeling software play an important role
+in supporting \gls{MSR} development. The \gls{ARE} and \gls{MSRE} projects first demonstrated the
+feasibility of a liquid-fueled reactor with fissile fuel dissolved in molten salt coolant. The
+\gls{MSBR} design features $^{233}$U breeding from $^{232}$Th with online fuel reprocessing as
+opposed to infrequent batch-wise reprocessing of solid-fueled breeder reactors. The various modern
+\gls{MSR} designs feature numerous changes relative to the older \gls{MSRE} and \gls{MSBR} designs
+such as running on epithermal and fast neutron spectrums, different core structures, and different
+molten salt compositions. However, the liquid fuel, online reprocessing capability, and other
+unique features of \glspl{MSR} render many existing reactor modeling software, tailored for
+modeling solid-fueled reactors, unsuitable for \gls{MSR} analysis. This fact is unsurprising
+considering the dominant market share of \glspl{LWR} in the global nuclear reactor fleet, the
+resultant research direction in the past few decades, and \glspl{MSR} being the sole reactor type
+to utilize liquid fuel. Accurate reactor modeling capabilities are important because they
+accelerate reactor design and optimization by enabling quicker iteration through numerous design
+changes. \gls{MSR} modeling software are also essential tools in reactor safety analysis and
+licensing efforts as reactor developers must demonstrate and verify their \gls{MSR} designs remain
+safe under various accident scenarios. The next two sections provide reviews of \gls{MSR}
+multiphysics modeling with respect to reactor accident analysis and control rod modeling in
+\gls{MSR} multiphysics simulations.
+
+\section{MSR Multiphysics Modeling}
+
+This section discusses the main challenges in \gls{MSR} multiphysics modeling on reactor accident
+timescales, followed by a review of existing \gls{MSR} multiphysics simulations and results in the
+literature. Lastly, I present verification and validation efforts related to \gls{MSR} multiphysics
+modeling.
+
+\subsection{Challenges in MSR Multiphysics Modeling} \label{sec:challenges}
 
 While modeling \glspl{MSR} is not necessarily more difficult than modeling
 solid-fueled reactors, we must adapt our software tools to accurately model the
 unique phenomena found in these circulating-fuel reactors. The differences in
 the challenges of simulating \glspl{MSR} compared to solid-fueled reactors stem
-mainly from the liquid fuel form of the fuel salt \cite{huff_identifying_2019,
-diamond_phenomena_2018}.
+mainly from the liquid fuel form of the fuel salt \cite{diamond_phenomena_2018,
+huff_identifying_2019}.
 
 Firstly, liquids generally exhibit greater thermal
 expansion per unit change in temperature than solids. A decrease in density of
@@ -203,7 +195,7 @@ Secondly, with the fuel
 salt also serving the role of providing cooling in the core, velocity flow
 profiles in the fuel salts strongly impact the temperature distribution via
 advection-dominated heat transfer \cite{diamond_phenomena_2018}. This contrasts
-with the relatively static temperature distribution shapes in fuel pins and
+with the relatively static temperature profiles in fuel pins and
 other forms of solid fuel matrixes physically separated from the coolant; 
 changes in coolant and the resultant changes in heat transfer rates in
 solid-fueled reactors are often reduced to empirical correlations governing
@@ -224,9 +216,21 @@ event compared to solid-fueled reactors, absent any temperature reactivity
 feedback. Thus, accurate \gls{MSR} transient simulations require accurate
 modeling of \gls{DNP} drift.
 
-As a result, multiphysics
-software must employ \textit{tight coupling schemes} to couple the neutronics
-and thermal-hydraulics governing equations to accurately capture the strong
+The existence of multiple, disparate physics in a single system constitutes a multiphysics system.
+Consequently, we need multiphysics software to accurately model a multiphysics system. Employing
+well-verified single-physics software for coupled multiphysics simulations does not guarantee
+stability, accuracy, or robustness \cite{keyes_multiphysics_2013}. Nevertheless, coupling separate
+single-physics software for multiphysics simulations is a viable and popular option with proper
+implementation. In the presence of strong coupling between different physics, extra care must be
+taken to accurately capture various multiphysics interactions. For instance, the two-way coupling
+between neutron flux and temperature in \glspl{MSR} described in this section necessitates robust
+coupling techniques. Naive multiphysics coupling algorithms may result in longer computation times
+at best and non-converging solves at worst.
+
+Regardless of whether one couples separate single-physics software together or develops an
+intrinsically multiphysics software, multiphysics software for modeling \glspl{MSR} must employ
+\textit{tight coupling schemes} to couple the neutronics
+and \gls{TH} governing equations to accurately capture the strong
 multiphysics interactions in transient \gls{MSR} simulations. Tightly coupled
 numerical models handle multiphysics interactions by either updating all state
 variables simultaneously in one monolithic solve (\textit{full coupling}) or
@@ -253,76 +257,108 @@ In contrast to tight coupling schemes, \textit{loose coupling schemes}
 solve each set of single-physics equations using state variable
 data from the previous timestep without iterative corrections within every
 timestep. Loosely coupled schemes are inappropriate for modeling \glspl{MSR}
-given the strong coupling between the neutronics and thermal-hydraulics.
+given the strong coupling between the neutronics and \gls{TH}.
 Aufiero et al. \cite{aufiero_development_2014} demonstrated a loose coupling
 approach that failed to reproduce the expected increase in reactor power
 in an \gls{MSR} in response to a 150 pcm reactivity insertion.
 
-Consequently, most MSR multiphysics simulation tools employ, at
+Consequently, MSR multiphysics simulation tools must employ, at
 the very least, tight coupling schemes through fixed point iterations. The
-next section explores various numerical coupling approaches in existing
-multiphysics \gls{MSR} simulation tools.
+next subsection reviews existing \gls{MSR} multiphysics simulations and results.
 
-\section{MSR Multiphysics Simulation Tools} \label{sec:msr-tools}
+\subsection{Review of MSR Multiphysics Simulations and Results} \label{sec:msr-tools}
 
-In recent years, several simulation tools have been developed for full-core
-modeling of fast-spectrum \glspl{MSR}. \textit{Tightly coupled} approaches,
-through segregated solvers, involve coupling separate single-physics neutronics
-and thermal-hydraulics software. For example, researchers at
-the \gls{TUD} coupled the 3D neutron diffusion software DALTON
-\cite{boer_validation_2010} and the \gls{CFD} software HEAT
-\cite{de_zwaan_static_2007} to perform a safety analysis of the \gls{MSFR}
-\cite{fiorina_modelling_2014}. In a later effort from the same institute,
-Tiberga et al. \cite{tiberga_discontinuous_2019} coupled PHANTOM-$S_N$ and
-DGFlows in their participation in the CNRS benchmark study
-\cite{tiberga_results_2020}. The CNRS benchmark, named after the \gls{CNRS}
-where it was originally developed, facilitates code-to-code verification of
-\gls{MSR} multiphysics software \cite{aufiero_testing_2018}. Another
-multiphysics package was developed at the Paul Scherrer Institute (PSI)
-coupling the thermal-hydraulics system software \gls{TRACE}
-\cite{nrc_trace_2007} with the
-nodal neutron diffusion software \gls{PARCS} \cite{downar_parcs_2010} for the
-safety analysis of the \gls{MSFR} \cite{pettersen_coupled_2016}. Coupling
-single-physics software to form an integrated multiphysics tool allows
-researchers to leverage on older, well-validated, single-physics software.
-These single-physics software are also highly optimized for solving specific
-types of \glspl{PDE} relevant to the investigated system.
+In the last two decades, several simulation tools have been developed for \gls{MSR} modeling. Given
+the focus on developing high-quality \gls{MSR} software to support reactor design optimization,
+this literature review omits MSR simulation work with zero-dimensional point reactor kinetics in
+favor of those with spatially-resolved neutronics methods.
+
+Most \gls{MSR} simulation tools employ tight, iterative coupling to couple separate neutronics and
+\gls{TH} solvers. In 2007, Krepel et al. \cite{krepel_dyn3d-msr_2007} extended the
+\gls{LWR} nodal diffusion code DYN3D to account for \gls{DNP} drift and fission energy deposition
+in the coolant for \gls{MSR} modeling. The extended DYN3D-MSR code also contains the FLOCAL
+\gls{TH} model for coolant flow and conjugate heat transfer modeling. Their \gls{MSRE} and
+\gls{MSBR} models consisted of homogeneous hexagonal nodes (mesh elements) for the nodal diffusion
+calculation coupled to individual hexagonal unit cells comprising of graphite with circular fuel
+channels in the center for the \gls{TH} calculations. They simulated steady-state operation;
+start-up, coast-down, and natural circulation transients; and an overcooling transient in their
+\gls{MSRE} model. They also modeled steady-state operation and a single channel blockage transient
+in their \gls{MSBR} model. At the \gls{TUD}, Kophazi et al. \cite{kophazi_development_2009} coupled
+their in-house 3D neutron diffusion software DALTON \cite{boer_validation_2010} and \gls{TH}
+software THERM to develop a 3D \gls{MSR} simulation tool. They homogenized the heterogeneous fuel
+and graphite region of the \gls{MSRE} for the neutronics calculation, but they discretized the
+region into a Cartesian mesh and modeled a more accurate representation of the oblong fuel channels
+in the graphite core matrix as opposed to the circular shape by Krepel et al.
+\cite{krepel_dyn3d-msr_2007}. Both efforts by Krepel et al. and Kophazi et al. showed good
+agreement with \gls{MSRE} experimental data in their respective validation tests.
+The researchers from \gls{TUD} continued in their approach of coupling separate single-physics
+software to create \gls{MSR} simulation tools, as noted by the DALTON-HEAT
+\cite{de_zwaan_static_2007} coupling to model the \gls{MSFR} \cite{fiorina_modelling_2014}. The
+fast-spectrum \gls{MSFR} features a large pool of fuel salt in its single-channel design as opposed
+to the \gls{MSRE}'s multi-channel design. As a result, the authors had to incorporate
+multidimensional turbulent flow modeling to accurately model the complex flow profiles and
+turbulence effects in the \gls{MSFR} during steady-state operation and transient scenarios. In a
+later effort from the same institute, Tiberga et al. \cite{tiberga_discontinuous_2019} coupled
+PHANTOM-$S_N$ and DGFlows in their participation in the CNRS benchmark study
+\cite{tiberga_results_2020}. Developed at the \gls{CNRS}, the CNRS benchmark facilitates
+code-to-code verification of \gls{MSR} multiphysics software \cite{aufiero_testing_2018}.
+
+Another multiphysics package was developed at
+the \gls{PSI} by coupling the \gls{LWR} \gls{TH} system software \gls{TRACE} \cite{nrc_trace_2007}
+with the nodal neutron diffusion software \gls{PARCS} \cite{downar_parcs_2010} for a safety
+analysis of the \gls{MSFR} \cite{pettersen_coupled_2016}. The straight cylinder \gls{MSFR} design
+was approximated using hexagonal nodes in \gls{PARCS} while \gls{TRACE} simulated
+Reynolds-averaged, inviscid coolant flow. While modeling inviscid flow reduces computational costs
+by eliminating the need for expensive turbulence modeling, this approach neglects turbulent flow
+and turbulent mixing effects. More recently, Jaradat et al. \cite{jaradat_development_2021}
+extended the 3D $P_1$ and $SP_3$ nodal transport code PROTEUS-NODAL to support \gls{DNP} drift.
+Yang et al. \cite{yang_development_2022} then developed a coupled simulation tool of PROTEUS-NODAL
+and the system analysis code \gls{SAM}. They modeled the \gls{MSFR} on a 2D axisymmetric geometry
+and the \gls{MSRE} on a 3D R-$\theta$-Z geometry with twelve 1D flow channels. The \gls{SAM} flow
+model relied on the algebraic mixing length model for turbulence modeling. Both sets of results
+reproduced the expected trends observed in published experimental and simulation data. Coupling
+single-physics software to form integrated multiphysics tools allows researchers to leverage on
+existing well-validated, single-physics software. These single-physics software are also highly
+optimized for solving specific types of \glspl{PDE} relevant to the investigated system.
 
 With modern advancements in computing hardware and growing access to
 high-performance computing systems, others have developed multiphysics tools by
 coupling the \gls{CFD} software OpenFOAM
 \cite{the_openfoam_foundation_ltd_openfoam_2021} with the Monte Carlo particle
-transport software
-Serpent \cite{leppanen_serpent_2014}, thus achieving high-fidelity neutronics
-calculations in transient reactor analyses. Laureau et al.
-\cite{laureau_transient_2017} developed an innovative technique called the
+transport software Serpent \cite{leppanen_serpent_2014}, thus achieving
+high-fidelity neutronics calculations in transient reactor analyses. To that end,
+Serpent has a multiphysics interface supporting coupling
+with other physics software \cite{leppanen_development_2013}. Laureau et al.
+\cite{laureau_transient_2017} developed another technique called the
 \gls{TFM} method through the introduction of additional time-dependence
 operators to conventional fission matrices typically used to accelerate source
 convergence in Monte Carlo neutronics calculations. The \gls{TFM} method
 pre-calculates three \glspl{TFM} of the reactor system in Serpent and
 interpolates the matrix values during the actual transient calculations to
-incorporate the effects of temperature-induced density change and Doppler
-effect on the neutron cross sections and ultimately the neutron flux. Blanco
-\cite{blanco_neutronic_2020} took a more integrated approach by
+incorporate temperature-induced salt expansion and Doppler
+effects on the neutron cross sections and ultimately the neutron flux. Laureau et al. opted to
+subcycle the neutronics calculations by setting smaller timesteps than the \gls{TH} calculations
+to take advantage of the differing physics timescales. They demonstrated load-following capability
+and parametric studies of overcooling and reactivity insertion transients in the \gls{MSFR}.
+Blanco \cite{blanco_neutronic_2020} took a more direct approach by
 compiling Serpent as an internal \texttt{C}-based function within OpenFOAM's
-\texttt{C++}-based framework. This approach reduced the amount of required data
+\texttt{C++}-based framework. This approach reduced the amount of external data
 transfers between Serpent and OpenFOAM as both software have access to shared
 memory during runtime. Their integrated tool employs the Quasi-Static
 method for transient neutronics calculations and runs Serpent Monte Carlo
 calculations several times per timestep until convergence is reached.
+Blanco demonstrated the Serpent-OpenFOAM tool on the CNRS benchmark specified by Tiberga et al.
+\cite{tiberga_results_2020}.
 
-Another \gls{MSR} simulation approach involves developing ``all-in-one''
-multiphysics software which handle all multiphysics calculations and data
-transfer internally. Among earlier efforts, Nicolino et al.
-\cite{nicolino_coupled_2008} and Zhang et al. \cite{zhang_development_2009}
-recognized the
-need for more robust multiphysics coupling techniques and higher-fidelity
-thermal hydraulics solutions to accurately capture complex flow profiles in
-pool-type \glspl{MSR}. They each independently developed unnamed multiphysics
-simulation tools and demonstrated their tools with non-moderated \gls{MSR}
+Another \gls{MSR} simulation approach involves developing inherently multiphysics software which
+handle all multiphysics calculations and data transfer internally. Among earlier efforts, Nicolino
+et al. \cite{nicolino_coupled_2008} and Zhang et al. \cite{zhang_development_2009} recognized the
+need for more robust multiphysics coupling and acceleration techniques and internal data transfers
+to reduce execution times. They each independently developed unnamed multiphysics simulation tools
+and demonstrated their tools with non-moderated \gls{MSR}
 designs. Later, Li et al. \cite{li_transient_2015} demonstrated the
 steady-state and transient analysis capabilities of COUPLE, a neutronics and
-thermal-hydraulics software developed at the Karlsruhe Institute of Technology.
+\gls{TH} software developed at the Karlsruhe Institute of Technology.
 Others adopted extensible software frameworks for developing numerical solvers
 to develop multiphysics reactor analysis software. Examples of these software
 frameworks include the commercial COMSOL
@@ -339,47 +375,123 @@ modeling the \gls{MSRE} upper plenum, downcomer and lower plenum, primary heat
 exchanger, and secondary heat exchanger as 0D systems (lumped-parameter model),
 and substituting the 2D fuel channel with a 3D fuel channel which more closely
 resembled the actual fuel channels in the \gls{MSRE}
-\cite{zanetti_geometric_2015}. Beyond graphite-moderated \glspl{MSR}, they
-also modeled the \gls{MSFR} in the same publication which featured \gls{TUD}'s
-DALTON + HEAT coupled multiphysics tool.
-More recently, several European institutes (\gls{CNRS}, \gls{PoliMi},
-and the \gls{PSI}) have also developed coupled neutronics and
-thermal-hydraulics tools in OpenFOAM. Their tools share some
-similarities such as implementing the $SP_N$ simplified $P_N$ neutron transport
-model and leveraging OpenFOAM's turbulent flow modeling capabilities.
-Differences include fuel compressibility modeling and helium bubble tracking
-capabilities from \gls{PoliMi} \cite{cervi_development_2019}, fuel
-performance analysis capability from \gls{PSI} \cite{fiorina_creation_2018},
-and the aforementioned external coupling capability with Serpent from
-\gls{CNRS} \cite{blanco_neutronic_2020}.
+\cite{zanetti_geometric_2015}. Other than the \gls{MSRE}, they also modeled the
+\gls{MSFR} in a later publication \cite{fiorina_modelling_2014} which also featured \gls{TUD}'s
+DALTON-HEAT coupled multiphysics tool.
 
-Finally, within the MOOSE framework, simulation tools capable of modeling
-\glspl{MSR} include: Rattlesnake \cite{wang_rattlesnake_2021}; and Moltres
+Other institutes have dedicated significant development work towards
+OpenFOAM-based \gls{MSR} simulation tools. Aufiero et al.
+\cite{aufiero_development_2014} first introduced an OpenFOAM model developed
+at \gls{PoliMi}. Their model implemented a neutron diffusion model and a
+\gls{RANS}-based turbulence model with incompressible flow to demonstrate 2D
+and 3D transient analyses of the \gls{MSFR}. Later advancements in the
+\gls{PoliMi} solver include a fuel compressibility model with helium bubble
+tracking to study fuel compressibility effects
+\cite{cervi_development_2019} and a $SP_3$ neutron transport
+model for improved neutronics calculations \cite{cervi_development_2019-1} in
+the \gls{MSFR}. GeN-Foam is another OpenFOAM-based tool developed by Fiorina
+et al. \cite{fiorina_gen-foam_2015} as a general reactor multiphysics solver
+applicable to \glspl{MSR} and other reactor types. GeN-Foam features neutron
+diffusion, $SP_3$, and $S_N$ neutronics models
+\cite{fiorina_development_2016,fiorina_gen-foam_2015,fiorina_detailed_2019},
+and thermo-mechanical modeling for reactor expansion effects. Using GeN-Foam,
+Altahhan et al. \cite{altahhan_preliminary_2020} developed and optimized a
+liquid-fuel \gls{MSR} design while Shi \& Fratoni \cite{shi_gen-foam_2021}
+simulated precursor drift effects in a homogenized \gls{MSRE} model.
+
+Finally, within the \gls{MOOSE} framework, simulation tools capable of modeling
+\glspl{MSR} include: Griffin \cite{abou-jaoude_coupled_2020}; and Moltres
 \cite{lindsay_moltres_2017}\textemdash the subject of this work.
-Rattlesnake primarily tackles radiation transport problems, but the MOOSE
-framework facilitates multiphysics coupling
-with MOOSE-based applications for other physics
-such that all applications share the same data structure. This eliminates
+Griffin primarily tackles radiation transport problems, but the \gls{MOOSE}
+framework facilitates multiphysics coupling with \gls{MOOSE}-based applications for other physics
+such that all applications share the same data structure. This feature eliminates
 computational costs from external data transfers and optionally allowing for
 \textit{fully coupled} solves in which the application solves all physics
-simultaneously. Similarly, Moltres benefits from the highly-integrated
-cross-compatibility
-within the ecosystem of MOOSE-based applications. Abou-Jaoude et al.
-\cite{abou-jaoude_coupled_2020} coupled Rattlesnake with Pronghorn, another
-MOOSE-based application for advanced reactor thermal-hydraulics modeling, to
+simultaneously. The mutual compatibility among different physics applications within the
+\gls{MOOSE} framework simplifies the work required to strongly couple
+different physics together to solve novel multiphysics problems. Similarly,
+Moltres benefits from the highly-integrated cross-compatibility
+within the ecosystem of \gls{MOOSE}-based applications. Abou-Jaoude et al.
+\cite{abou-jaoude_coupled_2020} coupled Griffin with Pronghorn, another
+\gls{MOOSE}-based application for advanced reactor \gls{TH} modeling, to
 demonstrate several steady-state \gls{MSR} simulation capabilities defined in
 the CNRS benchmark. Lindsay et al.
 \cite{lindsay_introduction_2018} first demonstrated Moltres' \gls{MSR} modeling
 capabilities on 2D axisymmetric and 3D Cartesian models of the \gls{MSRE} with
-fixed velocity flow on a fully coupled neutronics and thermal-hydraulics solve.
-We later demonstrated some of Moltres' more recent developments through
+fixed velocity flow on a fully coupled neutronics and \gls{TH} solve.
+I later demonstrated some of Moltres' more recent developments through
 modeling a 2D axisymmetric model of the \gls{MSFR} for steady-state operation
 and transient accident analysis \cite{park_advancement_2020}. The latter study
 introduced looped \gls{DNP} flow, coupling the \gls{DNP} drift and temperature 
 advection-diffusion to incompressible flow, and decay heat modeling
-capabilities. The proposed work aims to continue Moltres development for
-multiphysics \gls{MSR} analysis. Chapter \ref{chap:moltres} describes Moltres
-and its existing capabilities for reactor analysis.
+capabilities.
+
+\subsection{MSR Multiphysics Modeling Verification \& Validation}
+
+\gls{VV} of simulation models are important components of simulation software development
+\cite{sargent_verification_2010}. Model verification is the process of checking whether a model and
+its implementation accurately represents the conceptual description and specifications. Model
+validation is the process of checking whether a model is an accurate representations of the real
+world within the range of its intended uses. For reactor software, model verification is commonly
+performed by comparing them to other reactor software designed to run the same type of reactor
+simulations. On the other hand, model validation is performed by comparing numerical results from
+a simulation model to experimental data from the corresponding live test. The validity of a model
+depends on the outcome of both model verification and validation.
+
+The important multiphysics phenomena in \glspl{MSR} for model \gls{VV} are salt flow-induced
+\gls{DNP} drift and the strong coupling between neutron flux and temperature advection-diffusion as
+described in Subsection \ref{sec:challenges}. Delpech et al. \cite{delpech_benchmark_2003}
+published one of the first modern \gls{VV} work for \gls{MSR} multiphysics modeling. Collaborators
+from six institutions modeled \gls{MSRE} pump start-up, pump coast-down, and natural
+circulation transients to assess and validate their models and codes for studying the effects of
+salt flow on the reactivity and power. Given the wide range of neutronics methods from
+multidimensional Monte Carlo methods to zero-dimensional point reactor kinetics, some deviations
+were observed between different codes. Neverthless, all results showed generally good agreement
+with \gls{MSRE} experimental data from \gls{ORNL}.
+
+As mentioned in Subsection \ref{sec:msr-tools}, Tiberga et al. \cite{tiberga_results_2020}
+published the CNRS benchmark for the verification of \gls{MSR} simulation tools designed for
+fast-spectrum \gls{MSR} modeling. In contrast with the multi-channel \gls{MSRE} and its derivative
+designs, the CNRS benchmark has a 2 m$\times$2 m problem domain of homogeneous fuel salt mimicking
+the large salt pool in fast-spectrum \gls{MSR} designs. The CNRS benchmark consists of three phases
+starting with single-physics calculations in Phase 0, followed by problems which gradually
+introduce multiphysics coupling in Phase 1, and lastly time-dependent pertubation problems in Phase
+2. Thus, the benchmark provides a systematic approach aimed towards helping code developers
+identify sources of discrepancies which may otherwise be masked by error cancellation or other
+dominant sources of discrepancies. The final steady-state and time-dependent problems involve
+studying the effects of natural circulation and lid-driven flow on the reactivity and power output.
+Aside from the problem specifications, Tiberga et al. also published the associated group
+constant cross section data required by deterministic neutronics solvers to perform neutronics
+calculations. Four institutions participated in the benchmarking exercise with neutron diffusion,
+$SP_N$, and $S_N$-based solvers for the neutronics calculations. Their measured neutronics and
+\gls{TH} parameters showed excellent agreement within up to 2.5\% discrepancy from their combined
+average.
+
+Neutronic benchmark studies of the \gls{MSRE} and the \gls{MSFR} by Fratoni et al.
+\cite{fratoni_molten_2020} and Brovchenko et al. \cite{brovchenko_neutronic_2019} measured the
+delayed neutron losses due to the decay of \glspl{DNP} flowing out of the active core region.
+Fratoni et al. sought to establish a standard validation platform for \gls{MSR} neutronics
+simulation tools with \gls{MSRE} experimental data for inclusion in the \gls{IRPhEP} handbook.
+They characterized and validated a model of the \gls{MSRE} in the Monte Carlo particle transport
+code Serpent. On the other hand, the \gls{MSFR} benchmark by Brovchenko et al. featured results
+from multiple \gls{MSR} simulation tools by several collaborators. Their assessment found that
+the choice of nuclear database for the cross sections and decay data has the most significant
+impact on the neutronics results.
+
+While these publications have plugged significant technical gaps, more can be done to develop
+open \gls{VV} procedures for \gls{MSR} multiphysics modeling. For instance, the
+CNRS benchmark does not assess the loss of delayed neutrons due to the decay of \glspl{DNP} flowing
+out of the active core region. This phenomenon is important as the delayed neutron fraction in the
+core directly impacts the transient power response in unprotected accident scenarios. Meanwhile,
+the neutronic benchmark studies by Fratoni et al. \cite{fratoni_molten_2020} and Brovchenko et al.
+\cite{brovchenko_neutronic_2019} did not provide standardized group constant data required by most
+deterministic multiphysics \gls{MSR} simulation tools. Therefore, it is difficult to isolate
+discrepancies arising from code implementations as opposed to discrepancies from using different
+nuclear databases or stochastic uncertainties in Monte Carlo simulations. A good model verification
+procedure for delayed neutron loss should ideally provide well-defined problems and the necessary
+input data. It is also helpful to perform model verification studies on simpler problems like the
+bare homogeneous problem domain in the CNRS benchmark before embarking on more complicated
+validation studies which require accurate models of the reference experiments.
 
 \section{Turbulence Modeling in MSRs}
 
@@ -530,8 +642,8 @@ close agreement of the fuel temperatures imply that the discrepancies in the
 turbulent intensities near the wall have a negligible impact on the overall
 distribution of advected quantities in the \gls{MSRE}. Podila et al.
 \cite{podila_cfd_2019} opted to use a $k$-$\epsilon$ model for subsequent
-calculations in their work given its lowest computational cost and the close
-agreement in the temperature distributions.
+calculations in their work given its lowest computational cost amongst the
+two-equation models and the close agreement in the temperature distributions.
 
 Amongst other \gls{MSR} simulation tools, the $k$-$\epsilon$ and $k$-$\omega$
 turbulence models are the most commonly used models as shown in published work
@@ -542,11 +654,26 @@ with COMSOL \cite{fiorina_modelling_2014}, OpenFOAM
 in a 2D axisymmetric \gls{MSFR} geometry and observed that the $k$-$\omega$
 model produced a wider recirculation zone near the outer wall, an additional
 recirculation zone near the top wall, and significantly higher maximum
-temperatures within the former recirculation zone. Thus, their work highlights
-the difficulties of modeling separated flows and calls for extra attention
-towards the choice of turbulence model in \glspl{MSR}.
+temperatures within the former recirculation zone. In a recent study by
+Laureau et al. \cite{laureau_unmoderated_2022}, the authors applied a \gls{DES} model to model
+eddies in the \gls{MSFR}. Given the high computational costs required to obtain reasonably small
+stochastic uncertainties from Monte Carlo calculations on arbitrarily varying temperature fields,
+they created a reduced order model relating local reactivity feedback estimates to the nominal
+temperature field to obtain the effective temperature field. Additionally, they fixed the total
+reactor power output to 3 GW to further reduce costs. With this multiphysics model, they found
+the pre-existing \gls{MSFR} model was prone to large power fluctuations up to 7.5\% under
+steady-state operation. Previous studies with lower-fidelity models, including the two-equation
+models, failed to capture this effect due to the time-averaging assumption required in those
+models. After replacing the large inlet pipes with multiple blade-like inlet channels in the
+\gls{MSFR} model, they managed to reduce power fluctuations to 1.2\%.
 
-\section{Control Rod Modeling}
+In essence, the existing literature on turbulence flows in \glspl{MSR} work highlight
+the importance of modeling turbulent flows and calls for extra care towards the choice of
+turbulence model depending on the \glspl{MSR} design and the phenomenon being studied.
+
+\section{Control Rod Modeling in MSRs}
+
+\subsection{Control Rods in MSRs}
 
 Most reactor designs have control rods to control the fission rate or completely shut down the
 reactor by inserting the rods further into the reactor core. As such, control rods consist of
@@ -569,15 +696,66 @@ assemblies in the NuScale VOYGR reactor to 157 assemblies in the Westinghouse AP
 the other hand, the entire MHTGR-350 high-temperature gas reactor, shown in Figure *, has 30
 control rods in total. The control rods are located in graphite reflector blocks, thereby placing
 them further from fuel elements. Lastly, the \gls{MSRE} design has three control rods located
-centrally in graphite-moderated core with fuel salt channels. While the objective of the proposed
-work is to improve diffusion-based control rod modeling in Moltres for \gls{MSR}-like designs, this
-literature review also explores existing methods developed for other reactor types.
+centrally in graphite-moderated core with fuel salt channels.
 
 [Insert control rod illustration]
 
-\subsection{Challenges of Control Rod Modeling} \label{sec:challenges-control-rod}
+There is a notable lack of research efforts into improving control rod modeling in \glspl{MSR}.
+The self-regulating nature and low excess reactivity of \glspl{MSR} reduces or even eliminates the
+need for control rods \cite{dolan_1_2017}. This characteristic arises from the strongly negative
+temperature reactivity feedback and the strong coupling to flow and heat removal rates. \gls{MSR}
+reactor designers rely on these passive mechanisms for reactor safety. In addition, they propose
+load-following operation by adjusting pump speeds and the temperature of the intermediate coolant
+loop. Laureau et al. \cite{laureau_transient_2017} demonstrated simple power ramp-up and ramp-down
+with the \gls{MSFR} by varying the temperature of the secondary coolant. Examples of \gls{MSR}
+designs with no control rods include the fast-spectrum \gls{MSFR} and TerraPower's \gls{MCFR}
+\cite{terrapower_terrapower_2021}. However, \gls{MSR} power control schemes which rely heavily on
+these mechanisms may not be suitable for all accident scenarios. Control rod insertion can provide
+an additional means of reactor shutdown without resorting to draining the fuel salt and
+complicating reactor restart procedures. We also note that thermal \gls{MSR} designs like the
+\gls{MSRE}, \gls{MSBR}, and TMSR-LF1 designs still include control rods as essential components in
+their designs, partly due to their less negative temperature reactivity feedback coefficients
+compared to their fast-spectrum counterparts. Thus, the existing literature on control rod modeling
+in \glspl{MSR} are based on thermal-spectrum \glspl{MSR}.
 
-In reactor design studies, we aim to determine control rod worth which is measured as the reduction
+Few \gls{MSR} multiphysics studies explicitly include control rods in their models. For instance,
+for the \gls{MSRE} pump start-up and coast-down experiments at \gls{ORNL} which involved control
+rod movement, most numerical studies simulate the reactivity effects of the control rods by scaling
+the neutron source term by the neutron multiplication factor to keep their reactor model at
+criticality \cite{delpech_benchmark_2003, krepel_dyn3d-msr_2007}. Some studies include control rod
+models in their steady-state calculations, but they resort to neutron source term scaling for the
+transient calculations due to the inaccuracy of neutron diffusion, $P_1$, and $SP_N$ methods in
+highly neutron absorbing regions \cite{kophazi_development_2009, jaradat_development_2021,
+yang_development_2022}. Kophazi et al. \cite{kophazi_development_2009} modeled annular control rods
+as homogenized hexahedrals in their 3D Cartesian geometry of the \gls{MSRE}. They
+homogenized fuel and graphite regions in the rest of the reactor model as mentioned in Subsection
+\ref{sec:msr-tools}. To reduce errors introduced by the neutron diffusion method, they imposed
+simple albedo boundary conditions for the thermal neutron group. Jaradat et al.
+\cite{jaradat_development_2021} and Yang et al. \cite{yang_development_2022} modeled the \gls{MSRE}
+control rods as homogenized wedges in their R-$\theta$-Z mesh due to the constraints of the nodal
+neutronics solver. Cui et al. \cite{cui_development_2021} also homogenized the control rods as
+regular hexahedral nodes in accordance to their nodal solver in Cartesian geometry. A disadvantage
+of homogenization-based methods is that it removes some of the heterogeneity in the flux and
+temperature. The heterogeneous temperature distribution is especially important in \glspl{MSR} due
+to the collocation of fuel and coolant, and the positive temperature reactivity feedback observed
+in graphite under certain conditions \cite{mathieu_thorium_2006}.
+
+[Insert figures of the control rod models by Kophazi, Jaradat, \& Cui]
+
+In theory, multiphysics simulation tools with Monte Carlo neutron transport such as the
+Serpent-OpenFOAM tool developed by Blanco \cite{blanco_neutronic_2020} could boast excellent
+control rod modeling performance. However, the computational cost would be extremely high for
+reactor geometries much more complex than the 2 m$\times$2 m homogeneous domain of the CNRS
+benchmark (Subsection \ref{sec:msr-tools}). Other high-fidelity neutronics methods such as the
+$S_N$ and $P_N$ methods are also typically too computationally expensive for time-dependent
+multiphysics simulations. On the other hand, less taxing methods such as the neutron diffusion
+method cannot model control rods accurately. The remainder of this section describes the challenges
+of control rod modeling with neutron diffusion, and reviews existing transport correction
+techniques for improving neutron diffusion method performance in control rod modeling.
+
+\subsection{Challenges in Control Rod Modeling} \label{sec:challenges-control-rod}
+
+In reactor design, we aim to determine control rod worth which is measured as the reduction
 in the neutron multiplication factor $k_{eff}$ due to the presence of the control rod in the
 reactor. We are also interested in the accompanying change in flux shape in the vicinity of the
 control rod. Neutrons entering the control rods have a higher chance of being absorbed than
@@ -649,7 +827,7 @@ finite energy ranges across the entire energy spectrum to form multigroup equati
 The subscript $g$ denotes the corresponding quantity for neutrons in energy group $g$.
 Overall, neutron transport methods are very computationally expensive and thus are mainly used for
 time-independent neutronic analyses. For time-dependent multiphysics simulations coupling
-neutronics to thermal-hydraulics and other physics present in nuclear reactors, most reactor codes
+neutronics to \gls{TH} and other physics present in nuclear reactors, most reactor codes
 rely on the neutron diffusion equation for modeling neutronics. The multigroup neutron diffusion
 equations are \glspl{PDE} derived from Eq. \ref{eq:mg-bte} by making
 simplifying assumptions on the angular dependence in the scattering cross section and integrating
@@ -709,7 +887,7 @@ macroscopic neutron cross section values for various neutron interactions such a
 scattering, absorption, and fission. Macroscopic cross sections represent the probability that a
 neutron, in a given energy range, will undergo the associated interaction per unit distance
 traveled in the material. Group constants also broadly include neutron diffusion
-coefficients/constants and delayed neutron precursor data. While advanced coarse-mesh and nodal
+coefficients/constants and \gls{DNP} data. While advanced coarse-mesh and nodal
 methods provide reasonable flux solutions for calculating global and intermediate-scale quantities,
 they do not capture detailed heterogeneous flux distribution within each coarse mesh subregion.
 
@@ -721,7 +899,9 @@ solution accuracy in highly absorbing and near-interface regions.
 Therefore, this literature review focuses on hybrid diffusion-transport methods developed to relay
 transport corrections in the form of more accurate neutron flux and current estimates to
 diffusion-based solvers. The methods differ mainly in how they incorporate corrections into a
-diffusion-based solver.
+diffusion-based solver. While the focus of this work is on improving diffusion-based control rod
+modeling in Moltres for \gls{MSR}-like designs, this literature review explores existing methods
+developed for other reactor types as no advanced techniques have been applied on \glspl{MSR}.
 
 \subsubsection{Absorber Blackness and Linear Extrapolation Length}
 
@@ -869,10 +1049,12 @@ As illustrated by the implementation in CITATION, \gls{MECS} requires considerab
 the super cell configuration to ensure that leakage rates of the transport solution are equivalent
 to the leakage rates of the subsequent diffusion solution. This procedure also places some
 constraints on the location and size of the absorber node that can be inconsistent with the
-nodalization of the rest of the reactor geometry \cite{ougouag_transport_2010}. \gls{MECS} is also
+nodalization of the rest of the reactor geometry \cite{ougouag_transport_2010}. \gls{MECS} is
 incompatible with reactor geometries which contain control rods that are too close to each other
 such that there is not enough distance in between to define neighboring nodes where
-flux-equivalence is assumed. Nevertheless, \gls{MECS} has been widely used within the \gls{VSOP}
+flux-equivalence is assumed. Lastly, \gls{MECS} is only applicable to coarse-mesh solvers and
+homogenizes the control rod along with the adjacent material in its vicinity. Nevertheless,
+\gls{MECS} has been widely used within the \gls{VSOP}
 suite of codes (which contains CITATION) and has been shown to be effective in a number of
 \gls{HTGR} studies \cite{fen_modelling_1992, reitsma_evaluating_2003, mulder_neutronics_2020}.
 
@@ -1181,4 +1363,47 @@ solutions. In this regard, the correction factors do not distinguish between err
 homogenization or the diffusion approximation. However, the improved solutions, especially with the
 \gls{SPH} method, can still deviate significantly from reference transport calculations. A super
 cell, similar to the one adopted by \gls{MECS}, can be used to reduce errors within and near
-control rod cells \cite{ortensi_newton_2018}.
+control rod cells \cite{ortensi_newton_2018}. Another disadvantage, shared by other schemes
+dependent on homogenization, is that homogenization removes some of the heterogeneity in the flux
+and temperature. The heterogeneous temperature distribution is especially important in \glspl{MSR}
+due to the collocation of fuel and coolant, and the positive temperature reactivity feedback
+observed in graphite under certain conditions \cite{mathieu_thorium_2006}.
+
+\section{Summary}
+
+In the last two decades, a growing number of \gls{MSR} multiphysics software have been developed by
+extending existing reactor software such as DALTON and \gls{TRACE} for \gls{MSR} modeling or
+building on general multiphysics software frameworks such as OpenFOAM and \gls{MOOSE}. The
+resultant software have a wide range of capabilities arising from their calculation schemes,
+constraints from legacy code, and simplifying assumptions to balance computational costs. Several
+research efforts have been targeted at establishing benchmarks for \gls{MSR} simulation tool
+\gls{VV}, notably with the CNRS benchmark \cite{tiberga_results_2020} and neutronics benchmarks of
+the \gls{MSRE} \cite{fratoni_molten_2020} and the \gls{MSFR} \cite{brovchenko_neutronic_2019}.
+While these efforts have plugged significant technical gaps, more can be done to develop open
+\gls{VV} procedures for \gls{MSR} multiphysics modeling, particularly for model verification of
+\gls{DNP} drift out of the active core region. Among other considerations, the proposed
+verification model should provide the necessary group constant input data for other multiphysics
+simulation tools to replicate the results without discrepancies propagating from using different
+nuclear databases or stochastic uncertainties from Monte Carlo simulations.
+
+On the \gls{TH} side of \gls{MSR} multiphysics, turbulent flow is a complex, yet important
+phenomenon to include in our simulation models to obtain accurate predictions of \gls{MSR} behavior
+under various operating conditions. Most \gls{MSR} multiphysics studies with turbulence models rely
+on the two-equation turbulence models which provide acceptable estimates of time-averaged flow
+characteristics. One study \cite{podila_cfd_2019} showed close agreement in the\gls{MSRE}
+temperature distribution with various one-equation, two-equation, and the \gls{RSM} turbulence
+models despite relatively larger differences observed in turbulence intensities near the walls.
+This observation suggests one-equation models may be adequate for \gls{MSR} designs and simulations
+with weaker turbulent effects, although other analyses may require even more accurate turbulence
+models like \gls{DES} to properly capture turbulent effects without time averaging.
+
+Lastly, there is a dearth of research into accurate control rod modeling in \gls{MSR} multiphysics
+simulations. Control rods induce highly anisotropic fluxes within themselves and their vicinities.
+Unfortunately, higher-fidelity neutron transport methods are typically too computationally
+expensive for use in \gls{MSR} multiphysics simulations, while cheaper methods like neutron
+diffusion perform poorly in regions with highly anisotropic fluxes. However, transport correction
+techniques can be applied to augment neutron diffusion calculations in these regions. While none
+have been applied to \gls{MSR} multiphysics simulations other than albedo boundary conditions,
+various techniques have been proposed and implemented for other reactor types. Inspiration may be
+gleaned from these techniques to improve control rod modeling in \glspl{MSR} with the neutron
+diffusion method.
