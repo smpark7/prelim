@@ -29,13 +29,11 @@
 
 \usepackage{threeparttable, tablefootnote}
 
-
 \usepackage{environ}
 \makeatletter
 
 \usepackage{tabularx}
 \usepackage{float}
-\usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage{diagbox}
 \usepackage{courier}
@@ -46,6 +44,9 @@
 \usepackage[numbers]{natbib}
 \usepackage{notoccite}
 \usepackage{tikz}
+
+\usepackage[ruled,linesnumbered,lined]{algorithm2e}
+\SetArgSty{textrm}
 
 
 \title{Advancement of Moltres for Multiphysics Molten Salt Reactor Modeling}
@@ -117,22 +118,28 @@ nogroupskip=true]
 \label{chap:lit}
 \input{lit}
 \glsresetall
-
+%
 %\chapter{Description of Moltres}
 %\label{chap:moltres}
 %\input{moltres}
 %\glsresetall
-
+%
 %\chapter{Verification of Moltres for Multiphysics Molten Salt
 %Reactor Modeling}
 %\label{chap:benchmark}
 %\input{benchmark}
 %\glsresetall
 
-%\chapter{Proposed Work}
-%\label{chap:models}
-%\input{models}
-%\glsresetall
+\chapter{Hybrid S$_\text{N}$-Diffusion Method for Improved Control Rod Modeling
+in Moltres}
+\label{chap:hybrid}
+\input{hybrid}
+\glsresetall
+
+\chapter{Proposed Work}
+\label{chap:proposedwork}
+\input{proposedwork}
+\glsresetall
 
 \backmatter
 

@@ -860,7 +860,7 @@ the \gls{BTE} \cite{lamarsh_introduction_1975}:
   D(\vec{r},t) =& \frac{1}{3\Sigma_t(\vec{r},t)} \quad \mbox{(isotropic)} \\
   D(\vec{r},t) =& \frac{1}{3\Sigma_{tr}(\vec{r},t)} = \frac{1}{3\left(\Sigma_t(\vec{r},t)-
   \bar{\mu}\Sigma_s(\vec{r},t)\right)}
-  \quad \mbox{(linearly anisotropic)}
+  \quad \mbox{(linearly anisotropic)} \label{eq:p1-diffcoef}
   \shortintertext{where}
   \Sigma_{tr} =& \mbox{ macroscopic transport cross section,} \nonumber \\
   \bar{\mu} =& \mbox{ average cosine of the scattering angles.} \nonumber
@@ -1267,6 +1267,7 @@ transport-derived flux and current as follows:
 %
 \begin{align}
   D^i_g =& -\frac{\left(z_{i+1}-z_i\right) \bar{J}_g}{\left[\phi_g(z_{i+1})-\phi_g(z_i)\right]}
+  \label{eq:emp}
 \end{align}
 %
 Both \gls{AEF} and empirical methods require the respective subvolumes $V_i$ to be small enough
@@ -1274,17 +1275,17 @@ for the assumptions of constant Eddington factors and diffusion coefficients to 
 
 Both methods performed much better than with conventional diffusion coefficients derived using the
 $P_1$ approximation method. For the same 1D heterogeneous \gls{BWR} problem demonstrating the prior
-Ronen method \cite{gross_high-accuracy_2020} but with anisotropic scattering, the reactivity errors
-were around 10 pcm after eliminating errors associated with energy group condensation. The error
-values compare favorably with the 16-68 pcm error with the $P_1$ method. The \gls{AEF} and
-empirical methods also reproduced the flux distributions better with a maximum pointwise error of
-2\% as opposed to 5\% from the $P_1$ method. Similar to the Ronen method, the \gls{AEF} and
-empirical methods introduce pointwise corrections with information from transport methods. However,
-the present methods require a priori knowledge of the true solution or otherwise accurate estimates
-from transport methods, whereas the Ronen method relies on analytical transport operators which use
-diffusion flux estimates from the previous iteration to update the flux solution. Nevertheless, the
-\gls{AEF} and empirical methods provide the foundation for further development of practical,
-self-closing transport correction techniques.
+Ronen method \cite{gross_high-accuracy_2020} but with anisotropic scattering, the absolute errors
+in $k_{eff}$ are around 100 pcm after eliminating errors associated with energy group
+condensation. The error values compare favorably with the 159-683 pcm error with the $P_1$ method.
+The \gls{AEF} and empirical methods also reproduced the flux distributions better with a maximum
+pointwise error of 2\% as opposed to 5\% from the $P_1$ method. Similar to the Ronen method, the
+\gls{AEF} and empirical methods introduce pointwise corrections with information from transport
+methods. However, the present methods require a priori knowledge of the true solution or otherwise
+accurate estimates from transport methods, whereas the Ronen method relies on analytical transport
+operators which use diffusion flux estimates from the previous iteration to update the flux
+solution. Nevertheless, the \gls{AEF} and empirical methods provide the foundation for further
+development of practical, self-closing transport correction techniques.
 
 \subsubsection{General Equivalence Theory and Superhomogenization Method}
 
