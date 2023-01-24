@@ -27,8 +27,8 @@ graphite-moderated \gls{MSRE} reactor design.
 \section{Theory} \label{sec:hybrid-theory}
 
 The proposed Hybrid $S_N$-Diffusion method is a two-level, iterative method to improve the
-accuracy of neutron diffusion solutions in reactor systems with highly neuutron-absorbing control
-rod regions. In this discussion, I focus on the 1-D, time-independent implementation of the
+accuracy of neutron diffusion solutions in reactor systems with highly neutron-absorbing control
+rod regions. In this discussion, I focus on the 1-D, $k$-eigenvalue implementation of the
 hybrid method.
 
 The discrete ordinates ($S_N$) method for solving the multigroup neutron transport equation
@@ -37,7 +37,7 @@ number of discrete angular intervals (ordinates). The set of distinct direction 
 $\hat{\Omega}_n$ representing the discrete ordinates is typically chosen in conjunction with a
 compatible quadrature set to replace the integrals across the continuous solid angles
 $\hat{\Omega}$ with quadrature approximations. The multigroup, discrete ordinates ($S_N$
-approximation) form of the 1-D, time-independent neutron transport equation with the Gauss-Legendre
+approximation) form of the 1-D, $k$-eigenvalue neutron transport equation with the Gauss-Legendre
 quadrature set is given as:
 %
 \begin{align}
@@ -82,7 +82,7 @@ as follows:
 \mu_n \Psi_g(x,\mu_n)
 \end{align}
 
-The 1-D form of the multigroup time-independent neutron diffusion equations (Eq. \ref{eq:mg-diff})
+The 1-D form of the multigroup $k$-eigenvalue neutron diffusion equations (Eq. \ref{eq:mg-diff})
 is given as:
 %
 \begin{align}
@@ -145,7 +145,7 @@ solver with \glspl{SVDC}.
 \begin{figure}[htb!]
   \centering
   \includegraphics[width=.7\columnwidth]{case-0-geometry}
-  \caption{A 1-D, two-region system containing a 0.5 cm-thick control rod and a 24.5 cm-thick
+  \caption{A 1-D, two-region system containing a 0.5-cm thick control rod and a 24.5-cm thick
     homogeneous mixture of molten fuel salt and graphite moderator. Reflective boundary conditions
     are applied on both ends.}
   \label{fig:case-0-geom}
@@ -176,7 +176,7 @@ I solved for the neutron flux in this system using the following set of numerica
 %
 All other relevant group constants are identical and unchanged from the original dataset generated
 using OpenMC. I implemented the diffusion solvers using the finite difference method and the $S_N$
-solver using a diamond-differenced transport sweep method in the Python programming language. For
+solver using the diamond-difference transport sweep method in the Python programming language. For
 brevity, further numerical implementation details of these solvers are deferred to Section
 \ref{sec:implementation}.
 
@@ -226,8 +226,8 @@ omitted because the purpose of this exercise is to demonstrate the effectiveness
 in reproducing a $S_N$ flux solution. As expected, the diffusion-$P_1$ flux solution deviates from
 the $S_4$ flux solution while the diffusion-\gls{SVDC} flux solution shows significantly better
 agreement with the $S_4$ flux solution. As shown in Table \ref{table:c0k}, $k$ estimate from the
-diffusion-\gls{SVDC} solver (0.62554) is also closer to the $k$ estimate from the $S_4$ solver
-(0.62424) than the diffusion-$P_1$ solver (0.60976).
+diffusion-\gls{SVDC} solver (0.62418) is also closer to the $k$ estimate from the $S_4$ solver
+(0.62467) than the diffusion-$P_1$ solver (0.60833).
 
 \begin{table}[tb!]
   \centering
@@ -235,11 +235,11 @@ diffusion-\gls{SVDC} solver (0.62554) is also closer to the $k$ estimate from th
   diffusion-\gls{SVDC} solvers and the absolute difference relative to the $S_4$ estimate.}
   \begin{tabular}{l S S}
     \toprule
-    Solver type & {$k$} & {Diff.} \\
+    Solver type & {$k$} & {$k-k_{S4}$} \\
     \midrule
-    Diffusion-$P_1$ & 0.60976 & -0.01448 \\
-    $S_4$ & 0.62424 & {-} \\
-    Diffusion-\gls{SVDC} & 0.62554 & +0.00130 \\
+    Diffusion-$P_1$ & 0.60833 & -0.01634 \\
+    $S_4$ & 0.62467 & {-} \\
+    Diffusion-\gls{SVDC} & 0.62418 & -0.00050 \\
     % OpenMC & {0.64604 +/- 0.00051} & {-} \\
     \bottomrule
   \end{tabular}
@@ -352,20 +352,41 @@ incoming flux parameter per mesh point; this parameter is the neutron forward/ba
 the $P_1$ approximation defined as:
 %
 \begin{align}
-  J_{g,\pm} &= \frac{\phi_g}{4} \mp \frac{D_g}{2}\frac{d\phi_g}{dx}
+  J_{g,\pm} &= \frac{\phi_g}{4} \mp \frac{D_g}{2}\frac{d\phi_g}{dx} \label{eq:p1-j}
   \shortintertext{where}
   J_{g,\pm} &= \mbox{ neutron forward/backward current of group }g. \nonumber \\
 \end{align}
 %
-In the absence of additional information, I will assume that all N/2 angular fluxes are equal in
-magnitude, i.e. the flux is isotropic throughout the half-sphere pointing into the $S_N$ subproblem
-domain. As a consequence, the $S_N$ subsolver yields an inaccurate flux solution.
+In the absence of additional information, I will assume that an isotropic angular flux
+distribution, i.e. all N/2 incoming angular fluxes are equal in magnitude. This concept is similar
+to white boundary conditions which describe isotropic reflection of particles at a boundary except
+no reflection occurs in this case. The isotropic angular flux can be expressed mathematically for
+forward angular fluxes as:
+%
+\begin{align}
+  \sum^N_{n=N/2+1}w_n\mu_n\Psi(x,\mu_n) =& J_{+}(x) && (\mu_n>0) \nonumber \\
+  \Psi(x,\mu_n)\sum^N_{n=N/2+1}w_n\mu_n =& J_{+}(x) && (\because \mbox{isotropic hemisphere})
+  \nonumber \\
+  \Psi(x,\mu_n) =& J_{+}(x)\Bigg/\sum^N_{n=N/2+1}w_n\mu_n
+\end{align}
+%
+and backward angular fluxes as:
+%
+\begin{align}
+  \sum^{N/2}_{n=1}w_n\mu_n\Psi(x,\mu_n) =& J_{-}(x) && (\mu_n<0) \nonumber \\
+  \Psi(x,\mu_n)\sum^{N/2}_{n=1}w_n\mu_n =& J_{-}(x) && (\because \mbox{isotropic hemisphere})
+  \nonumber \\
+  \Psi(x,\mu_n) =& J_{-}(x)\Bigg/\sum^{N/2}_{n=1}w_n\mu_n \label{eq:sn-psi-j}
+\end{align}
+%
+These boundary conditions for the $S_N$ subsolver generally yield inaccurate flux solutions since
+most reactor systems do not exhibit perfectly isotropic neutron fluxes.
 
 To resolve this issue, I posit the following hypothesis: \textit{If there exists a highly
 neutron-absorbing control rod region within the $S_N$ subproblem domain $\Omega^d_1$ and the $S_N$
 subproblem boundary $\partial\Omega^d_1$ lies several neutron mean free paths away from this
 region, the \gls{SVDC} values calculated near the control rod region (using the $S_N$ subsolver
-with half-sphere isotropic boundary conditions) will tend to the actual flux gradient solution
+with isotropic hemisphere boundary conditions) will tend to the actual flux gradient solution
 (using a reference $S_N$ calculation across the entire problem domain $\Omega^d$).} In other words,
 suboptimal boundary conditions may induce inaccurate \gls{SVDC} values near the $\partial
 \Omega^d_1$ subdomain boundaries, but the \gls{SVDC} values further from $\partial\Omega^d_1$ are
@@ -459,9 +480,9 @@ Figures \ref{fig:c0g1hf} and \ref{fig:c0g2hf} show the group 1 and 2 neutron flu
 from the neutron diffusion calculations with $P_1$ diffusion coefficients and \glspl{SVDC}, and
 $S_4$ calculation. As expected following the diffusion coefficient discussion, the hybrid method
 flux distribution matches the $S_4$ flux distribution well. The $k$ estimate from the hybrid
-method is 0.62574 which is only 0.00020 higher than the diffusion calculation with reference
-\glspl{SVDC} (0.62554), and 0.00150 higher than the $S_4$ calculation (0.62424). By comparison, the
-$k$ estimate from the diffusion calculation with $P_1$ diffusion coefficients is 0.01448 lower than
+method is 0.62444 which is only 0.00026 higher than the diffusion calculation with reference
+\glspl{SVDC} (0.62418), and 0.00023 lower than the $S_4$ calculation (0.62467). By comparison, the
+$k$ estimate from the diffusion calculation with $P_1$ diffusion coefficients is 0.01634 lower than
 the $S_4$ calculation as discussed in Section \ref{sec:svdc}.
 
 In Case 0, $\Omega^d_1$ covers more than half of $\Omega^d_0$ due to
@@ -512,11 +533,12 @@ quantity that is not directly provided by OpenMC. It is calculated as
       group $g$ to $g$.} \nonumber
 \end{align}
 %
-$\Sigma_{r,g}$ primarily represents the loss of neutrons through outscattering and absorption.
-$\Sigma_{sp}^{g\rightarrow g}$ incorporates neutron multiplication effects from neutron knockout
-reactions into the scattering cross section. Neutron knockout reactions are commonly tallied as
-scattering reactions, and $\Sigma_{r,g}$ is a convenient term through which to incorporate neutron
-knockout effects into the neutron diffusion equations.
+$\Sigma_{r,g}$ primarily represents the loss of neutrons from group $g$ through outscattering and
+absorption. $\Sigma_{sp}^{g\rightarrow g}$ incorporates neutron multiplication effects from neutron
+knockout reactions into the scattering cross section. Neutron knockout reactions are commonly
+tallied as scattering reactions, and $\Sigma_{r,g}$ is a convenient term through which to
+incorporate neutron knockout effects into the neutron diffusion equations. I ran all test cases in
+this work with up to 1st-order Legendre expanded scattering cross sections.
 
 OpenMC uses the $P_1$ flux-limited formulation \cite{pomraning_flux-limited_1984} for calculating
 $D_g$ as follows
@@ -546,7 +568,7 @@ coefficient sampling, I formulated all test cases such that all material interfa
 A ghost point is added to the end of the spatial grid if the reflective boundary conditions are
 imposed at that boundary.
 
-Discretizing the multigroup time-independent neutron diffusion equations in Eq. \ref{eq:1d-diff}
+Discretizing the multigroup $k$-eigenvalue neutron diffusion equations in Eq. \ref{eq:1d-diff}
 and reformulating the scattering term using neutron balance in the control volume bounded by
 $x_{i-\sfrac{1}{2}}$ and $x_{i+\sfrac{1}{2}}$ yields
 %
@@ -556,7 +578,7 @@ $x_{i-\sfrac{1}{2}}$ and $x_{i+\sfrac{1}{2}}$ yields
 \right]\Delta x. \label{eq:diff-j}
 \end{align}
 %
-Using a 1st-order diamond difference scheme to replace the $J$ terms with the discretized form of
+Using the diamond difference scheme to replace the $J$ terms with the discretized form of
 Fick's first law of diffusion,
 %
 \begin{align}
@@ -578,16 +600,21 @@ and rearranging the terms in Eq. \ref{eq:diff-j} yields
   =& \mbox{ macroscopic removal cross section for neutron group }g. \nonumber
 \end{align}
 %
+The diamond difference scheme is 2nd-order accurate, and it can be easily shown that this form is
+equivalent to applying 2nd-order finite differencing to the original neutron diffusion equation in
+Eq. \ref{eq:1d-diff} with diamond differencing for the cell-centered group constants.
 The fixed neutron source $S_g$ is ignored here since the test cases are all neutron-multiplying
 systems with no fixed source.
 
 I implemented two types of boundary conditions: vacuum and reflective boundary conditions. The
 \textbf{vacuum boundary conditions} are imposed by setting the incoming flux in the $P_1$
-approximation to zero as follows
+approximation to zero and applying 2nd-order finite differencing as follows
 %
 \begin{align}
-  \mbox{Left boundary: } \frac{\phi_{g,0}}{4}-\frac{\phi_{g,1}-\phi_{g,0}}{2\Delta x} =& 0 \\
-  \mbox{Right boundary: } \frac{\phi_{g,I}}{4}+\frac{\phi_{g,I}-\phi_{g,I-1}}{2\Delta x} =& 0.
+  \mbox{Left boundary: } \frac{\phi_{g,0}}{4}-\frac{D_{g,\sfrac{1}{2}}}{2}
+  \frac{\left(-\phi_{g,2}+4\phi_{g,1}-3\phi_{g,0}\right)}{2\Delta x} = 0 \\
+  \mbox{Right boundary: } \frac{\phi_{g,I}}{4}+\frac{D_{g,I-\sfrac{1}{2}}}{2}
+  \frac{\left(\phi_{g,I-2}-4\phi_{g,I-1}+3\phi_{g,I}\right)}{2\Delta x} = 0.
 \end{align}
 %
 The \textbf{reflective boundary conditions} are imposed by setting equating the flux at the last physical
@@ -603,11 +630,13 @@ the continuity condition requires that the net neutron current on either side of
 equal as follows
 %
 \begin{align}
-  -D_{g,j-\sfrac{1}{2}}\frac{\phi_{g,j}-\phi_{g,j-1}}{\Delta x} = -D_{g,j+\sfrac{1}{2}}
-  \frac{\phi_{g,j+1}-\phi_{g,j}}{\Delta x} \label{eq:itf-bc}
+  -\frac{3D_{g,i-\sfrac{1}{2}} - D_{g,i-\sfrac{3}{2}} }{2}
+  \frac{\phi_{g,i-2}-4\phi_{g,i-1}+3\phi_{g,i}}{2\Delta x} =&
+  -\frac{3D_{g,i+\sfrac{1}{2}} - D_{g,i+\sfrac{3}{2}} }{2}
+  \frac{-3\phi_{g,i}+4\phi_{g,i+1}-\phi_{g,i}}{2\Delta x} \label{eq:itf-bc}
 \end{align}
 %
-for a material interface at $x_j$.
+for a material interface at $x_i$.
 
 Altogether, they form a system of equations of the form $\bm{A\overline{\phi}}=\bm{\frac{1}{k}
 B\overline{\phi}}$, where $\bm{\overline{\phi}}$ is a flattened vector representation of
@@ -644,9 +673,9 @@ flux values in $\bm{x}$. Finally, the final $\phi_{g,i}$ is normalized by a fact
 
 For the 1-D $S_N$ neutron transport method on the same uniform spatial grid with $I+1$ mesh points,
 the neutron angular flux variables $\Psi_{g,i,n}=\Psi_g(x_i,\mu_n)$ are defined on the mesh points
-$x_i$ while neutron scalar flux variables $\phi_{g,i\pm\sfrac{1}{2}}$ are defined on the
-half-integer mesh points $x_{i\pm\sfrac{1}{2}}$. All group constants are sampled at
-$x{i\pm\sfrac{1}{2}}$.
+$x_i$ while neutron scalar flux variables $\phi_{g,i\pm\sfrac{1}{2}}=\phi_g(x_{i\pm\sfrac{1}{2}})$
+are defined on the half-integer mesh points $x_{i\pm\sfrac{1}{2}}$. All group constants are sampled
+at $x_{i\pm\sfrac{1}{2}}$.
 
 The $S_N$ equations are solved using the transport sweep method in which the algorithm ``sweeps''
 through the spatial grid and sequentially updates $\Psi_{g,i,n}$. In 1-D, the algorithm sweep
@@ -663,7 +692,7 @@ $x_{i+\sfrac{1}{2}}$ yields
 %
 where $q_{g,i+\sfrac{1}{2},n}$ represents the combined scattering and fission neutron source term.
 After expressing $\Psi_{g,i+\sfrac{1}{2}}$ as the average of $\Psi_{g,i+1,n}$ and $\Psi_{g,i,n}$
-in the 1st-order diamond difference scheme and rearranging the terms, we obtain
+in the diamond difference scheme and rearranging the terms, we obtain
 %
 \begin{align}
   \Psi_{g,i+1,n} =& \frac{1-\Sigma_{t,g}\Delta x/2\mu_n}{1+
@@ -740,11 +769,575 @@ $n$.
 
 \subsection{Hybrid $S_N$-Diffusion Method}
 
+Without loss of generality, consider a 1-D system symmetric about the left boundary at $x_0=0$ cm.
+Like Case 0, the control rod region is the left-most region followed by other types of non-control
+rod regions. The $S_N$ subproblem domain $\Omega^d_1$ is bounded by $x_0$ and $x_j$ for some $x_j$
+located several mean free paths to the right of the control rod region as governed by the relevant
+discussion in Section \ref{sec:hybrid-method}.
+
+Excluding the initial neutron diffusion calculation to initialize $k^0$ and $\phi^0$, each outer
+iteration in the hybrid method consists of one $S_N$ neutron transport calculation and one neutron
+diffusion calculation. The $\phi$ estimates from these $S_N$ transport and neutron diffusion
+calculations are labeled as $\phi^{m+\sfrac{1}{2}}$ and $\phi^{m+1}$, respectively, during the
+$(m+1)$-th outer iteration. $\phi^{m+\sfrac{1}{2}}$ spans $\Omega^d_1$ while $\phi^{m+1}$ spans
+the entire domain $\Omega^d_0$.
+
+For the $S_N$ subproblem boundary conditions, we discretize Eqs. \ref{eq:p1-j} and
+\ref{eq:sn-psi-j} as follows
+%
+\begin{align}
+  \Psi_{g,j,n} =& \frac{J_{g,-}(x_j)}{\sum^{N/2}_{n'=1}w_{n'}\mu_{n'}} \nonumber \\
+  =& \frac{\frac{\phi_g(x_j)}{4}+
+  \frac{D_g(x_{j-\sfrac{1}{2}})}{2}\frac{d\phi_g(x_j)}{dx}}{\sum^{N/2}_{n'=1}w_{n'}\mu_{n'}}
+  \nonumber \\
+  =& \frac{\frac{\phi_{g,j}}{4}+
+  \frac{D_{g,j-\sfrac{1}{2}}}{2}\frac{\phi_{g,j}-\phi_{g,j-1}}{\Delta x}}
+    {\sum^{N/2}_{n'=1}w_{n'}\mu_{n'}} && (\mu_n < 0) \label{eq:sn-bc}
+\end{align}
+%
+where $D_g$ is the $P_1$-based diffusion coefficient value.
+
+The \gls{SVDC} formulation in Eq. \ref{eq:svdc} is discretized using the diamond difference scheme
+as follows
+%
+\begin{align}
+  D^s_{g,i+\sfrac{1}{2}} =& -\frac{J^{tr}_{g,i+1}+J^{tr}_{g,i}}{2} \left(
+  \frac{\phi^{tr}_{g,i+1}-\phi^{tr}_{g,i}}{\Delta x} \right)^{-1} = -\frac{\Delta x}{2}
+  \frac{J^{tr}_{g,i+1}+J^{tr}_{g,i}}{\phi^{tr}_{g,i+1}-\phi^{tr}_{g,i}}. \label{eq:svdc-num}
+\end{align}
+%
+From Eq. \ref{eq:svdc-num}, we note that numerical instabilities may occur near flux peaks where
+the flux gradient and thus the denominator of Eq. \ref{eq:svdc-num} approach zero. On the other
+hand, this observation also implies that diffusion coefficient values have negligible influence on
+the flux solution near flux peaks due to the small flux gradient values. Therefore, we can avoid
+numerical instabilities by applying the following logic after calculating $D^s_g$: If the ratio of
+$|\frac{d\phi_g}{dx}|$ to $|\phi_g|$ is sufficiently small and $|D^s_g-D_g| > D_g$, the hybrid
+method defaults to using $D_g$ instead of $|D^s_g-D_g|$. The first conditional statement locates
+regions of relatively flat flux, and of these regions, the second conditional statement excludes
+regions which naturally experience flat flux such as air-filled regions. In all test cases,
+applying the first conditional as $|\frac{1}{\phi_g}\frac{d\phi_g}{dx}|<5\times 10^{-2}$ was
+sufficient for this task.
+
+The Hybrid $S_N$-Diffusion algorithm is as follows
+%
+\begin{align}
+  \shortintertext{1. Initialize $k^0$ and $\phi^0$ with an initial neutron diffusion calculation on
+  $\Omega^d_0$}
+  \shortintertext{2. Generate estimates for $\Psi_{g,j,n}$ at $x_j$ for the $S_N$ transport
+  calculation boundary conditions using Eq. \ref{eq:sn-bc}}
+  \shortintertext{3. Calculate $\phi^{m+\sfrac{1}{2}}$ with the $S_N$ transport subsolver on
+  $\Omega^d_1$}
+  \shortintertext{4. Generate \glspl{SVDC} with $\phi^{m+\sfrac{1}{2}}$ and $J^{m+\sfrac{1}{2}}$
+  using Eq. \ref{eq:svdc-num}}
+  \shortintertext{5. Calculate $\phi^{m+1}$ with the newly generated \glspl{SVDC} and the neutron
+  diffusion solver on $\Omega^d_0$}
+  \shortintertext{6. Check whether convergence is reached}
+  \frac{|\bm{\overline{\phi}}^m-\bm{\overline{\phi}}^{m-1}|}{|\bm{\overline{\phi}}^m|} <& \
+  tol_{\bm{\overline{\phi}}} \\
+  \frac{|k^m-k^{m-1}|}{|k^m|} <& \ tol_k
+  \shortintertext{7. Return to Step 2 if either expression is false, otherwise exit.} \nonumber
+\end{align}
+%
+In general, the convergence tolerance values for the outer hybrid method iteration must be smaller
+than the tolerance values for the neutron diffusion and $S_N$ transport inner iterations. Using
+$\phi^m$ from the neutron diffusion calculation as initial conditions for the $S_N$ transport
+calculation in the $(m+1)$-th iteration helps to significantly reduce the number of transport
+sweeps required.
+
+\section{Description of 1-D Test Cases}
+
+I designed ten 1-D test cases with increasing complexity to test the performance of the
+Hybrid $S_N$-Diffusion method in response to various geometrical features. The latter cases
+resemble the reference \gls{MSRE} design which has centrally located control rods.and air-filled
+guide tubes. Figure \ref{fig:case-geom} shows the geometries of the Cases 0 to 5b.
+All geometries have reflective boundary conditions at $x=0$ cm to reduce computational costs by
+creating half-core or repeating unit cell models. Cases 1a, 2a, 3a, and 4a are repeating unit
+cell models with reflecting boundaries on the right-side boundaries. Cases 1b, 2b, 3b, 4b, 5a, and
+5b are half-core models with vacuum boundaries on the right-side boundaries.
+
+Starting with an infinite, homogeneous region in Case 1a, I systematically added geometric
+complexities to each successive test case to identify how each feature impacts the neutronics
+results. Case 1b introduces a reflector region and vacuum boundary conditions relative to Case 1a.
+Cases 2a and 2b introduce a control rod region between $x=0$ cm and $x=0.5$ cm relative to Cases 1a
+and 1b. Cases 3a and 3b introduce a 0.5 cm-thick air gap between the control rod and the
+fuel-graphite mixture regions relative to Cases 2a and 2b. For Cases 4a and 4b, I replaced the
+homogeneous fuel-graphite mixture in Cases 1a and 2b with explicit fuel-graphite lattices as shown
+in Figure \ref{fig:case-geom}. Case 5a introduces an air gap between the control rod and the
+fuel-graphite lattice regions. Lastly, Case 5b replaces the control rod region with an extended
+air gap region to provide a base case for control rod worth calculations relative to Case 5a.
+
+\begin{figure}[htb!]
+  \centering
+  \includegraphics[width=\columnwidth]{case-geometry}
+  \caption{Geometries of the 1-D test cases. The material labelled ``mixture'' represents a
+    homogeneous mixture of fuel and graphite at a ratio of 22.5\%-77.5\% by volume. All geometries
+    have reflective boundary conditions on the boundary at $x=0$ cm. The right-side boundaries are
+    reflecting for Cases 1a, 2a, 3a, and 4a, and vacuum for Cases 1b, 2b, 3b, 4b, 5a, and 5b.}
+  \label{fig:case-geom}
+\end{figure}
+
+%\begin{table}[tb!]
+%  \centering
+%  \caption{Description of the 1-D Test Case Geometries.}
+%  \begin{tabular}{l c c c}
+%    \toprule
+%    Cases & Ordered list of regions & Ordered list of interface x-coordinates & Left \& Right BCs\\
+%    \midrule
+%    Case 0 & Control rod, homogenized fuel-graphite lattice &
+%    \bottomrule
+%  \end{tabular}
+%  \label{table:c0k}
+%\end{table}
+
+I ran all cases with four neutron energy groups bounded at $E=10^{-5}, 10^0, 10^2, 10^5, 10^8$
+eV. Figures \ref{fig:spectrum} and \ref{fig:reaction} show how this energy group structure
+partitions the neutron flux energy spectrum and neutron reaction rates. For this preliminary work,
+the four-group structure is sufficient for showing different scattering and absorption trends of
+slow, intermediate, and fast neutrons. I also ran all cases on OpenMC to generate the required
+group constants and to assess the accuracy of my deterministic methods against OpenMC in
+continuous-energy (OpenMC-CE) and multigroup (OpenMC-MG) modes. Table \ref{table:var} shows how the
+position, direction of travel, neutron energy, and angle-dependence in $\Sigma_s$ are handled by
+OpenMC and the deterministic methods. Comparing OpenMC-MG results with OpenMC-CE results allows us
+to quantify errors arising from neutron energy group discretization and the scattering cross
+section simplifications.
+
+\begin{figure}[htb!]
+  \centering
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{spectrum}
+    \caption{Neutron flux energy spectrum per source neutron}
+    \label{fig:spectrum}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{reaction}
+    \caption{Flux-normalized scattering and absorption reaction rates}
+    \label{fig:reaction}
+  \end{subfigure}
+  \caption{Neutron flux energy spectrum and reaction rates for Case 5a. The dotted vertical lines
+  correspond to the discrete neutron energy group boundaries.}
+  \label{fig:spec-reac}
+\end{figure}
+%
+\begin{table}[tb!]
+  \centering
+  \footnotesize
+  \caption{Variable handling in OpenMC under continuous-energy (OpenMC-CE) and multigroup
+  (OpenMC-MG) modes, and in the $S_4$ neutron transport, neutron diffusion, and Hybrid
+  $S_N$-Diffusion methods. }
+  \begin{tabular}{c c c c c c}
+    \toprule
+    Variable & OpenMC-CE & OpenMC-MG & $S_4$ & Diffusion & Hybrid \\
+    \midrule
+    Position, $\bm{r}$ & Continuous & Continuous & Discrete & Discrete & Discrete \\
+    Direction of travel, $\bm{\hat{\Omega}}$ & Continuous & Continuous & Discrete & N/A & N/A \\
+    Energy, $E$ & Continuous & Discrete & Discrete & Discrete & Discrete \\
+    Angle-dependence in $\Sigma_s$ & Continuous & 1st-order Legendre & 1st-order Legendre
+    & N/A & N/A \\
+    \bottomrule
+  \end{tabular}
+  \label{table:var}
+\end{table}
+
+Based on a mesh convergence study on Case 2b, all three methods reach reasonable convergence
+with a mesh size of $\Delta x=0.0125$ cm; further mesh refinement results in less than 0.00030
+change in $k$.
+
+\section{Results \& Discussion} \label{sec:prelim-results}
+
+In this section, I will compare various neutronics parameters for all test cases calculated from
+the OpenMC and deterministic methods. I refer to the OpenMC calculations under continuous-energy
+and multigroup modes as OpenMC-CE and OpenMC-MG, respectively.
+
+\subsection{Comparison of Multiplication factors, $k$}
+
+Tables \ref{table:ck1} and \ref{table:ck2} show the $k$ estimates from the OpenMC and deterministic
+methods for all test cases. The tables also include statistical uncertainties for the OpenMC
+$k$ estimates. I did not apply the hybrid method for cases which do not contain control rod
+regions. 
+
+All five methods generally show loose agreement with one another within each test case. The
+differences between the OpenMC-CE and OpenMC-MG $k$ estimates vary significantly from 0.00011 in
+Case 1a to 0.01667 in Case 4b. These Monte Carlo methods exhibit greater differences in cases
+containing reflector regions (e.g. 1b, 2b, 3b, 4b, 5a, 5b). The reflector region consists of an
+equal volume mixture of steel and water. The hydrogen in water is a strong neutron moderator, and
+it induces highly anisotropic scattering due to its small atomic mass. Therefore, the differences
+imply that the neutron energy group discretization scheme and/or the Legendre expansion orders of
+scattering cross sections are insufficient for accurately modeling neutron flux in the reflector
+regions.
+
+\begin{table}[htb!]
+  \centering
+  \footnotesize
+  \caption{Multiplication factor $k$ estimates for Cases 1a, 1b, 2a, 2b, 3a, and 3b from the
+    OpenMC-CE, OpenMC-MG, $S_4$ neutron transport, neutron diffusion, and Hybrid $S_N$-Diffusion
+    methods.}
+  \begin{tabular}{c S[table-format=1.7] S[table-format=1.7] S[table-format=1.7] S[table-format=1.7]
+  S[table-format=1.7] S[table-format=1.7]}
+    \toprule
+    \multirow{2}{*}{\textbf{Method}} &
+    \multicolumn{6}{c}{\textbf{Multiplication factor,} $\bm{k}$} \\
+    \cmidrule{2-7}
+    & {\textbf{Case 1a}} & {\textbf{Case 1b}} & {\textbf{Case 2a}} &
+    {\textbf{Case 2b}} & {\textbf{Case 3a}} & {\textbf{Case 3b}} \\
+    \midrule
+    OpenMC-CE & 1.60033(56) & 1.16749(60) & 1.20666(66) & 0.69499(47) & 1.19908(63) & 0.68565(53)\\
+    OpenMC-MG & 1.60044(33) & 1.18123(60) & 1.20675(62) & 0.70622(44) & 1.20043(48) & 0.69751(50)\\
+    $S_4$     & 1.60036     & 1.18050     & 1.20474     & 0.70302     & 1.19844     & 0.69483    \\
+    Diffusion & 1.60036     & 1.17940     & 1.19666     & 0.69210     & 1.19020     & 0.68386    \\
+    Hybrid    & {N/A}       & {N/A}       & 1.20446     & 0.70156     & 1.19816     & 0.69336    \\
+    \bottomrule
+  \end{tabular}
+  \label{table:ck1}
+\end{table}
+%
+\begin{table}[htb!]
+  \centering
+  \footnotesize
+  \caption{Multiplication factor $k$ estimates for Cases 4a, 4b, 5a, and 5b from the OpenMC-CE,
+    OpenMC-MG, $S_4$ neutron transport, neutron diffusion, and Hybrid $S_N$-Diffusion methods.}
+  \begin{tabular}{c S[table-format=1.7] S[table-format=1.7] S[table-format=1.7]
+    S[table-format=1.7]}
+    \toprule
+    \multirow{2}{*}{\textbf{Method}} &
+    \multicolumn{4}{c}{\textbf{Multiplication factor,} $\bm{k}$} \\
+    \cmidrule{2-5}
+    & {\textbf{Case 4a}} & {\textbf{Case 4b}} & {\textbf{Case 5a}} &
+    {\textbf{Case 5b}} \\
+    \midrule
+    OpenMC-CE & 1.64506(53) & 1.19116(63) & 0.70352(64) & 1.16832(58) \\
+    OpenMC-MG & 1.64434(33) & 1.20783(59) & 0.71513(55) & 1.18279(59) \\
+    $S_4$     & 1.64365     & 1.20790     & 0.71280     & 1.18252     \\
+    Diffusion & 1.64395     & 1.20819     & 0.70428     & 1.18274     \\
+    Hybrid    & {N/A}       & {N/A}       & 0.71396     & {N/A}       \\
+    \bottomrule
+  \end{tabular}
+  \label{table:ck2}
+\end{table}
+%
+\begin{table}[htb!]
+  \centering
+  \footnotesize
+  \caption{Differences in $k$ estimates for Cases 1a, 1b, 2a, 2b, 3a, and 3b for the $S_4$ neutron
+    transport, neutron diffusion, and Hybrid $S_N$-Diffusion methods relative to OpenMC-MG.}
+  \begin{tabular}{c S[table-format=1.7] S[table-format=1.7] S[table-format=1.7] S[table-format=1.7]
+  S[table-format=1.7] S[table-format=1.7]}
+    \toprule
+    \multirow{2}{*}{\textbf{Method}} & \multicolumn{6}{c}{$\bm{k-k_{MG}}$} \\
+    \cmidrule{2-7}
+    & {\textbf{Case 1a}} & {\textbf{Case 1b}} & {\textbf{Case 2a}} &
+    {\textbf{Case 2b}} & {\textbf{Case 3a}} & {\textbf{Case 3b}} \\
+    \midrule
+    $S_4$     & -0.00008 & -0.00073 & -0.00201 & -0.00320 & -0.00199 & -0.00268 \\
+    Diffusion & -0.00008 & -0.00183 & -0.01009 & -0.01412 & -0.01023 & -0.01365 \\
+    Hybrid    & {N/A}    & {N/A}    & -0.00229 & -0.00466 & -0.00227 & -0.00415 \\
+    \bottomrule
+  \end{tabular}
+  \label{table:ckdiff1}
+\end{table}
+%
+\begin{table}[htb!]
+  \centering
+  \footnotesize
+  \caption{Differences in $k$ estimates for Cases 4a, 4b, 5a, and 5b for the $S_4$ neutron
+    transport, neutron diffusion, and Hybrid $S_N$-Diffusion methods relative to OpenMC-MG.}
+  \begin{tabular}{c S[table-format=1.7] S[table-format=1.7] S[table-format=1.7]
+    S[table-format=1.7]}
+    \toprule
+    \multirow{2}{*}{\textbf{Method}} & \multicolumn{4}{c}{$\bm{k-k_{MG}}$} \\
+    \cmidrule{2-5}
+    & {\textbf{Case 4a}} & {\textbf{Case 4b}} & {\textbf{Case 5a}} &
+    {\textbf{Case 5b}} \\
+    \midrule
+    $S_4$     & -0.00069 & +0.00007 & -0.00233 & -0.00027 \\
+    Diffusion & -0.00039 & +0.00036 & -0.01085 & -0.00005 \\
+    Hybrid    & {N/A}    & {N/A}    & -0.00117 & {N/A}    \\
+    \bottomrule
+  \end{tabular}
+  \label{table:ckdiff2}
+\end{table}
+%
+\begin{table}[tb!]
+  \centering
+  \footnotesize
+  \caption{Control rod worths calculated as changes in the reactivity between Case 5a and 5b for
+    the OpenMC continuous-energy and multigroup mode calculations, and the $S_4$ neutron transport,
+  neutron diffusion, and Hybrid $S_N$-Diffusion methods.}
+  \begin{tabular}{c S}
+    \toprule
+    \multirow{2}{*}{\textbf{Method}} & {\textbf{Control rod worth}} \\
+                                     & {$\bm{\rho_{(5b)}-\rho_{(5a)}}$} \\
+    \midrule
+    OpenMC-CE & 0.56549 \\
+    OpenMC-MG & 0.55289 \\
+    $S_4$     & 0.55727 \\
+    Diffusion & 0.57439 \\
+    Hybrid    & 0.55515 \\
+    \bottomrule
+  \end{tabular}
+  \label{table:rod-worth}
+\end{table}
+
+In contrast with OpenMC-CE, the $k$ estimates from the $S_4$ neutron transport method show closer
+agreement with the estimates from OpenMC-MG. Tables \ref{table:ckdiff1} and \ref{table:ckdiff2}
+shows the differences in $k$ between OpenMC-MG and the deterministic methods. The differences in
+$k$ range from 0.00008 in Case 1a to 0.00320 in Case 2b. Given that the mesh is sufficiently fine
+for the $S_4$ method, the only other significant difference between these methods is the
+discretization of the direction of travel variable $\hat{\Omega}$. The flux distributions exhibit
+more apparent differences as I will discuss in the next subsection. Nevertheless, the $S_4$
+method is sufficiently accurate and consistent for assessing control rod neutronics modeling with
+the Hybrid $S_N$-Diffusion method.
+
+As expected, the neutron diffusion method performs significantly worse than the $S_4$ method in
+Cases 2, 3, and 5a which all contain control rod regions. It deviates from the OpenMC-MG $k$
+estimate by up to 0.01412 in Case 2b compared to 0.00320 for the $S_4$ method. The hybrid method
+proves to be effective as it improves the $k$ estimate to almost match the $S_4$ method results for
+the cases with control rods.
+
+Finally, I calculated the control rod worth by taking the change in reactivity $\rho$ between Case
+5a and 5b for all five methods as shown in Table \ref{table:rod-worth}. The formula for $\rho$ is
+given as
+%
+\begin{align}
+  \rho =& \frac{k-1}{k}.
+\end{align}
+%
+Since I did not run the hybrid method for Case 5b, I took the $k$ estimate from the neutron
+diffusion method as the reference non-rodded for the control rod worth calculation for the hybrid
+method. Compared with OpenMC-MG, the control rod worth from the neutron diffusion method deviates
+the most by 3.9\% as opposed to 0.8\% and 0.4\% by the $S_4$ and hybrid methods, respectively.
+
+\subsection{Comparison of Neutron Flux Distributions, $\phi$}
+
+I focus my discussion in this section on Cases 3b and 5a which represent the most complex
+geometries with homogeneous and lattice fuel-graphite regions. I sampled the flux distributions in
+OpenMC-CE and OpenMC-MG across coarser $0.1$-cm intervals to reduce statistical uncertainties of
+each individual flux reading.
+
+\begin{figure}[htb!]
+  \centering
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-1-flux}
+    \caption{Group 1}
+    \label{fig:c3bg1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-2-flux}
+    \caption{Group 2}
+    \label{fig:c3bg2}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-3-flux}
+    \caption{Group 3}
+    \label{fig:c3bg3}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-4-flux}
+    \caption{Group 4}
+    \label{fig:c3bg4}
+  \end{subfigure}
+  \caption{Neutron group flux distributions for Case 3b from OpenMC-CE, OpenMC-MG, $S_4$, neutron
+  diffusion, and hybrid methods.}
+  \label{fig:c3bflux}
+\end{figure}
+
+Figure \ref{fig:c3bflux} shows the neutron flux distributions for groups 1 to 4. Notably, the
+OpenMC-CE flux distribution is the most dissimilar to the rest of the distributions likely due to
+the inadequate neutron energy group discretization scheme. Consequently, I compared the
+deterministic methods with OpenMC-MG to eliminate energy discretization errors. Figure
+\ref{fig:c3bfluxe} shows the relative differences in the flux distributions from $S_4$, neutron
+diffusion, and hybrid methods with respect to OpenMC-MG. The neutron diffusion method
+performs worse than $S_4$, especially near the control rod region between $x=0$ cm and $x=20$ cm
+for the slower group 3 and 4 neutron flux. Although the control rod region spans between $x=0$ cm
+and $x=0.5$ cm only, it induces strong flux gradients in its vicinity and thus renders the neutron
+diffusion method less valid. The hybrid method brings about significant improvements to all four
+group fluxes in this region. Beyond $x=40$ cm, both neutron diffusion and hybrid methods produce
+similar flux error distributions due to the influence of the material interface between the
+fuel-graphite and reflector regions.
+
+\begin{figure}[htb!]
+  \centering
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-1-flux-error}
+    \caption{Group 1}
+    \label{fig:c3bg1e}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-2-flux-error}
+    \caption{Group 2}
+    \label{fig:c3bg2e}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-3-flux-error}
+    \caption{Group 3}
+    \label{fig:c3bg3e}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-3b-group-4-flux-error}
+    \caption{Group 4}
+    \label{fig:c3bg4e}
+  \end{subfigure}
+  \caption{Relative differences of the neutron group flux distributions for Case 3b from the $S_4$,
+    neutron diffusion, and hybrid methods with respect to OpenMC-MG.}
+  \label{fig:c3bfluxe}
+\end{figure}
+
+For a quantitative assessment, I defined the normalized flux error $\epsilon$ for each energy group
+with respect to the OpenMC-MG flux distribution using a normalized Frobenius/Euclidean norm formula
+given as
+%
+\begin{align}
+  \epsilon_g =& \frac{\lVert\sum^I_{i=1}\phi_{g,i} - \phi^{MG}_{g,i}\rVert_F}
+  {\lVert\sum^I_{i=1}\phi^{MG}_{g,i}\rVert_F} =
+  \frac{\left[\sum^I_{i=1}\lvert\phi_{g,i} - \phi^{MG}_{g,i}\rvert^2 \right]^{\sfrac{1}{2}}}
+  {\left[\sum^I_{i=1}\lvert\phi^{MG}_{g,i}\rvert^2\right]^{\sfrac{1}{2}}}
+\end{align}
+%
+I integrated on the fine flux distributions over 0.1-cm intervals from $S_4$, neutron diffusion,
+and hybrid methods to match the 0.1-cm intervals of the OpenMC-MG flux distribution.
+Table \ref{table:c3berror} shows the $\epsilon$ values for the deterministic methods. As expected,
+the hybrid method produces smaller flux error norms than the neutron diffusion method. The
+improvements are more pronounced for group 3 and 4 fluxes.
+%
+\begin{table}[tb!]
+  \centering
+  \footnotesize
+  \caption{Normalized flux error $\epsilon$ for Case 3b from the $S_4$, neutron diffusion, and
+    hybrid methods with respect to OpenMC-MG.}
+  \begin{tabular}{c S S S S}
+    \toprule
+    {\multirow{2}{*}{\textbf{Method}}} &
+    \multicolumn{4}{c}{\textbf{Normalized flux error,} $\bm{\epsilon_g}$} \\
+    \cmidrule{2-5}
+    & {\textbf{Group 1}} & {\textbf{Group 2}} & {\textbf{Group 3}} &
+    {\textbf{Group 4}} \\
+    \midrule
+    $S_4$     & 0.0070 & 0.0080 & 0.0092 & 0.0082 \\
+    Diffusion & 0.0141 & 0.0172 & 0.0275 & 0.0272 \\
+    Hybrid    & 0.0116 & 0.0128 & 0.0136 & 0.0107 \\
+    \bottomrule
+  \end{tabular}
+  \label{table:c3berror}
+\end{table}
+
+Case 5a introduces significant geometrical heterogeneity from the fuel-graphite lattice region.
+This is very apparent from the flux distributions in Figure \ref{fig:c5aflux}. The OpenMC Monte
+Carlo methods captured the fluctuations in the flux with their continuous angle variable as opposed
+to the $S_4$, neutron diffusion, and hybrid methods. The group 1 flux peaks are notably pronounced
+since all fission neutrons are born in the fuel region with most of them in group 1. Figure
+\ref{fig:c5afluxe} shows the relative differences in flux for the $S_4$, neutron diffusion, and
+hybrid methods relative to OpenMC-MG. All three methods show regular fluctuations in the relative
+flux differences corresponding to the fuel-graphite lattice. The $S_4$ method generally deviates
+the least from OpenMC-MG while the neutron diffusion method exhibits characteristically
+significant flux deviations near the control rod region prior to $x=20$ cm and the material
+interface between the fuel and reflector regions beyond $x=40$ cm.
+
+\begin{figure}[htb!]
+  \centering
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-1-flux}
+    \caption{Group 1}
+    \label{fig:c5ag1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-2-flux}
+    \caption{Group 2}
+    \label{fig:c5ag2}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-3-flux}
+    \caption{Group 3}
+    \label{fig:c5ag3}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-4-flux}
+    \caption{Group 4}
+    \label{fig:c5ag4}
+  \end{subfigure}
+  \caption{Neutron group flux distributions for Case 5a from OpenMC-CE, OpenMC-MG, $S_4$, neutron
+  diffusion, and hybrid methods.}
+  \label{fig:c5aflux}
+\end{figure}
+%
+\begin{figure}[htb!]
+  \centering
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-1-flux-error}
+    \caption{Group 1}
+    \label{fig:c5ag1e}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-2-flux-error}
+    \caption{Group 2}
+    \label{fig:c5ag2e}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-3-flux-error}
+    \caption{Group 3}
+    \label{fig:c5ag3e}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{case-5a-group-4-flux-error}
+    \caption{Group 4}
+    \label{fig:c5ag4e}
+  \end{subfigure}
+  \caption{Relative differences of the neutron group flux distributions for Case 5a from the $S_4$,
+    neutron diffusion, and hybrid methods with respect to OpenMC-MG.}
+  \label{fig:c5afluxe}
+\end{figure}
+%
+\begin{table}[tb!]
+  \centering
+  \footnotesize
+  \caption{Normalized flux error $\epsilon$ for Case 5a from the $S_4$, neutron diffusion, and
+    hybrid methods with respect to OpenMC-MG.}
+  \begin{tabular}{c S S S S}
+    \toprule
+    {\multirow{2}{*}{\textbf{Method}}} &
+    \multicolumn{4}{c}{\textbf{Normalized flux error,} $\bm{\epsilon_g}$} \\
+    \cmidrule{2-5}
+    & {\textbf{Group 1}} & {\textbf{Group 2}} & {\textbf{Group 3}} &
+    {\textbf{Group 4}} \\
+    \midrule
+    $S_4$     & 0.0149 & 0.0079 & 0.0127 & 0.0187 \\
+    Diffusion & 0.0300 & 0.0197 & 0.0336 & 0.0445 \\
+    Hybrid    & 0.0283 & 0.0145 & 0.0188 & 0.0285 \\
+    \bottomrule
+  \end{tabular}
+  \label{table:c5aerror}
+\end{table}
 
 
-\section{Description of 1-D Models}
-
-\section{Results} \label{sec:prelim-results}
 
 \section{Summary}
 
@@ -752,3 +1345,6 @@ The Hybrid $S_N$-Diffusion method is promising for studying reactor systems such
 which consist of mostly highly scattering regions (small neutron mean free path), because the $S_N$
 subproblem domain $\Omega^d_1$ covers a small fraction of the entire reactor geometry. This
 reduces the computational costs of the iterative $S_N$ calculations in the hybrid method.
+
+I plan to perform further investigations to replace the approximate energy group discretization
+used here and to use higher-order Legendre expansions of the scattering cross sections.
