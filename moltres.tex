@@ -225,11 +225,11 @@ conventionally known as the vacuum and reflective boundary conditions given,
 respectively, as:
 
 \begin{align}
-    \frac{\partial \phi}{\partial x_i} + \frac{\phi}{2} =& 0 \label{eq:vacuum}
+  D_g \nabla \phi_g \cdot \hat{n} + \frac{\phi}{2} =& 0 \label{eq:vacuum}
     \shortintertext{and}
-    \frac{\partial \phi}{\partial x_i} =& 0
+  \nabla \phi \cdot \hat{n} =& 0
     \shortintertext{where}
-    x_i =& \mbox{ spatial coordinate perpendicular to the boundary.} \nonumber
+  \hat{n} =& \mbox{ outward unit normal vector to the boundary.} \nonumber
 \end{align}
 
 The vacuum boundary condition typically applies to the external boundaries of
@@ -286,7 +286,7 @@ module provides the \gls{SUPG} stabilization scheme
 \cite{brooks_streamline_1982} for the velocity and temperature variables to
 minimize these oscillations. The module also provides the \gls{PSPG}
 stabilization scheme \cite{hughes_new_1986} which enables equal-order
-discretizations. Peterson et al. \cite{peterson_overview_2018}
+discretizations of pressure and velocity. Peterson et al. \cite{peterson_overview_2018}
 provides further detail on the implementation of these stabilization schemes in
 the \texttt{Navier-Stokes} module.
 
@@ -341,11 +341,11 @@ artificially influence upstream behavior, especially in developing flow. The
 ``no boundary condition'' outflow boundary condition by Griffiths
 \cite{griffiths_no_1997} has been shown to reduce such upstream errors.
 
-\subsection{Precursor Loop} \label{sec:moltres-loop}
+\subsection{External Loop} \label{sec:moltres-loop}
 
 Moltres also accounts for the decay of
 \glspl{DNP} outside the active core region by simulating its flow in a
-separate 1-D pipe geometry. This outer loop pipe calculation is implicitly
+separate 1-D pipe geometry. This outer loop pipe calculation is tightly
 coupled to the active core simulation through Picard iterations in MOOSE's
 MultiApp functionality and inlet/outlet boundary values.
 The outer loop region is assumed to be subcritical to minimize neutron
@@ -360,10 +360,11 @@ only significant neutronics-related phenomena are the drift and decay of
 \end{align}
 %
 Equation \ref{eq:dnploop} is derived from equation \ref{eq:precursor} by
-removing the fission \gls{DNP} source and diffusion terms, and the conversion
-of the advection into a 1-D form.
+removing the fission \gls{DNP} source and diffusion terms, and reducing the
+dimensionality from 3-D to 1-D.
 
-The governing equation
+Moltres also simulates the temperature distribution in the external loop to model heat removal via
+heat exchangers. The governing equation
 for temperature, derived from equation \ref{eq:temp}, is:
 %
 \begin{align}
@@ -373,18 +374,17 @@ for temperature, derived from equation \ref{eq:temp}, is:
     Q_{hx} =& \text{heat removal rate through the heat exchanger.} 
     \nonumber
 \end{align}
-
-In the outer loop region, the fission heat source term is replaced with a heat
+%
+The fission heat source term is replaced with a heat
 exchanger sink term $Q_{hx}$.
 
-\subsubsection{Boundary Conditions}
+\subsubsection{External Loop Boundary Conditions}
 
-Table \ref{table:loopbc} summarizes the boundary conditions for all variables
-on the inlet and outlet of the 1-D outer loop region. The inlet boundary
-conditions are all Dirichlet boundary conditions. The inlet boundary values
-are set by the outflow from the active core region that this inlet is
-connected to in the actual reactor geometry. The outlet boundary conditions
-are all outflow boundary conditions as shown in Table \ref{table:loopbc}.
+Table \ref{table:loopbc} lists the boundary conditions for all variables on the inlet and outlet of
+the 1-D outer loop region. The inlet boundary conditions are all Dirichlet boundary conditions. The
+prescribed value for the inlet boundary conditions are set to match the average outflow from the
+active core region. The outlet boundary conditions are all outflow boundary conditions as shown in
+Table \ref{table:loopbc}.
 
 \begin{table}[htbp!]
     \small
@@ -417,10 +417,10 @@ temperature and the precursors at the outlet. These values are weighted by the
 outflow velocity values at the outlet according to the following equation:
 %
 \begin{align}
-    \overline{\psi} =& \frac{\int_\mathcal{C} \psi(x_j) u(x_j) dx_j}{
+    \overline{\psi} =& \frac{\int_\mathcal{C} Y(x_j) u(x_j) dx_j}{
     \int_\mathcal{C} u(x_j) dx_j} \\
     \shortintertext{where}
-    \psi =& \text{ variable to be weighted} \nonumber \\
+    Y =& \text{ variable to be weighted} \nonumber \\
     \mathcal{C} =& \text{ outlet boundary area} \nonumber \\
     u =& \text{ outflow velocity perpendicular to the outlet boundary,} \nonumber \\
     x_j =& \text{ spatial coordinate parallel to the outlet boundary.}
@@ -576,15 +576,12 @@ Moltres calculations.
 
 \subsubsection{Critical Assessment} \label{sec:msre-critique}
 
-Ultimately, Lindsay et al. achieved their goal of ``introducing Moltres as a
-simulation tool'' \cite{lindsay_introduction_2018}. Their work illustrated the
-development of neutronics and thermal-hydraulics models in Moltres and
-demonstrated, along with advanced capabilities from the \gls{MOOSE} framework,
-fully-coupled simulations of the \gls{MSRE} with implicit time-stepping. The
+Lindsay et al.'s work illustrated early development efforts for neutronics and thermal-hydraulics
+models in Moltres and demonstrated, along with advanced capabilities from the \gls{MOOSE}
+framework, fully-coupled simulations of the \gls{MSRE} with implicit time-stepping. The
 decent qualitative agreement observed between Moltres and the \gls{ORNL}
 \gls{MSRE} calculations proved that Moltres was capable of simulating
-\glspl{MSR} with some simplifying assumptions. Furthermore, Moltres was a
-relatively newly developed software at the time of submission.
+\glspl{MSR} under some simplifying assumptions.
 
 On the other hand, significant improvements could be made to Moltres to better
 model multiphysics phenomena in \glspl{MSR}. For instance, replacing the
@@ -617,19 +614,24 @@ secondary cooling accidents. Therefore, understanding residual heat generation
 from fission product decays in \gls{MSR} is essential in preventing further
 structural failure in the aftermath of an accident.
 
-Lastly, the authors rightly recognized two other avenues for future work: more
+Specific to reactor physics modeling, Moltres also requires an accurate method for modeling
+control rods. As observed in Figure \ref{fig:msre-flux}, the omission of control rods led to the
+significant discrepancies in the thermal flux distribution. However, developing control rod
+modeling capability in Moltres is nontrivial given that neutron diffusion theory performs poorly
+within highly neutron-absorbing regions.
+
+Lastly, the authors recognized two other avenues for future work: more
 rigorous validation and verification of Moltres' capabilities by comparison
 with more detailed experimental data and other modern \gls{MSR} modeling
-efforts; and the study of transient simulation cases investigating control rod
+efforts; and the study of transient simulation cases such as control rod
 ejection, single channel blockage, loss of flow, and loss of secondary cooling.
 
 \subsection{Advancements in Moltres and Transient Simulations of the MSFR}
 \label{sec:msfr}
 
-This section follows my previous work in \textit{Advancement and Verification
-of Moltres for Molten Salt Reactor Safety Analysis}
-\cite{park_advancement_2020}, which I shall refer to as ``this work'' in this
-subsection.
+This section follows my previous work for my Master's degree in \textit{Advancement and
+Verification of Moltres for Molten Salt Reactor Safety Analysis} \cite{park_advancement_2020},
+which I shall refer to as ``this work'' in this subsection.
 
 This work represents a continuation of the work by Lindsay et al.
 \cite{lindsay_introduction_2018} in the development of Moltres as an \gls{MSR}
@@ -639,7 +641,7 @@ to model flow dynamics, the precursor loop system, and the decay heat model.
 I later demonstrated these features through steady-state and transient
 simulations of a 2D axisymmetric \gls{MSFR} model.
 
-Moltres depends on the \texttt{Navier-Stokes} module in \gls{MOOSE} for
+Moltres couples natively with the \texttt{Navier-Stokes} module in \gls{MOOSE} for
 incompressible flow modeling capabilities. Efforts towards coupling
 the neutronics capabilities to the \texttt{Navier-Stokes} module were already
 underway during the peer review process of the work described in Section
