@@ -1,192 +1,34 @@
-\section{Moltres} \label{sec:moltres}
+\section{Modeling Approach with Moltres} \label{sec:model}
 
-In this section we describe Moltres \cite{lindsay_introduction_2018}, the
-multiphysics reactor simulation tool, and the specific modeling approach for
-simulating the CNRS Benchmark cases in Moltres. Much of Moltres' development
-focuses on meeting the needs of \gls{MSR} multiphysics.
+This section describes specific modeling approach for
+simulating the CNRS Benchmark cases in Moltres.
 
-\subsection{Description of Moltres} \label{sec:description-of-moltres}
-
-Moltres models coupled neutronics and thermal-hydraulics in reactors. While
-generally applicable to most reactor concepts, much of
-Moltres' development focuses on meeting the needs of \gls{MSR} multiphysics.
-Together with \gls{MOOSE}'s \cite{permann_moose_2020} \texttt{Heat}
-\texttt{Conduction} and \texttt{Navier-Stokes} \cite{peterson_overview_2018}
-modules, Moltres solves the multigroup neutron diffusion
-equations, for an arbitrary number of energy and precursor groups, and
-thermal-hydraulics equations simultaneously on the same mesh (or separately
-through fixed-point iterations if desired).
-Previously, Lindsay et al. \cite{lindsay_introduction_2018}
-demonstrated Moltres' \gls{MSR} neutronics modeling capabilities with 1D salt
-flow in 2D-axisymmetric and 3D models of the \gls{MSRE}. The neutron flux and
-temperature distributions agreed qualitatively with legacy
-\gls{MSRE} data albeit with some minor quantitative discrepancies due to
-simplifications and assumptions in the reactor geometry. Moltres has
-since undergone further development to support 1) the looping of \gls{DNP}
-drift back into the reactor core, 2) coupling the aforementioned \gls{DNP}
-drift to incompressible Navier-Stokes velocity flows within the reactor core,
-and 3) a decay heat model to simulate decay heat from fission products.
-
-To perform neutronics calculations, Moltres requires homogenized group constant
-data from dedicated high-fidelity neutronics software such as the NEWT module
-in SCALE \cite{dehart_reactor_2011}, Serpent 2 \cite{leppanen_serpent_2014}, or
-OpenMC \cite{romano_openmc:_2015}. Users
-can run a Python script in Moltres' Github repository which automatically reads
-user-provided SCALE/Serpent 2/OpenMC output data files and creates
-Moltres-compatible JSON or text files containing all required group constant
-data.
-
-Moltres solves for the neutron fluxes governed by
-the multigroup neutron diffusion equations given by:
-%
-\begin{align}
-    \frac{1}{v_g} \frac{\partial \phi_g}{\partial t} =& \nabla \cdot D_g
-    \nabla \phi_g - \Sigma^r_g \phi_g +
-    \sum^G_{g' \neq g} \Sigma^s_{g' \rightarrow g} \phi_{g'} \nonumber \\
-    &+ \chi^p_g \sum^G_{g'=1} \left( 1-\beta \right) \nu \Sigma^f_{g'}
-    \phi_{g'} + \chi^d_g \sum^I_i \lambda_i C_i \label{eq:cnrs-neut} \\
-    %
-    \shortintertext{where}
-    v_g =& \text{ average speed of neutrons in group $g$,} 
-    \nonumber \\
-    \phi_g =& \text{ neutron flux in group $g$,}
-    \nonumber \\
-    t =& \text{ time,} \nonumber \\
-    D_g =& \text{ diffusion coefficient of neutrons in} \nonumber \\
-    &\text{ group $g$,} \nonumber \\
-    \Sigma^r_g =& \text{ macroscopic cross section for removal of} \nonumber \\
-    &\text{ neutrons from group $g$,} \nonumber \\
-    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic cross section of
-    scattering from} \nonumber \\
-    &\text{ groups $g'$ to $g$,} \nonumber \\
-    \chi^p_g =& \text{ prompt fission spectrum for neutrons in} \nonumber \\
-    &\text{ group $g$,} \nonumber \\
-    G =& \text{ total number of discrete neutron groups,} \nonumber \\
-    \nu =& \text{ average number of neutrons produced per} \nonumber \\
-    &\text{ fission,} \nonumber \\
-    \Sigma^f_{g} =& \text{ macroscopic fission cross section for neutron}
-    \nonumber \\
-    &\text{ in group $g$,} \nonumber \\
-    \chi^d_g =& \text{ delayed fission spectrum for neutrons in} \nonumber \\
-    &\text{ group $g$,} \nonumber \\
-    I =& \text{ total number of delayed neutron precursor} \nonumber \\
-    &\text{ groups,} \nonumber \\
-    \beta =& \text{ total delayed neutron fraction.} \nonumber
-\end{align}
-
-The delayed neutron precursor concentrations are
-governed by the following equation:
-%
-\begin{align}
-    \frac{\partial C_i}{\partial t} =& \beta_i \sum^G_{g'=1} \nu \Sigma^f_{g'}
-    \phi_{g'} - \lambda_i C_i - \vec{u} \cdot \nabla C_i + \nabla \cdot
-    D_{\text{P}} \nabla C_i \label{eq:cnrs-dnp} \\
-    %
-    \shortintertext{where}
-    \beta_i =& \text{ delayed neutron fraction of precursor group $i$,}
-    \nonumber \\
-    \lambda_i =& \text{ average decay constant of delayed neutron} \nonumber \\
-    &\text{ precursors in precursor group $i$,} \nonumber \\
-    C_i =& \text{ concentration of delayed neutron precursors in}
-    \nonumber \\
-    &\text{ precursor group $i$,} \nonumber \\
-    \vec{u} =& \text{ molten salt flow velocity vector,}
-    \nonumber \\
-    D_{\text{P}} =& \text{ effective diffusion coefficient of the delayed}
-    \nonumber \\
-    &\text{ neutron precursors.} \nonumber
-\end{align}
-
-The last two terms in Equation \ref{eq:cnrs-dnp} represent the advection and
-diffusion terms, respectively, to model the movement of \gls{DNP} in
-liquid-fuel \glspl{MSR}.
-
-The governing equation for temperature is an advection-diffusion equation with
-a fission heat source term $Q_f$ given by:
-%
-\begin{align}
-    \rho c_{p} \frac{\partial T}{\partial t} =& - \rho c_p \vec{u}
-    \cdot \nabla T + \nabla \cdot \left(k \nabla T \right) + Q_f
-    \label{eq:cnrs-temp}
-    \shortintertext{and}
-    Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g
-    \shortintertext{where}
-    \rho =& \text{ density of the molten salt,}
-    \nonumber \\
-    c_p =& \text{ specific heat capacity of molten salt,} \nonumber \\
-    T =& \text{ temperature of molten salt,} \nonumber \\
-    k =& \text{ effective thermal conductivity of molten salt,} \nonumber \\
-    Q_f =& \text{ fission heat source,} \nonumber \\
-    \epsilon_g =& \text{ average fission energy released by neutrons in group
-    $g$.} \nonumber
-\end{align}
-
-Lastly, the governing equations for the incompressible Navier-Stokes flow are
-given by:
-%
-\begin{align}
-    \rho \frac{\partial \vec{u}}{\partial t} =&
-    -\rho (\vec{u}
-    \cdot \nabla) \vec{u} - \nabla p + \mu \nabla^2 \vec{u}
-    + \rho \alpha \vec{g} \left(T - T_{\text{ref}} \right)
-    \label{eq:cnrs-momentum}
-    \shortintertext{and}
-    \nabla \cdot \vec{u} =& 0
-    \label{eq:cnrs-divergence}
-    \shortintertext{where}
-    p =& \text{ pressure,} \nonumber \\
-    \mu =& \text{ dynamic viscosity,} \nonumber \\
-    \alpha =& \text{ coefficient of thermal expansion,} \nonumber \\
-    \vec{g} =& \text{ gravitational force vector,} \nonumber
-    \\
-    T_{\text{ref}} =& \text{ reference temperature at which the nominal}
-    \nonumber \\
-    &\text{ density is provided.} \nonumber
-    \nonumber
-\end{align}
-
-The velocity, temperature, and delayed neutron precursor
-variables are all susceptible to numerical node-to-node oscillations
-commonly observed when resolving advection-dominated transport using continuous
-Galerkin methods \cite{kuhlmann_lid-driven_2018}.
-\gls{MOOSE}'s \texttt{Navier-Stokes} module provides the
-\gls{SUPG} stabilization scheme \cite{brooks_streamline_1982} for the velocity
-and temperature variables to combat these oscillations. We
-refer readers to \cite{peterson_overview_2018} for details on the
-implementation of these methods in the \texttt{Navier-Stokes} module. On the
-other hand, for the delayed neutron precursor variables,
-we discretized them using
-discontinuous shape functions supported by \gls{MOOSE}'s discontinuous finite
-element solver to circumvent the numerical instability issue.
-
-\subsection[Modeling approach]{Modeling approach\footnote{The input files for
+For this work\footnote{The input files for
 all benchmark
 cases are available on the Moltres GitHub repository at 
 \url{https://github.com/arfc/moltres/tree/devel/problems/2021-cnrs-benchmark}.
-}} \label{sec:model}
-
-For this work, we ran the benchmark cases on a uniformly-spaced mesh consisting
+}, I ran the benchmark cases on a uniformly-spaced mesh consisting
 of 200$\times$200 elements. Thus, the dimensions of each mesh element are
-0.01m$\times$0.01m. We adopt the group constant data
-provided by Tiberga et al. \cite{tiberga_results_2020}. Next, we
+0.01m$\times$0.01m. I adopted the group constant data
+provided by Tiberga et al. \cite{tiberga_results_2020}. Next, I
 discretized most of the relevant variables, i.e. neutron fluxes, velocity
 components, pressure, and temperature, using continuous, first-order, Lagrange
 shape functions. The only exception is the precursor concentration variables,
-which we discretized using zeroth-order monomial shape functions and solved
-using a \gls{DFEM}. We interpolated the resulting discontinuous,
+which I discretized using zeroth-order monomial shape functions and solved
+using a \gls{DFEM}. I interpolated the resulting discontinuous,
 cell-centered precursor values to obtain the nodal values for results
 analysis.
 
-As mentioned in Section \ref{sec:description-of-moltres}, the
+The
 \texttt{Navier-Stokes} and \texttt{Heat} \texttt{Conduction} modules from
 \gls{MOOSE} provide some of the capabilities for
-modeling incompressible flow and heat transfer. In particular, we stabilized
+modeling incompressible flow and heat transfer. In particular, I stabilized
 the incompressible flow and temperature governing equations using the
 \gls{SUPG} stabilization method implemented in \gls{MOOSE}
-\cite{peterson_overview_2018}. Without \gls{SUPG} stabilization, we
+\cite{peterson_overview_2018}. Without \gls{SUPG} stabilization, I
 observed spurious numerical oscillations in the velocity and temperature near
 the top boundary due to the singularity on the top left corner where different
-velocity boundary conditions meet. We also applied the \gls{PSPG} stabilization
+velocity boundary conditions meet. I also applied the \gls{PSPG} stabilization
 scheme \cite{hughes_new_1986} from the Navier-Stokes module
 \cite{peterson_overview_2018}
 which enables equal-order discretizations in the velocity and pressure
@@ -195,7 +37,7 @@ cheaper and more convenient to work with than implementing higher-order
 velocity discretizations for stability without \gls{PSPG}
 \cite{chapelle_inf-sup_1993}.
 
-We performed all eigenvalue calculations in Steps 0.2, 1.1, 1.2, 1.3, and 1.4
+I performed all eigenvalue calculations in Steps 0.2, 1.1, 1.2, 1.3, and 1.4
 using the inverse power method solver in \gls{MOOSE}. All other steps
 were performed using the Preconditioned Newton-Krylov solver
 \cite{gaston_physics-based_2015}. The coupled steady-state problems in
@@ -220,11 +62,11 @@ and a steady-state problem in thermal-hydraulics simultaneously.
 	\label{table:timestep}
 \end{table}
 
-For the time-dependent cases in Step 2.1, we employed fully coupled solves with
+For the time-dependent cases in Step 2.1, I employed fully coupling with
 a second-order implicit Backward Differential Formula (BDF2) time-stepping
-scheme. For each driving frequency in the heat transfer coefficient, we set the
+scheme. For each driving frequency in the heat transfer coefficient, I set the
 timestep sizes to 1/200th of the perturbation period. Table
-\ref{table:timestep} shows the timestep sizes. We assumed the
+\ref{table:timestep} shows the timestep sizes. I assumed the
 systems reached asymptotic behavior when the magnitudes of neighboring power
 peaks differed by less than 0.001\% for at least ten wavelengths. Under this
 assumption, the phase shift measurements between adjacent waves always

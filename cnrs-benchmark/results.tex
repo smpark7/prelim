@@ -52,11 +52,7 @@ in the benchmark paper for every observable along AA' or BB' in Figures
 \ref{fig:1.3}, and \ref{fig:2.1} for a qualitative comparison of the results
 from Moltres and the benchmark participants. Given the significant overlap in
 the plot curves, these figures omit results from CNRS-$SP_1$ and TUD-$S_2$ to
-reduce cluttering. Readers may also refer to
-\ref{appendix:tables} for tables of observable values at nine equidistant
-points along AA' and BB' from Moltres and the benchmark participants. We
-provide these tables for ease of review and a direct comparison to
-corresponding data tables from \cite{tiberga_results_2020}. The full dataset
+reduce cluttering. The full dataset
 of all observable results used in this results analysis is
 available at \cite{park_results_2021}. Lastly, Table
 \ref{table:rho} reports all reactivity and change in reactivity results from
@@ -64,19 +60,26 @@ Steps 0.2, 1.1, 1.2, and 1.3.
 
 \begin{figure}[h]
 	\centering
-    \includegraphics[width=.75\columnwidth]{0-1-vel-plot}
+    \includegraphics[width=.49\columnwidth]{0-1-vel-plot}
 	\caption{Step 0.1 \textemdash\ Horizontal velocity component along BB'.}
 	\label{fig:0.1}
 \end{figure}
 %
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=.75\columnwidth]{0-2-fiss-plot}
-	\caption{Step 0.2 \textemdash\ Fission rate density along AA'.}
-	\label{fig:0.2}
-	\includegraphics[width=.75\columnwidth]{0-3-temp-plot}
-	\caption{Step 0.3 \textemdash\ Temperature distribution along BB'.}
-	\label{fig:0.3}
+    \begin{subfigure}[b]{.49\textwidth}
+      \centering
+	  \includegraphics[width=\columnwidth]{0-2-fiss-plot}
+	  \caption{Step 0.2 \textemdash\ Fission rate density along AA'.}
+	  \label{fig:0.2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{.49\textwidth}
+      \centering
+	  \includegraphics[width=\columnwidth]{0-3-temp-plot}
+	  \caption{Step 0.3 \textemdash\ Temperature distribution along BB'.}
+	  \label{fig:0.3}
+    \end{subfigure}
 \end{figure}
 %
 \FloatBarrier
@@ -125,15 +128,13 @@ average discrepancies. The discrepancy value for $T$ along centerline BB' in
 Step 0.3 is the only exception with its value of 0.164\% being larger than
 the benchmark average by 3 \gls{SD}.
 
-We
-note in Figure \ref{fig:0.3} that the $T$ distribution from Moltres is almost
+We note in Figure \ref{fig:0.3} that the $T$ distribution from Moltres is almost
 identical to the corresponding distributions from CNRS-$SP_3$ and TUD-$S_6$
 along most of centerline BB'. However, Figure \ref{fig:0.3-zoom} shows
 significant spread in the $T$ distributions along BB' from all software
 packages near the top boundary. At $y = 2.0$ m, Moltres underpredicts the
 temperature at 912.3 K compared to the benchmark participants' values which
-range between 930.3 K and 948.1 K (Refer to Table \ref{table:0.3} for the
-numerical values). This point on the top boundary lies directly downstream of
+range between 930.3 K and 948.1 K. This point on the top boundary lies directly downstream of
 the velocity boundary condition discontinuity at the top-left corner.
 Corner singularities are generally difficult to approximate with
 continuous Galerkin methods \cite{kuhlmann_lid-driven_2018}.
@@ -150,7 +151,7 @@ along the top boundary do not impact the overall integrity of our results.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=.75\columnwidth]{0-3-temp-plot-zoom}
+	\includegraphics[width=.49\columnwidth]{0-3-temp-plot-zoom}
 	\caption{Step 0.3 \textemdash\ Temperature distribution along BB' for y = 1.94 m to
 	y = 2.00 m.}
 	\label{fig:0.3-zoom}
@@ -202,7 +203,7 @@ the average and \gls{SD} of the benchmark participants for Steps 1.1, 1.2, and
 \cite{tiberga_results_2020}. The subsequent subsections discuss the results
 for each benchmark step in Phase 1.
 %
-\begin{table*}[htb]
+\begin{table}[htb]
 	\caption{Discrepancy values from Moltres alongside the average and standard
 	deviation of the discrepancy values of the benchmark participants for Phase
 	1.}
@@ -241,7 +242,7 @@ for each benchmark step in Phase 1.
 		\bottomrule
 	\end{tabular}
 	\label{table:disc1}
-\end{table*}
+\end{table}
 
 \subsubsection{Step 1.1: Circulating fuel}
 
@@ -256,23 +257,23 @@ $\rho$ relative to Step 0.2 is $-62.7$ pcm for Moltres and this value is
 consistent with the $-63.0$ to $-62.0$ pcm range that most of the benchmark
 participants' values fall in.
 %
-\begin{figure}[h!]
+\begin{figure}[htb]
 	\centering
-    \includegraphics[width=.75\columnwidth]{1-1-dnp-x-plot}
-    \includegraphics[width=.75\columnwidth]{1-1-dnp-y-plot}
+    \includegraphics[width=.49\columnwidth]{1-1-dnp-x-plot}
+    \includegraphics[width=.49\columnwidth]{1-1-dnp-y-plot}
 	\caption{Step 1.1 \textemdash\ Delayed neutron source along AA' (top) and BB'
 	(bottom).}
 	\label{fig:1.1}
 \end{figure}
 %
-\begin{figure*}[htb]
+\begin{figure}[htb]
 	\centering
-	\includegraphics[width=.75\columnwidth]{1-2-temp-plot}
-	\includegraphics[width=.75\columnwidth]{1-2-fiss-plot}
+	\includegraphics[width=.49\columnwidth]{1-2-temp-plot}
+	\includegraphics[width=.49\columnwidth]{1-2-fiss-plot}
 	\caption{Step 1.2 \textemdash\ Temperature distribution and change in fission rate
 	density along AA'.}
 	\label{fig:1.2}
-\end{figure*}
+\end{figure}
 
 \FloatBarrier
 
@@ -308,15 +309,15 @@ by virtue of the similar solvers (diffusion and $S_2$ neutronics models) and
 methods of solution (finite element method on uniform meshes) employed by our
 respective software.
 %
-\begin{figure*}[htb]
+\begin{figure}[htb]
 	\centering
-	\includegraphics[width=.5\columnwidth]{1-3-vel-plot}
-	\includegraphics[width=.5\columnwidth]{1-3-temp-plot}
-	\includegraphics[width=.5\columnwidth]{1-3-dnp-plot}
+	\includegraphics[width=.49\columnwidth]{1-3-vel-plot}
+	\includegraphics[width=.49\columnwidth]{1-3-temp-plot}
+	\includegraphics[width=.49\columnwidth]{1-3-dnp-plot}
 	\caption{Step 1.3 \textemdash\ Vertical velocity component, temperature distribution,
 	and delayed neutron source along AA'.}
 	\label{fig:1.3}
-\end{figure*}
+\end{figure}
 
 \FloatBarrier
 
@@ -325,7 +326,7 @@ respective software.
 Figure \ref{fig:cnrs-color} shows 2D temperature distribution and velocity
 streamlines from Moltres for Step 1.4 with $U_{lid} = 0.5$ m$\cdot$s$^{-1}$ and
 $P = 1$ GW. Table \ref{table:full} shows the change in $\rho$ under the various
-$U_{lid}$ and $P$ values. We refer readers to Tiberga et al.'s paper
+$U_{lid}$ and $P$ values. Refer to Tiberga et al.'s paper
 \cite{tiberga_results_2020} for the benchmark participants' corresponding
 values. The change in $\rho$ values from Moltres all fall within the range of
 benchmark values
@@ -338,7 +339,7 @@ neutronics models.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=.9\columnwidth]{full-coupled}
+  \includegraphics[width=.7\columnwidth]{full-coupled}
   \caption{Temperature distribution from Moltres for the fully coupled
   system (Step 1.4) with buoyancy effects, $P = 1$ GW, and $U_{lid} = 0.5$
   m$\cdot$s$^{-1}$. The lines correspond to the streamlines of the velocity
@@ -390,14 +391,14 @@ neutronics models.
 	\label{table:disc2}
 \end{table}
 %
-\begin{figure*}[htb]
+\begin{figure}[htb]
 	\centering
-	\includegraphics[width=.75\columnwidth]{2-1-gain-plot}
-	\includegraphics[width=.75\columnwidth]{2-1-phase-plot}
+	\includegraphics[width=.49\columnwidth]{2-1-gain-plot}
+	\includegraphics[width=.49\columnwidth]{2-1-phase-plot}
 	\caption{Step 2.1 \textemdash\ Bode gain and phase plots of the frequency response of
 	the fully coupled system.}
 	\label{fig:2.1}
-\end{figure*}
+\end{figure}
 
 \subsection{Phase 2 results \& discussion}
 

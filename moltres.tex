@@ -68,7 +68,7 @@ data transfers and allowing for fully coupled solves. For example, Moltres
 couples with the \texttt{Navier-Stokes} module \cite{peterson_overview_2018}
 from MOOSE for fully coupled reactor simulations modeling neutronics and
 thermal-hydraulics with incompressible flow. Section
-\ref{sec:challenges} highlighted the advantages of using fully coupled schemes
+\ref{sec:msr-multiphysics} highlighted the advantages of using fully coupled schemes
 for modeling strongly coupled systems such as the coupled
 neutronics and thermal-hydraulics in \glspl{MSR}. Moltres can also
 couple to other MOOSE-based applications in a similar fashion with ease. In
@@ -101,7 +101,7 @@ collaboration and sharing best software practices. Supporting Moltres'
 continued development, Moltres relies on GitHub for online version control with
 continuous integrated testing to protect its existing capabilities.
 
-In summary, Moltres provides robust, yet flexible coupling capabilities to
+In summary, Moltres provides robust and flexible coupling capabilities to
 model strongly coupled neutronics and thermal-hydraulics in \glspl{MSR}. As a
 MOOSE-based application, Moltres is highly extensible by means of coupling to
 other MOOSE-based applications and benefits from MOOSE's user-friendly
@@ -114,9 +114,9 @@ coupled neutronics and thermal-hydraulics in \glspl{MSR}. Section \ref{sec:nts}
 discusses the neutronics model in Moltres, while Section \ref{sec:th} discusses
 the thermal-hydraulics model.
 
-\subsection{Neutronics} \label{sec:nts}
+\subsection{Neutronics Model} \label{sec:nts}
 
-\subsubsection{Multigroup Neutron Diffusion Equations}
+\subsubsection{Multigroup Neutron Diffusion Model}
 
 Moltres solves the multigroup neutron diffusion equations for the neutron
 flux solution within the problem domain. These equations are derived from the
@@ -132,30 +132,30 @@ groups are given by:
     \nabla \phi_g - \Sigma^r_g \phi_g +
     \sum^G_{g' \neq g} \Sigma^s_{g' \rightarrow g} \phi_{g'} \nonumber \\
     &+ \chi^p_g \sum^G_{g'=1} \left( 1-\beta \right) \nu \Sigma^f_{g'}
-    \phi_{g'} + \chi^d_g \sum^I_i \lambda_i C_i \label{eq:neutron} \\
-    %
-    \shortintertext{where}
-    v_g =& \text{ average speed of neutrons in group $g$,} 
-    \nonumber \\
-    \phi_g =& \text{ neutron flux in group $g$,}
-    \nonumber \\
-    t =& \text{ time,} \nonumber \\
-    D_g =& \text{ diffusion coefficient of neutrons in group $g$,} \nonumber \\
-    \Sigma^r_g =& \text{ macroscopic removal cross section for} \nonumber \\
-    &\text{ neutrons from group $g$,} \nonumber \\
-    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic scattering cross section
-    for neutrons from} \nonumber \\
-    &\text{ groups $g'$ to $g$,} \nonumber \\
-    \chi^p_g =& \text{ prompt fission spectrum for neutrons in group $g$,} \nonumber \\
-    G =& \text{ total number of discrete neutron groups,} \nonumber \\
-    \nu_g =& \text{ average number of neutrons produced per fission,} \nonumber
-    \\
-    \Sigma^f_{g} =& \text{ macroscopic fission cross section for neutron}
-    \nonumber \\
-    &\text{ in group $g$,} \nonumber \\
-    \chi^d_g =& \text{ delayed fission spectrum for neutrons in group $g$,} \nonumber \\
-    I =& \text{ total number of delayed neutron precursor groups,} \nonumber \\
-    \beta =& \text{ total delayed neutron fraction.} \nonumber
+    \phi_{g'} + \chi^d_g \sum^I_i \lambda_i C_i \label{eq:neutron} %\\
+%    %
+%    \shortintertext{where}
+%    v_g =& \text{ average speed of neutrons in group $g$,} 
+%    \nonumber \\
+%    \phi_g =& \text{ neutron flux in group $g$,}
+%    \nonumber \\
+%    t =& \text{ time,} \nonumber \\
+%    D_g =& \text{ diffusion coefficient of neutrons in group $g$,} \nonumber \\
+%    \Sigma^r_g =& \text{ macroscopic removal cross section for} \nonumber \\
+%    &\text{ neutrons from group $g$,} \nonumber \\
+%    \Sigma^s_{g' \rightarrow g} =& \text{ macroscopic scattering cross section
+%    for neutrons from} \nonumber \\
+%    &\text{ groups $g'$ to $g$,} \nonumber \\
+%    \chi^p_g =& \text{ prompt fission spectrum for neutrons in group $g$,} \nonumber \\
+%    G =& \text{ total number of discrete neutron groups,} \nonumber \\
+%    \nu_g =& \text{ average number of neutrons produced per fission,} \nonumber
+%    \\
+%    \Sigma^f_{g} =& \text{ macroscopic fission cross section for neutron}
+%    \nonumber \\
+%    &\text{ in group $g$,} \nonumber \\
+%    \chi^d_g =& \text{ delayed fission spectrum for neutrons in group $g$,} \nonumber \\
+%    I =& \text{ total number of delayed neutron precursor groups,} \nonumber \\
+%    \beta =& \text{ total delayed neutron fraction.} \nonumber
 \end{align}
 
 In spite of forming only around 0.7\% of all neutrons emitted, delayed neutrons
@@ -168,21 +168,21 @@ groups are given by:
 \begin{align}
     \frac{\partial C_i}{\partial t} =& \beta_i \sum^G_{g'=1} \nu \Sigma^f_{g'}
     \phi_{g'} - \lambda_i C_i - \vec{u} \cdot \nabla C_i + \nabla \cdot
-    D_{\text{P}} \nabla C_i \label{eq:precursor} \\
+    D_{\text{P}} \nabla C_i \label{eq:precursor} %\\
     %
-    \shortintertext{where}
-    \beta_i =& \text{ delayed neutron fraction of precursor group $i$,}
-    \nonumber \\
-    \lambda_i =& \text{ average decay constant of delayed neutron} \nonumber \\
-    &\text{ precursors in precursor group $i$,} \nonumber \\
-    C_i =& \text{ concentration of delayed neutron precursors in}
-    \nonumber \\
-    &\text{ precursor group $i$,} \nonumber \\
-    \vec{u} =& \text{ molten salt flow velocity vector,}
-    \nonumber \\
-    D_{\text{P}} =& \text{ effective diffusion coefficient of the delayed}
-    \nonumber \\
-    &\text{ neutron precursors.} \nonumber
+%    \shortintertext{where}
+%    \beta_i =& \text{ delayed neutron fraction of precursor group $i$,}
+%    \nonumber \\
+%    \lambda_i =& \text{ average decay constant of delayed neutron} \nonumber \\
+%    &\text{ precursors in precursor group $i$,} \nonumber \\
+%    C_i =& \text{ concentration of delayed neutron precursors in}
+%    \nonumber \\
+%    &\text{ precursor group $i$,} \nonumber \\
+%    \vec{u} =& \text{ molten salt flow velocity vector,}
+%    \nonumber \\
+%    D_{\text{P}} =& \text{ effective diffusion coefficient of the delayed}
+%    \nonumber \\
+%    &\text{ neutron precursors.} \nonumber
 \end{align}
 
 These two equations are largely similar to conventional formulations of the
@@ -218,7 +218,7 @@ intervals). Users can then choose from linear spline, cubic spline, or monotone
 cubic interpolation methods available in Moltres to interpolate the group
 constant data for values falling within the provided temperature range. 
 
-\subsubsection{Neutronics Boundary Conditions}
+\subsubsection{Neutronics Model Boundary Conditions}
 
 Moltres provides two types of boundary conditions for neutron fluxes; these are
 conventionally known as the vacuum and reflective boundary conditions given,
@@ -243,9 +243,9 @@ along fuel salt-structural interfaces; and outflow/inflow boundary
 conditions along the outlet/inlet boundaries through which the precursors
 flow as they circulate the fuel salt loop.
 
-\subsection{Thermal-Hydraulics} \label{sec:th}
+\subsection{Thermal-Hydraulics Model} \label{sec:th}
 
-\subsubsection{Incompressible Flow}
+\subsubsection{Incompressible Flow Model}
 
 Moltres largely relies on MOOSE's \texttt{Heat} \texttt{Conduction} and
 \texttt{Navier-Stokes} physics modules for its thermal-hydraulics modeling
@@ -264,18 +264,18 @@ with the Boussinesq approximation for buoyancy-driven flow are given as:
     \shortintertext{and}
     \text{Mass equation: } \nabla \cdot \vec{u} =& 0
     \label{eq:divergence}
-    \shortintertext{where}
-    \rho =& \text{ fluid density,} \nonumber \\
-    p =& \text{ pressure,} \nonumber \\
-    \mu =& \text{ dynamic viscosity,} \nonumber \\
-    \alpha =& \text{ coefficient of thermal expansion,} \nonumber \\
-    \vec{g} =& \text{ gravitational force vector,} \nonumber
-    \\
-    T =& \text{ fluid temperature,} \nonumber \\
-    T_{\text{ref}} =& \text{ reference temperature at which the nominal}
-    \nonumber \\
-    &\text{ density is provided.} \nonumber
-    \nonumber
+%    \shortintertext{where}
+%    \rho =& \text{ fluid density,} \nonumber \\
+%    p =& \text{ pressure,} \nonumber \\
+%    \mu =& \text{ dynamic viscosity,} \nonumber \\
+%    \alpha =& \text{ coefficient of thermal expansion,} \nonumber \\
+%    \vec{g} =& \text{ gravitational force vector,} \nonumber
+%    \\
+%    T =& \text{ fluid temperature,} \nonumber \\
+%    T_{\text{ref}} =& \text{ reference temperature at which the nominal}
+%    \nonumber \\
+%    &\text{ density is provided.} \nonumber
+%    \nonumber
 \end{align}
 
 Velocity variables and advected quantities such as temperature are susceptible
@@ -290,7 +290,7 @@ discretizations of pressure and velocity. Peterson et al. \cite{peterson_overvie
 provides further detail on the implementation of these stabilization schemes in
 the \texttt{Navier-Stokes} module.
 
-\subsubsection{Temperature Advection-Diffusion}
+\subsubsection{Temperature Advection-Diffusion Model}
 
 Lastly, Moltres solves for the temperature distribution through the temperature
 advection-diffusion equation given by:
@@ -301,12 +301,12 @@ advection-diffusion equation given by:
     \label{eq:temp}
     \shortintertext{and}
     Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g \label{eq:heat-source}
-    \shortintertext{where}
-    c_p =& \text{ specific heat capacity of molten salt,} \nonumber \\
-    k =& \text{ effective thermal conductivity of molten salt,} \nonumber \\
-    Q_f =& \text{ fission heat source,} \nonumber \\
-    \epsilon_g =& \text{ average fission energy released by neutrons in group
-    $g$,} \nonumber \\
+%    \shortintertext{where}
+%    c_p =& \text{ specific heat capacity of molten salt,} \nonumber \\
+%    k =& \text{ effective thermal conductivity of molten salt,} \nonumber \\
+%    Q_f =& \text{ fission heat source,} \nonumber \\
+%    \epsilon_g =& \text{ average fission energy released by neutrons in group
+%    $g$,} \nonumber \\
     Q_s =& \text{ heat sink/removal.} \nonumber
 \end{align}
 
@@ -314,7 +314,7 @@ $Q_f$ represents the fission heat source term and is calculated by taking the
 sum of neutron group fluxes multiplied by their respective macroscopic fission
 cross sections and the average fission energy released per fission.
 
-\subsubsection{Thermal-Hydraulics Boundary Conditions}
+\subsubsection{Thermal-Hydraulics Model Boundary Conditions}
 
 The \texttt{Navier-Stokes} module provides the following types of boundary
 conditions for the velocity and temperature variables:
@@ -341,7 +341,7 @@ artificially influence upstream behavior, especially in developing flow. The
 ``no boundary condition'' outflow boundary condition by Griffiths
 \cite{griffiths_no_1997} has been shown to reduce such upstream errors.
 
-\subsection{External Loop} \label{sec:moltres-loop}
+\subsection{External Loop Model} \label{sec:moltres-loop}
 
 Moltres also accounts for the decay of
 \glspl{DNP} outside the active core region by simulating its flow in a
@@ -378,7 +378,7 @@ for temperature, derived from equation \ref{eq:temp}, is:
 The fission heat source term is replaced with a heat
 exchanger sink term $Q_{hx}$.
 
-\subsubsection{External Loop Boundary Conditions}
+\subsubsection{External Loop Model Boundary Conditions}
 
 Table \ref{table:loopbc} lists the boundary conditions for all variables on the inlet and outlet of
 the 1-D outer loop region. The inlet boundary conditions are all Dirichlet boundary conditions. The
@@ -407,7 +407,7 @@ Table \ref{table:loopbc}.
 	\label{table:loopbc}
 \end{table}
 
-\subsubsection{Core and Outer Loop Coupling}
+\subsubsection{Core and Outer Loop Coupling Model}
 
 This subsection details the delayed neutron precursors, and
 temperature coupling between the core and outer loop regions. 
@@ -437,7 +437,7 @@ This approach that the inflow temperature and \gls{DNP} are uniform at the
 inlet. The Picard iterations within every timestep ensure that the two systems
 are implicitly coupled.
 
-\section{Previous Work} \label{sec:moltres-previous}
+\section{Previous \gls{MSR} Analyses with Moltres} \label{sec:moltres-previous}
 
 This section discusses some previous work with Moltres to illustrate its
 various capabilities and coupling approaches for multiphysics \gls{MSR}
@@ -661,28 +661,7 @@ from the decay of fission products, similar to delayed neutron emission
 from precursors. The decay heat model introduces decay heat groups of different
 decay constants, variables representing the decay heat groups, and modifies the
 heat source term given by Equation \ref{eq:heat-source} to account for
-the delayed heat generation. The governing equations for decay heat power
-density and the new heat source term are given by:
-
-\begin{align}
-	\frac{\partial \omega_j}{\partial t} =& f_j \lambda_j \sum^G_{g=1}
-	\epsilon_{g}
-	\Sigma^f_{g} \phi_{g} - \lambda_j \omega_j - \vec{u} \cdot \nabla
-	\omega_j + \nabla \cdot D_P \nabla \omega_j, \label{eq:decayheat} \\
-	\shortintertext{and}
-	Q_f =& \left( 1 - \sum^J_{j=1} f_j \right) \sum^G_{g=1} \epsilon_g
-	\Sigma_g^f \phi_g + \sum^J_{j=1} \omega_j
-	\shortintertext{where}
-    \omega_j =& \text{ total decay heat power density from decay heat
-    precursors in group $j$,} \nonumber \\
-	f_j =& \text{ fraction of total power attributable to decay heat group
-	$j$,} \nonumber \\
-	\epsilon_g =& \text{ average fission energy per fission initiated by a
-	neutron in group $g$,} \nonumber \\
-	\lambda_j =& \text{ average decay constant of decay heat precursors in
-	group $j$,} \nonumber \\
-	J =& \text{ total number of decay heat groups.} \nonumber
-\end{align}
+the delayed heat generation. 
 
 The number of decay heat groups and their respective decay constants depends on
 the decay heat profile of the reactor after a specified period of operation.
@@ -781,9 +760,9 @@ compared with the 34.80\% and 34.85\% from the other models
 constant turbulent viscosity fell short on accurately capturing precursor
 drift in the \gls{MSFR}.
 
-\begin{figure}[htbp!]
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=.55\textwidth]{decay-heat-temp}
+    \includegraphics[width=.5\textwidth]{decay-heat-temp}
     \caption{Difference in core temperatures at steady-state with decay heat
     relative to the result without decay heat (Figure \ref{fig:flow-temp}).}
     \label{fig:decayheattemp}
@@ -810,11 +789,23 @@ approximately $-6.5$ pcm$\cdot$K$^{-1}$ for the PoliMi and TU Delft models.
 
 \begin{figure}[htb!]
     \centering
-    \includegraphics[width=.7\textwidth]{200pcm-heat}
-    \caption{Power output following a 200 pcm step-wise unprotected reactivity
-    insertion in the Moltres, PoliMi, and
-    TU Delft models \cite{fiorina_modelling_2014}.}
-    \label{fig:200pcmheat}
+    \begin{subfigure}[b]{.49\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{200pcm-heat}
+      \caption{Power output following a 200 pcm step-wise unprotected reactivity
+        insertion in the Moltres, PoliMi, and
+        TU Delft models \cite{fiorina_modelling_2014}.}
+      \label{fig:200pcmheat}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{.49\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{lohs-heat}
+      \caption{Power output during
+        an unprotected loss of heat sink transient in the Moltres, PoliMi, and
+        TU Delft models \cite{fiorina_modelling_2014} without decay heat.}
+      \label{fig:lohsheat}
+    \end{subfigure}
 \end{figure}
 
 The loss of heat sink transients were performed with and without the decay heat
@@ -830,15 +821,6 @@ heat output 34 s into the accident scenario. With the decay heat model, the
 Moltres model shows good agreement with the PoliMi model. The temperature
 increase averaged over the whole fuel salt loop falls within 10\% of the PoliMi
 model (Figure \ref{fig:polimidecaytemp}).
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=.7\textwidth]{lohs-heat}
-    \caption{Power output during
-    an unprotected loss of heat sink transient in the Moltres, PoliMi, and
-    TU Delft models \cite{fiorina_modelling_2014} without decay heat.}
-    \label{fig:lohsheat}
-\end{figure}
 
 \begin{figure}[htb!]
 	\centering

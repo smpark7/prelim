@@ -153,7 +153,7 @@
 \thesis@frontmatter
 \setcounter{page}{2}}
 \RequirePackage[english]{babel}
-\addto{\captionsenglish}{\renewcommand*{\contentsname}{Table of contents}}
+\addto{\captionsenglish}{\renewcommand*{\contentsname}{Contents}}
 \let\thesis@tableofcontents=\tableofcontents
 \def\tableofcontents{{\singlespacing\thesis@tableofcontents}}
 \RequirePackage{titletoc}
