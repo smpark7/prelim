@@ -317,7 +317,7 @@ and its vicinity. Consequently, the Hybrid $S_N$-Diffusion method can retain acc
 and current estimates around the control rod region from the $S_N$ method while making significant
 computational cost savings by treating most of the reactor geometry with the neutron diffusion
 method alone. Henceforth, I will refer to the $S_N$ calculation on the correction
-region as the $S_N$ \textit{subproblem} or \textit{subsolver}. I define the entire problem
+region as the $S_N$ \textit{subproblem} or \textit{sub-solver}. I define the entire problem
 domain and the correction region as $\Omega^d_0$ and $\Omega^d_1$, respectively, where
 $\Omega^d_1\subseteq\Omega^d_0$. The algorithm for the Hybrid $S_N$-Diffusion method is as follows:
 %
@@ -326,8 +326,8 @@ $\Omega^d_1\subseteq\Omega^d_0$. The algorithm for the Hybrid $S_N$-Diffusion me
     $P_1$-based diffusion coefficients and other standard group constants (e.g., neutron cross
     sections).
   \item Use the neutron diffusion flux estimates in $\Omega^d_1$ and current estimates along
-    $\partial \Omega^d_1$ as initial and boundary conditions for the $S_N$ subsolver.
-  \item With the $S_N$ subsolver, calculate an improved neutron flux solution in $\Omega^d_1$,
+    $\partial \Omega^d_1$ as initial and boundary conditions for the $S_N$ sub-solver.
+  \item With the $S_N$ sub-solver, calculate an improved neutron flux solution in $\Omega^d_1$,
     which contains the control rod region and its immediate vicinity.
   \item Calculate \glspl{SVDC} using the $S_N$ flux solution and Eq. \ref{eq:svdc}.
   \item Pass the \glspl{SVDC} to the neutron diffusion solver to replace the conventional
@@ -381,13 +381,13 @@ and backward angular fluxes as:
   \Psi(x,\mu_n) =& J_{-}(x)\Bigg/\sum^{N/2}_{n=1}w_n\mu_n \label{eq:sn-psi-j}
 \end{align}
 %
-These boundary conditions for the $S_N$ subsolver will generally yield inaccurate flux
+These boundary conditions for the $S_N$ sub-solver will generally yield inaccurate flux
 $\phi$ distributions since realistic reactor systems invariably do not exhibit perfectly isotropic
 neutron fluxes. However, the influence of boundary conditions on $J$ and $\frac{d\phi}{dx}$ does
 not extend far from the boundaries in optically thick media. By taking the ratio of $J$
 to $\frac{d\phi}{dx}$ to calculate \glspl{SVDC}, I eliminate any errors from $\phi$ since both
 $J$ and $\frac{d\phi}{dx}$ scale approximately linearly with $\phi$. The \glspl{SVDC}
-generated with the $S_N$ subsolver within $\Omega^d_1$ will be accurate everywhere except near
+generated with the $S_N$ sub-solver within $\Omega^d_1$ will be accurate everywhere except near
 $\partial\Omega^d_1$. $\Omega^d_1$ must be large enough to provide transport corrections
 through the \glspl{SVDC} and accommodate inaccurate \glspl{SVDC} near
 $\partial\Omega^d_1$. The inaccurate \glspl{SVDC} should then be discarded in favor of using
@@ -399,7 +399,7 @@ neutron diffusion calculation.
 %To resolve this issue, I posit the following hypothesis: \textit{If there exists a highly
 %neutron-absorbing control rod region within the $S_N$ subproblem domain $\Omega^d_1$ and the $S_N$
 %subproblem boundary $\partial\Omega^d_1$ lies several neutron mean free paths away from this
-%region, the \gls{SVDC} values calculated near the control rod region (using the $S_N$ subsolver
+%region, the \gls{SVDC} values calculated near the control rod region (using the $S_N$ sub-solver
 %with isotropic hemisphere boundary conditions) will tend to the actual flux gradient solution
 %(using a reference $S_N$ calculation across the entire problem domain $\Omega^d$).} In other words,
 %suboptimal boundary conditions may induce inaccurate \gls{SVDC} values near the $\partial
@@ -867,7 +867,7 @@ The Hybrid $S_N$-Diffusion algorithm is as follows
   $\Omega^d_0$}
   \shortintertext{2. Generate estimates for $\Psi_{g,j,n}$ at $x_j$ for the $S_N$ transport
   calculation boundary conditions using Eq. \ref{eq:sn-bc}}
-  \shortintertext{3. Calculate $\phi^{m+\sfrac{1}{2}}$ with the $S_N$ transport subsolver on
+  \shortintertext{3. Calculate $\phi^{m+\sfrac{1}{2}}$ with the $S_N$ transport sub-solver on
   $\Omega^d_1$}
   \shortintertext{4. Generate \glspl{SVDC} with $\phi^{m+\sfrac{1}{2}}$ and $J^{m+\sfrac{1}{2}}$
   using Eq. \ref{eq:svdc-num}}
@@ -886,9 +886,9 @@ $\phi^m$ from the neutron diffusion calculation as initial conditions for the $S
 calculation in the $(m+1)$-th iteration helps to reduce the number of transport
 sweeps required significantly.
 
-The $S_N$ subsolver only covers $\Omega^d_1$, so it does not calculate an independent $k$
+The $S_N$ sub-solver only covers $\Omega^d_1$, so it does not calculate an independent $k$
 estimate. Instead, the $k^m$ from the neutron diffusion calculation scales the fission neutron
-source term in the $S_N$ subsolver.
+source term in the $S_N$ sub-solver.
 
 \section{Description of 1-D Test Cases} \label{sec:test-case}
 
@@ -1026,10 +1026,10 @@ result in less than $2\times10^{-5}$
 change in $k$. The same $tol$ value applies to convergence checks for both $\phi$ and $k$ in all
 three methods because the variables converge at similar rates. The hybrid method requires three
 separate $tol$ values due to the inner and outer iterations. Notably, the hybrid method can reach
-convergence with a larger $tol$ value for its $S_N$ subsolver than the $tol$ value for the
+convergence with a larger $tol$ value for its $S_N$ sub-solver than the $tol$ value for the
 standalone $S_N$ solver, which implies that $J$ and $\sfrac{d\phi}{dx}$ converge faster than $\phi$
 because the \glspl{SVDC} depend on those variables instead of $\phi$. Consequently, the $S_N$
-subsolver requires much fewer iterations than the standalone $S_N$ solver. In combination with
+sub-solver requires much fewer iterations than the standalone $S_N$ solver. In combination with
 restricting $S_N$ calculations to the correction region, the hybrid method saves significant
 computation time compared to the standalone $S_N$ method.
 
@@ -1455,7 +1455,7 @@ interface between the fuel and reflector regions beyond $x=40$ cm.
 In this section, I compare the $P_1$-based diffusion coefficients, reference \glspl{SVDC}, and
 hybrid \glspl{SVDC} for Cases 3b and 5a. As in Section \ref{sec:hybrid-method}, the reference
 \glspl{SVDC} are derived from the $S_8$ flux solution, while the hybrid \glspl{SVDC} are derived
-from the $S_8$ subsolver flux solution within the Hybrid $S_N$-Diffusion method.
+from the $S_8$ sub-solver flux solution within the Hybrid $S_N$-Diffusion method.
 
 Figure \ref{fig:c3bdiffcoef} shows the various diffusion coefficient distributions for Case 3b
 between $x=0$ cm and $x=30$ cm. The figures omit the large diffusion coefficient values in the
@@ -1592,7 +1592,7 @@ than the standalone $S_N$ neutron transport method because 1) $S_N$ calculations
 correction regions which cover a fraction of the overall geometry, 2) and the \glspl{SVDC} are
 observed to converge faster than the neutron fluxes in $S_N$ calculations.
 
-I established a framework for the hybrid method for coupling an $S_N$ subsolver and a neutron
+I established a framework for the hybrid method for coupling an $S_N$ sub-solver and a neutron
 diffusion solver through outer iterations by taking advantage of the weak dependence of the $S_N$
 flux solution on the approximate boundary conditions determined from the neutron diffusion flux
 solution. This novel framework could be extended to improve multischeme methods, which

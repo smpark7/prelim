@@ -93,10 +93,10 @@ turbulent shear layer.
 
 In Chapter \ref{chap:hybrid}, I presented the theory and preliminary results of the Hybrid
 $S_N$-Diffusion method for several 1-D \gls{MSRE}-like, graphite-moderated geometries. The hybrid
-method generates \glspl{SVDC}, which provide pointwise corrections to the diffusion subsolver from
-the $S_N$ subsolver neutron current and flux gradient solutions. The hybrid method minimizes
+method generates \glspl{SVDC}, which provide pointwise corrections to the diffusion sub-solver from
+the $S_N$ sub-solver neutron current and flux gradient solutions. The hybrid method minimizes
 computational costs by imposing the $S_N$ calculations on a small subdomain centered on the control
-rod region and relaxing the $S_N$ subsolver convergence tolerance since the neutron current and
+rod region and relaxing the $S_N$ sub-solver convergence tolerance since the neutron current and
 flux gradient converges faster than the neutron flux. As intended,
 the hybrid method provided better multiplication factor and neutron flux estimates over the
 standard neutron diffusion method in systems containing control rods.
@@ -117,12 +117,12 @@ broader sub-objectives, all of which are listed below in approximate chronologic
     experimental data.
   \item Characterize and compare the computational efficiencies of the hybrid method implemented as
     multilevel and multischeme methods. If the multi-scheme implementation is viable, it could
-    reduce computational costs by running the $S_N$ and diffusion subsolvers concurrently and
+    reduce computational costs by running the $S_N$ and diffusion sub-solvers concurrently and
     eliminating outer iterations.
 \end{itemize}
 
 In this context, multilevel neutronics methods refer to methods that apply different neutronics
-methods on the same or overlapping problem domains with data exchanges between the subsolvers to
+methods on the same or overlapping problem domains with data exchanges between the sub-solvers to
 improve accuracy or convergence rates. On the other hand, multischeme neutronics methods refer to
 methods that apply different neutronics methods on non-overlapping subdomains to take advantage of
 higher fidelity or convergence rates associated with the methods under different conditions. While
