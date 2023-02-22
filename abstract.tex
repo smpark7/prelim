@@ -1,0 +1,30 @@
+Compared with solid-fueled reactors, liquid-fueled \glspl{MSR} feature additional multiphysics
+phenomena such as flow-induced DNP drift and temperature advection-diffusion in the molten fuel
+salt. Modeling strongly coupled neutronics and thermal–hydraulics in
+liquid-fueled \glspl{MSR} requires robust and flexible multiphysics software for accurate
+simulations at reasonable computational costs. Moltres is a multiphysics reactor software designed
+to meet that goal. In my preliminary work, I completed a verification study of Moltres based on a
+numerical benchmark developed at \gls{CNRS} for the verification of \gls{MSR} simulation tools
+designed for fast-spectrum \gls{MSR} modeling. I propose running an additional
+\gls{VV} study based on pump-initiated experiments performed on the \gls{MSRE} in the 1960s.
+This study will be performed in collaboration with the developer of another \gls{MSR} simulation
+tool, QuasiMolto, for code-to-code verification. Beyond the \gls{VV} of Moltres’ existing
+capabilities, I propose implementing a turbulent flow modeling
+capability in Moltres. Various \gls{MSR} designs exhibit turbulent flow in high Reynolds number
+flow regions. Instead of high-fidelity turbulence models whose high computational costs are at odds
+with the intermediate-fidelity simulations with Moltres, I propose implementing the
+Spalart-Allmaras turbulence model for acceptably accurate estimates of turbulence and its effects
+on temperature and \gls{DNP} advection.
+Lastly, I aim to address a gap in the existing literature for multiphysics simulations of MSRs with
+control rods. While many time-independent neutronics studies of MSRs
+include control rod elements in their models, most multiphysics studies omit control rod
+elements and instead rely on neutron source scaling to model the effects of control rod insertion
+and withdrawal. For the few multiphysics studies that retain control
+rod elements in their models, they introduce modeling discrepancies such as material homogenization
+or geometrical changes. They do not demonstrate time-dependent control rod insertion/withdrawal
+modeling capabilities. Therefore, I propose to develop a novel hybrid neutronics method to improve
+neutron diffusion calculations within and near highly absorbing regions. The hybrid method explores
+using discrete ordinates ($S_N$) neutron transport sub-solvers to generate spatially-dependent
+diffusion coefficients within/near highly absorbing regions for the global neutron diffusion
+solver. In this preliminary report, I will present several 1D test cases to demonstrate the
+implementation and performance of the hybrid method.

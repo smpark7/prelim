@@ -1,27 +1,22 @@
 As identified in Sections \ref{sec:msre-critique} and \ref{sec:msfr-critique},
-Moltres will benefit from more rigorous validation and verification of its
-\gls{MSR} modeling capabilities. Owing to the limited availability of \gls{MSR}
-experimental data, verification work presently represents the better option for
-assessing Moltres' simulation accuracy. Therefore, this chapter presents
+Moltres will benefit from further \gls{VV} of its
+\gls{MSR} modeling capabilities. This chapter presents verification
 results from Moltres for problems within the CNRS Benchmark
 \cite{tiberga_results_2020}---a numerical benchmark specifically designed to
-assess \gls{MSR} simulation tools on coupled, multiphysics simulations of
+assess \gls{MSR} simulation tools on coupled multiphysics simulations of
 fast-spectrum \glspl{MSR}. The benchmark consists of several steps in which
-steady-state and transient simulations are prescribed. Starting from simple,
-single-physics cases, subsequent steps incrementally introduce various types of
-multiphysics coupling until full coupling is achieved in the final steps. This
+steady-state and transient simulations are prescribed. The benchmark starts with simple
+single-physics cases and incrementally introduces various types of
+multiphysics coupling until full coupling is simulated in the final steps. This
 gradual approach helps participants identify sources of discrepancies
-which can arise from differences in modeling assumptions or
+that can arise from differences in modeling assumptions or
 cross-section libraries, or actual errors in the software. I adapted the
-contents of this chapter from my work in a manuscript titled
+contents of this chapter from my journal article titled
 ``\textit{Verification of Moltres for Multiphysics Simulations of Fast-Spectrum
-Molten Salt Reactors}'' and submitted to the Annals of Nuclear Energy for
-publication.
+Molten Salt Reactors}'' and published in the Annals of Nuclear Energy journal
+\cite{park_verification_2022}.
 
 \input{cnrs-benchmark/benchmark}
 \input{cnrs-benchmark/moltres}
 \input{cnrs-benchmark/results}
 \input{cnrs-benchmark/conclusion}
-\begin{subappendices}
-    \input{cnrs-benchmark/appendix}
-\end{subappendices}

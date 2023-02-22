@@ -1,21 +1,21 @@
-\section{CNRS Benchmark} \label{sec:benchmark}
+\section{Description of the CNRS Benchmark} \label{sec:benchmark}
 
 The CNRS Benchmark \cite{tiberga_results_2020} is a numerical
 benchmark for multiphysics software dedicated to modeling \glspl{MSR}. It
 consists of three phases and eight steps in total. Each
 step is a well-defined subproblem for systematically assessing the
 capabilities of \gls{MSR} software and pinpointing sources of discrepancies
-between software. Phase 0 consists three single-physics problems in fluid
-dynamics, neutronics, and temperature, respectively. Phase 1 consists
-of four coupled, steady-state problems. Lastly, Phase 2 consists of one
+between software. Phase 0 consists of three single-physics problems in fluid
+dynamics, neutronics, and temperature. Phase 1 consists
+of four coupled steady-state problems. Lastly, Phase 2 consists of one
 coupled, time-dependent problem.
 
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=.6\columnwidth]{cnrs-geometry}
 	\caption{2m$\times$2m 2D domain of the CNRS Benchmark. $U_{lid}$
-	represents the velocity along the top boundary. Various quantities are
-	measured along the centerlines AA' and BB' for comparison. From Tiberga et
+	represents the velocity along the top boundary. For comparison, various quantities are
+	measured along the centerlines AA' and BB'. From Tiberga et
 	al. \cite{tiberga_results_2020}.}
 	\label{fig:cnrs-geometry}
 \end{figure}
@@ -27,9 +27,9 @@ Standard vacuum boundary conditions apply for neutron flux along all
 boundaries whereby outgoing neutrons are considered lost, while homogeneous
 boundary conditions apply for delayed neutron precursors. No-slip boundary
 conditions apply for velocity variables in the cavity, except along the top
-boundary for Steps 0.1, 0.3, 1.1, 1.2, and 1.4 which impose forced flow in the
+boundary for Steps 0.1, 0.3, 1.1, 1.2, and 1.4, which impose forced flow in the
 form of lid-driven
-cavity flow. For the temperature variable, all boundaries are insulated and we
+cavity flow. For the temperature variable, all boundaries are insulated, and we
 simulate salt cooling with the following volumetric heat sink equation:
 %
 \begin{align}
@@ -69,19 +69,18 @@ dependence in the cross sections and the neutron diffusion coefficients:
 
 The benchmark also prescribes incompressible Navier-Stokes flow with the
 Boussinesq approximation for evaluating the salt flow in the
-domain, but does not restrict the type of neutronics model.
-The following subsections briefly detail each benchmark step, with Table
-\ref{table:benchmark} listing the relevant input parameters and observables.
+domain but does not restrict the type of neutronics model.
+Table \ref{table:benchmark} lists the relevant input parameters and observables.
 
 \begin{table*}[tp!]
 	\caption{Input parameters and observables of each benchmark step.}
 	\centering
 	\footnotesize
-	\begin{tabular}{p{.05\textwidth} p{.4\textwidth} p{.6\textwidth}}
+    \begin{tabular}{p{.05\textwidth} p{.1\textwidth} p{.3\textwidth} p{.45\textwidth}}
 		\toprule
-		\textbf{Step} & \textbf{Input parameters} & \textbf{Observables} \\
+        \textbf{Step} & \textbf{Name} & \textbf{Input parameters} & \textbf{Observables} \\
 		\midrule
-		0.1 &
+        0.1 & Velocity field &
 		\begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -93,7 +92,7 @@ The following subsections briefly detail each benchmark step, with Table
 		    \item Velocity components $(u_x,u_y)$ along AA' and BB'
 		\end{itemize}\vspace*{-\baselineskip}\mbox{} \\
         \midrule
-        0.2 &
+        0.2 & Neutronics &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -108,7 +107,7 @@ The following subsections briefly detail each benchmark step, with Table
             \item Reactivity $\rho$
 		\end{itemize}\vspace*{-\baselineskip}\mbox{} \\
         \midrule
-        0.3 &
+        0.3 & Temperature &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -124,7 +123,7 @@ The following subsections briefly detail each benchmark step, with Table
 		    \item Temperature $T$ along AA' and BB'
 		\end{itemize}\vspace*{-\baselineskip}\mbox{} \\
         \midrule
-        1.1 &
+        1.1 & Circulating fuel &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -141,7 +140,7 @@ The following subsections briefly detail each benchmark step, with Table
 		    $\Delta \rho = \rho - \rho_{s_{0.2}}$
 		\end{itemize}\vspace*{-\baselineskip}\mbox{} \\
         \midrule
-        1.2 &
+        1.2 & Power coupling &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -161,7 +160,7 @@ The following subsections briefly detail each benchmark step, with Table
             \left[\sum^6_g \Sigma_{f,g} \phi_g(\vec{r})\right]_{s_{0.2}}$
 		\end{itemize} \\
         \midrule
-        1.3 &
+        1.3 & Buoyancy &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -179,7 +178,7 @@ The following subsections briefly detail each benchmark step, with Table
         $\Delta\rho = \rho - \rho_{s_{0.2}}$
 		\end{itemize} \\
         \midrule
-        1.4 &
+        1.4 & Full coupling &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -196,7 +195,7 @@ The following subsections briefly detail each benchmark step, with Table
 		    and $U_{lid}$ values
 		\end{itemize}\vspace*{-\baselineskip}\mbox{} \\
         \midrule
-        2.1 &
+        2.1 & Forced convection transient &
         \begin{itemize}[nosep,noitemsep,left=0pt,
 		                before={\begin{minipage}[t]{\hsize}},
                         after ={\end{minipage}}]
@@ -214,118 +213,8 @@ The following subsections briefly detail each benchmark step, with Table
 	\label{table:benchmark}
 \end{table*}
 
-\subsection{Phase 0: Single physics}
-
-In this preliminary phase, the steady-state solutions of
-individual physics are studied without any multiphysics coupling.
-
-\subsubsection{Step 0.1: Velocity field}
-
-This step investigates the steady-state incompressible flow distribution in the
-domain from a lid-driven cavity flow by imposing a non-zero horizontal
-velocity along the top boundary. In addition, this step provides a fixed
-velocity field for Steps 0.3, 1.1, and 1.2.
-
-\subsubsection{Step 0.2: Neutronics}
-
-This step tests neutronics capabilities through a criticality eigenvalue
-problem in a static, isothermal fuel configuration by solving for the fission
-rate density and effective multiplication factor $k_{eff}$. This step also aims
-to identify deviations in results attributable to differences in neutronics
-models and approximations. The total power $P$ is fixed to normalize the
-neutron fluxes. For neutronics models conforming to the six neutron energy
-group structure provided by Tiberga et al. \cite{tiberga_results_2020},
-fission rate density is calculated as:
-%
-\begin{align}
-    \text{Fission rate density} =& \sum^6_g \Sigma_{f,g} \phi_g(\vec{r})
-    \shortintertext{where}
-    \Sigma_{f,g} =& \text{ macroscopic fission cross section for neutron}
-    \nonumber \\
-    &\text{ in group $g$,} \nonumber \\
-    \phi_g =& \text{ neutron flux in group $g$.} \nonumber
-\end{align}
-
-\subsubsection{Step 0.3: Temperature}
-
-This step assesses passive scalar transport capability for determining the
-temperature distribution independently from
-the fluid flow and neutronics problems by imposing fixed velocity and fission
-heat source distributions from Steps 0.1 and 0.2, respectively. Similar to the
-fission rate density, the heat source distribution in six-group neutronics
-models is calculated as:
-%
-\begin{align}
-    \text{Heat source distribution} =& \sum^6_{g} \epsilon_g \Sigma_{f,g}
-    \phi_g(\vec{r})
-    \shortintertext{where}
-    \epsilon_g =& \text{ average fission energy released by neutrons}
-    \nonumber \\
-    &\text{ in group $g$.} \nonumber
-\end{align}
-
-\subsection{Phase 1: Steady-state coupling}
-
-Phase 1 builds towards simulating a fully-coupled multiphysics steady-state
-system by gradually introducing coupling between various physics present in
-a fast-spectrum molten salt system. All simulations are solved as steady-state
-criticality eigenvalue problems.
-
-\subsubsection{Step 1.1: Circulating fuel}
-
-This step investigates effects of fuel salt flow on the neutronics,
-namely the reactivity loss from the movement of precursors. The delayed neutron
-precursors are allowed to drift under the fixed velocity field from Step 0.1
-while keeping the temperature $T$ fixed at 900 K. With eight precursor groups,
-the delayed neutron source is calculated as:
-%
-\begin{align}
-    \text{Delayed neutron source} =& \sum^8_i \lambda_i C_i
-    \shortintertext{where}
-    \lambda_i =& \text{ average decay constant of delayed neutron} \nonumber \\
-    &\text{ precursors in precursor group $i$,} \nonumber \\
-    C_i =& \text{ concentration of delayed neutron precursors in}
-    \nonumber \\
-    &\text{ precursor group $i$.} \nonumber
-\end{align}
-
-\subsubsection{Step 1.2: Power coupling}
-
-This step assesses the capability to accurately reproduce the change in
-neutron flux distribution due to the fuel density reactivity feedback between
-the neutron fluxes and the temperature distribution. We solve for the
-steady-state neutron flux and temperature distributions under the fixed
-velocity field from Step 0.1 and a volumetric heat sink described by Equation
-\ref{eq:cnrs-heat}.
-
-\subsubsection{Step 1.3: Buoyancy}
-
-Building on the previous step, we replace the fixed velocity field with
-buoyancy-driven flow arising from the temperature gradients for a fully-coupled
-multiphysics problem without forced flow. Barring any major discrepancies in
-the previous steps, this step assesses the capability to reproduce the correct
-buoyancy-driven flow profile and the subsequent effects on the neutronics and
-temperature distribution due to precursor drift and fuel density reactivity
-feedback.
-
-\subsubsection{Step 1.4: Full coupling}
-
-This step introduces forced flow to the fully-coupled problem through the
-non-zero $U_{lid}$ boundary
-condition. Thus, this problem most closely represents a molten salt system with
-1) flow driven by an external force, 2) buoyancy flow effects, 3) \gls{DNP}
-drift, and 4) thermal feedback effects on the neutronics. We solve for the
-$k_{eff}$ under a range of $U_{lid}$ and $P$ values given in Table
-\ref{table:benchmark}.
-
-\subsection{Phase 2: Time dependent coupling}
-
-In this phase, the transient response of the fully coupled nonlinear system is
-studied.
-
-\subsubsection{Step 2.1: Forced convection transient}
-
-Linear perturbation analyses are performed in this step by introducing periodic
+Step 2.1 studies the transient response of the fully coupled nonlinear system.
+Linear perturbation analyses are performed by introducing periodic
 perturbations to the heat transfer coefficient $\gamma$ and studying the gain
 and phase shift of the response in the total power $P$. For the initial
 conditions, the steady-state solution from Step 1.4 with

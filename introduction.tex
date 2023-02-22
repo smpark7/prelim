@@ -1,87 +1,12 @@
-\section{Background \& Motivation}
+\section{Motivation}
 
-Greenhouse gas emission from human activities is the main cause of climate
-change, which has dire consequences on human health and safety due to extreme
-weather events and the overall impact on food production
-\cite{mcmichael_global_2004}. Poor people are especially vulnerable because
-they do not have the resources to manage or mitigate the impacts of climate
-change. For instance, they are more affected by local disruptions in food
-supply and natural disasters, have poorer access to healthcare and financial
-resources to recover from setbacks \cite{hallegatte_shock_2016}. Many countries
-have since pledged to meet the net-zero carbon emissions goal by 2050 and limit
-the rise in global temperatures to 1.5$^{\circ}$C \cite{iea_net_2021}.
-
-The transition to a carbon-free economy requires drastic changes in the way
-every sector produces or consumes energy in the form of electricity or heat.
-The \gls{IEA} published a report, titled ``Net Zero by 2050 - A Roadmap for the
-Global Energy Sector'', to set out guidelines to inform policy makers how the
-\gls{NZE} could be reached in a way that ``maximizes technical feasibility,
-cost-effectiveness and social acceptance, while ensuring continued economic
-growth and secure energy supplies''. The \gls{NZE} roadmap projects that
-solar \gls{PV} and wind has to make up just under 70\% of
-electricity generated globally in 2050 (Figure \ref{fig:2050-elec-source}).
-The remaining share largely consists of dispatchable sources, such as
-hydropower, carbon-neutral biofuel, and nuclear, since solar \gls{PV} and wind
-are non-dispatchable sources which experience daily and seasonal variations in
-electricity production. These variations are already causing major shifts in
-the electricity markets today. California, a region with high renewable energy
-penetration, experienced negative electricity prices during the midday (Figure
-\ref{fig:cali-prices}) due to the excess electricity generation from solar
-\glspl{PV} and base-load suppliers paying to keep their power plants online to
-ramp up for the evening demand spike \cite{forsberg_market_2020}.
-
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width=.8\columnwidth]{2050-elec-source}
-	\caption{Projected global electricity generation by source in the
-	\gls{NZE}. Retrieved from \cite{iea_net_2021}.}
-	\label{fig:2050-elec-source}
-\end{figure}
-
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width=.7\columnwidth]{california-prices}
-	\caption{California wholesale electricity prices over 24 hours from the
-	second Sundays in April in 2012 and 2017. Retrieved from
-	\cite{forsberg_market_2020}.}
-	\label{fig:cali-prices}
-\end{figure}
-
-Unlike solar or wind power, nuclear power provides consistent and reliable
-power independent of weather conditions. The \gls{NZE} roadmap acknowledges the
-need for nuclear power as one of the various dispatchable energy sources;
-Figure \ref{fig:2050-elec-source}, taken from the \gls{IEA} \gls{NZE} report,
-shows that nuclear power will continue to play an important role in reducing
-carbon emissions with electricity generation in 2050 from nuclear projected to
-be double the output in 2020 while maintaining an approximate 10\% share in
-electricity generation as global energy demand rises. A separate study from
-\gls{MIT} \cite{petti_future_2018} reports that attempting to limit carbon
-emissions without nuclear power would cause electricity generation costs to
-increase significantly due to the disproportionately large excess capacity in
-solar \gls{PV}, wind, and battery storage required to maintain electricity
-security during periods of adverse weather conditions.
-Beyond the electricity sector, nuclear power also has the potential to replace
-fossil fuels to meet energy demands from industrial process heat applications
-and transportation \cite{forsberg_market_2020}. Solar \gls{PV} and
-wind are ill-suited for meeting heat demand such as district heating and
-industrial heat applications at economically competitive rates. Some advanced
-reactors such as \glspl{MSR} and \glspl{HTGR} operate at sufficiently
-high temperatures for chemical, petrochemical, steel, and other industries.
-These industries include hydrogen and ammonia production, two hydrogen-based
-fuel candidates for replacing fossil fuel consumption in the aviation and
-marine sectors to reduce carbon emissions.
-
-The world would have to ramp up the current rate of reactor deployments to
-replace aging reactors and displace a portion of the presently large share of
-energy production from fossil fuels. However, several obstacles stand in the
-way of new reactor deployments. These obstacles include perceived
-safety risks, sustainability concerns,
-and the ability to compete economically with other sources of energy
-\cite{massachusetts_institute_of_technology_future_2003}. A potential solution
-to the aforementioned issues is the \gls{MSR} concept, one of six advanced
-reactor designs selected by the Generation IV International Forum
-\cite{gif_technology_2002} for continued research and development.
-
+A liquid-fueled \gls{MSR} is an advanced nuclear reactor with fissile material
+dissolved in a molten salt mixture. This fuel salt mixture doubles as the primary reactor coolant
+for transferring heat from the reactor core to the primary heat exchangers. Figure \ref{fig:msr}
+shows a schematic diagram of a thermal-spectrum, channel-type \gls{MSR}. In channel-type
+\glspl{MSR}, the fuel salt flows through vertical channels in the reactor core alongside neutron
+moderators (e.g., graphite, heavy water, or molten sodium hydroxide). 
+%
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=.7\columnwidth]{msr}
@@ -90,136 +15,302 @@ reactor designs selected by the Generation IV International Forum
 	\label{fig:msr}
 \end{figure}
 
-``\glspl{MSR}'' generally refer to all reactor designs that use molten salt as
-the primary coolant. In practice, the term usually refers to liquid-fueled
-designs which have fissile and/or fertile materials dissolved directly in
-molten salt coolants, whereas solid-fueled designs are commonly referred to as
-\glspl{FHR}. In this work, I will be following this convention. Figure
-\ref{fig:msr} shows a schematic diagram of a typical \gls{MSR}. The fuel salt
-refers to the molten salt in the primary coolant loop which carries the fissile
-material. Most designs include the intermediate coolant loop illustrated in
-Figure \ref{fig:msr} as an additional safety barrier from radioactive release
-and to protect the electricity generator section of the plant. \glspl{MSR}
-possess an inherently robust
-safety feature in the strongly negative fuel temperature coefficient of
+The \gls{MSR} is one of six advanced reactor designs selected at the \gls{GIF} for improved safety,
+sustainability, efficiency, and cost over the current generation of predominantly \glspl{LWR}.
+Due to the high thermal expansion coefficient, \glspl{MSR} possess an inherently robust
+safety feature in the strong negative fuel temperature coefficient of
 reactivity \cite{elsheikh_safety_2013}. This reactivity coefficient limits the
 maximum temperature that the reactor core would experience in an accident
 scenario such as an unprotected reactivity insertion because the subsequent
-rise in core temperatures induces a significant drop in reactivity which
-quickly neutralizes the initial reactivity insertion. \glspl{MSR} also
+rise in core temperatures induces a significant drop in reactivity,
+quickly neutralizing the initial reactivity insertion. \glspl{MSR} also
 operate at a large thermal margin to boiling and can rely on natural
-circulation in the event of a pump failure. As a last resort, some \gls{MSR}
-designs incorporate a drain plug consisting of air-cooled frozen salt which
-melts when the core temperatures exceed a safety threshold. The hot molten salt
-in the core flows down to drain tanks designed to hold the fuel-filled salt in
+circulation in the event of a pump failure. As a last resort, many \gls{MSR}
+designs incorporate a drain plug made of actively-cooled frozen salt, which
+melts when the core temperatures exceed safety thresholds. The hot molten salt
+in the core would then flow into a drain tank designed to hold the fuel salt in
 a subcritical configuration to disrupt any further chain fission reactions.
 
-Some \glspl{MSR} like the \gls{MSBR} or the \gls{MSFR} can
+Some \glspl{MSR}, like the \gls{MSBR} or the \gls{MSFR}, can
 incorporate the thorium fuel cycle for improved sustainability arising from the
 use of abundant natural thorium resources and reduced transuranic waste
-\cite{heuer_towards_2014}. The latter consequence also reduces economical costs
-associated with long-term nuclear waste storage. In addition, the ability to
-operate at near atmospheric pressures eliminates the need for a thick pressure
+\cite{heuer_towards_2014}. The latter consequence also reduces costs
+associated with long-term nuclear waste storage. In addition, operating
+near atmospheric pressures eliminates the need for a thick pressure
 vessel and drives down construction costs, while online fuel reprocessing
-reduces reactor downtime during reactor operation \cite{dolan_1_2017}. We can
-make further economic arguments supporting \glspl{MSR} in the context of the
-carbon-constrained future envisioned in \gls{IEA}'s \gls{NZE} roadmap
-\cite{iea_net_2021}. A solar \gls{PV} and wind-dominated energy market produces
-variable electricity generation. The resulting volatility in electricity prices
-encourages the construction of \textit{heat storage} and \textit{peak power
-production} plants. At the same time, demand for carbon-neutral
-\textit{hydrogen fuel} will rise as electrification is economically unfeasible
-for some industries such as the aviation and marine sectors which depend
-energy-dense fuels for transport. As described in
-\cite{forsberg_market_2020}, the most cost-efficient options for the
-aforementioned resources (\textit{heat storage}, \textit{peak power
-production}, and \textit{hydrogen fuel}) all require high-temperature heat.
-These factors economically favor salt-cooled reactors over other types of
-reactors as they output heat at higher average temperatures.
+reduces reactor downtime during reactor operation \cite{dolan_1_2017}.
+We can make further economic arguments supporting \glspl{MSR} in the context of the
+carbon-constrained future envisioned in the \gls{IEA}'s \gls{NZE} roadmap
+\cite{iea_net_2021}. The roadmap for minimizing carbon emissions requires solar photovoltaic- and
+wind-dominated energy markets, which can generate highly variable electricity generation. The
+resulting volatility in electricity prices
+encourages the construction of heat storage and peak power
+production plants. At the same time, demand for carbon-neutral
+fuel will rise as electrification is economically unfeasible
+for some industries, such as the aviation and marine sectors, which depend on
+energy-dense fuels for propulsion. As described by Forsberg
+\cite{forsberg_market_2020}, the most cost-efficient options for heat storage, peak power
+production, and carbon-neutral fuel production all require high-temperature heat.
+This requirement favors \glspl{MSR} which can deliver heat at higher average
+temperatures than \glspl{LWR} and other high-temperature advanced reactors.
+\glspl{MSR} may also possess an edge over other high-temperature advanced reactors from the
+synergistic benefits of siting molten salt heat storage facilities near \gls{MSR} power generation
+facilities.
 
-While \glspl{MSR} have attracted increasing research interest over the past two
-decades, they are still very much under research development and no commercial
-\gls{MSR} exists yet. Reactor analysis software are essential tools in aiding
-reactor development because they help inform design choices and regulations in
-line with maximizing safety, reducing proliferation risks, and improving fuel
-efficiency. The liquid fuel form in particular introduces new computational
-challenges in simulating the transient behavior of \glspl{MSR}. \glspl{MSR}
-feature strong negative reactivity feedback in the fuel salt. The feedback
-causes strong and near-instantaneous interactions between reactor power and
-thermal hydraulic temperature profile. Furthermore, fissile material
-and \glspl{DNP} in \glspl{MSR} flow freely within the primary coolant
-loop as opposed to being held in place in solid-fuel reactors. The movement of
-\glspl{DNP} impacts the effective delayed neutron fraction in the core and
-consequently also impacts the transient behavior of the reactor. Therefore,
-\gls{MSR} computational models require robust coupling techniques to accurately
-capture the strong multiphysics interactions.
+\subsection{Past \& Present \gls{MSR} Research \& Development}
 
-Most reactor analysis applications are usually reactor-specific by
-design such as TRACE \cite{nrc_trace_2007} for \glspl{LWR}, and
-SAS4A/SASSYS-1 \cite{fanning_sas4a/sassys-1_2017} for
-liquid metal cooled reactors. Thus, these applications would disregard
-\gls{MSR}-specific phenomena and are inappropriate for \gls{MSR}
-analysis without modifications to the source code. Some research efforts
-do focus on adapting these applications for \gls{MSR} analysis. Examples
-include the coupling of modified versions of TRACE and PARCS
-\cite{pettersen_coupled_2016}, and the development of VERA-MSR from the
-integrated \gls{LWR} simulation tool VERA \cite{graham_development_2019}.
-Others developed their \gls{MSR} simulation tools from general
-multiphysics or \gls{CFD} applications such as COMSOL
-\cite{fiorina_modelling_2014} and OpenFOAM \cite{aufiero_development_2014}.
+\gls{ORNL} researchers first conceived the \gls{MSR} concept in pursuit of a high-temperature
+liquid fuel reactor for the US Aircraft Nuclear Propulsion program in
+the 1950s \cite{rosenthal_molten-salt_1970}. They
+built the first ever operational \gls{MSR}, the 2.5 MW$_{\text{th}}$
+\gls{ARE} reactor at \gls{ORNL}. The successful demonstration of the \gls{ARE} spurred further
+research into adapting \glspl{MSR} for civilian power generation \cite{rosenthal_molten-salt_1970}.
+Continued \gls{MSR} research efforts culminated in designing constructing, and successfully
+operating of the 8-MW$_{\text{th}}$, thermal-spectrum \gls{MSRE} with
+graphite channels and a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture
+\cite{haubenreich_experience_1970}. In addition to other operational achievements, the
+\gls{MSRE} became the first reactor to run on $^{233}$U fuel bred from $^{232}$Th. Building on
+their experience with the \gls{MSRE}, \gls{ORNL} proposed a new program for constructing and
+operating a demonstration reactor based on the \gls{MSBR} concept they had developed
+\cite{macpherson_molten_1985}. The \gls{MSBR} is a thermal-spectrum \gls{MSR} with fertile
+$^{232}$Th isotopes mixed directly into the \gls{FLiBe} molten salt for $^{233}$U breeding. The
+\gls{MSBR} was to rely on continuous online reprocessing to add fertile
+material and remove fission product neutron poisons.
+However, the \gls{MSBR} project was canceled prior to the demonstration stage in
+favor of the \gls{LMFBR}, which had benefited from a head start in development and more substantial
+political backing \cite{macpherson_molten_1985}.
 
-Similarly, Moltres \cite{lindsay_introduction_2018} is an open-source MSR
-simulation tool built in the \gls{MOOSE} \cite{gaston_physics-based_2015}
-parallel finite element framework. Lindsay et al.
-\cite{lindsay_introduction_2018} first presented the tool in 2017 and
-demonstrated its capabilities by simulating 2-D and 3-D models of the
-\gls{MSRE}. The results showed good qualitative
-agreement with the original design calculations by \gls{MSRE} researchers at
-\gls{ORNL}. This thesis presents newer developments in Moltres
-allowing for more complex and accurate \gls{MSR} simulations.
+Following a relative lull lasting until the late 1990s, renewed research efforts and interest from
+the \gls{GIF}
+provided new impetus for \gls{MSR} research and development. As of the end of 2022, numerous
+\gls{MSR} designs exist at various stages of development. Leading \gls{MSR} designs, in terms of
+development, licensing, or demonstration, include the \gls{MSFR} \cite{merle_optimized_2007},
+\gls{MCFR} \cite{terrapower_terrapower_2021}, TMSR-LF1 \cite{zhang_review_2018}, and \gls{IMSR}
+\cite{leblanc_18_2017}. The \gls{MSFR} is a fast-spectrum breeder reactor developed through
+collaboration among European institutes with funding support from the
+European Union. Figure \ref{fig:msfr} shows a schematic diagram of the \gls{MSFR}. As opposed to
+the multi-channel design of the \gls{MSRE} and \gls{MSBR}, the
+\gls{MSFR} core consists of a large molten salt pool without graphite moderators to avoid
+frequent graphite replacements and positive graphite temperature reactivity feedback. The
+\gls{MCFR} is a similar pool-type reactor under active development at TerraPower. TerraPower and
+Southern Company embarked on a joint project to design, construct, and operate a prototype
+\gls{MCRE} design with funding support from the \gls{DOE}'s \gls{ARDP}. \gls{CAS} launched the
+\gls{TMSR} program in 2011 to develop and construct both solid-fueled and liquid-fueled \gls{TMSR}
+designs \cite{zou_research_2019}. They finished construction of TMSR-LF1, a 2-MW$_{\text{th}}$
+liquid-fueled prototype, in August 2021 and received approval for reactor commissioning in August
+2022. Lastly, Canada-based Terrestrial Energy is also developing its \gls{IMSR}, a small modular
+\gls{MSR} based on the \gls{MSRE}. It passed a joint technical review by the
+Canadian and US nuclear regulators in July 2022.
+%
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=.7\columnwidth]{msfr}
+	\caption{Schematic diagram of the \gls{MSFR}. Retrieved from 
+	\cite{allibert_7_2016}.}
+	\label{fig:msfr}
+\end{figure}
+
+\subsection{Challenges in Multiphysics \gls{MSR} Modeling \& Simulation}
+
+Developing \gls{MSR} simulation software plays a vital role in supporting \gls{MSR}
+development. Accurate reactor modeling capabilities are vital because they
+accelerate reactor design and optimization by enabling quicker iteration through numerous design
+changes. \gls{MSR} simulation software are also essential tools in reactor safety analysis and
+licensing efforts since reactor developers must demonstrate and verify that the \gls{MSR} systems
+perform as designed and remain safe under various accident scenarios.
+
+While modeling \glspl{MSR} is not necessarily more difficult than modeling
+solid-fueled reactors, we must adapt our software tools to accurately model the
+unique phenomena found in these circulating-fuel reactors. The differences in
+the challenges of simulating \glspl{MSR} compared to solid-fueled reactors stem
+mainly from the liquid fuel form of the fuel salt \cite{diamond_phenomena_2018,
+huff_identifying_2019}.
+
+Liquids generally exhibit greater thermal
+expansion per unit increase in temperature than solids. A decrease in fuel density
+increases the likelihood of neutrons escaping the fuel region
+and being absorbed by non-fissile material elsewhere in the reactor.
+Consequently, combined with the temperature-dependent Doppler broadening of
+resonance capture cross sections, \glspl{MSR} possess stronger negative fuel
+temperature reactivity feedback than their solid-fueled counterparts
+\cite{elsheikh_safety_2013}. These
+phenomena ultimately result in strong interactions between the neutron fluxes
+and core temperatures, given that neutron fluxes affect core temperatures
+through fission heat generation and core temperatures affect neutron
+fluxes through the mechanisms described previously.
+
+With the fuel salt also providing cooling in the core through advective heat
+transfer, velocity flow
+profiles in the fuel salts strongly impact the temperature distribution via
+advection-dominated heat transfer \cite{diamond_phenomena_2018}. The flow-driven
+temperature distribution contrasts
+with the relatively static temperature profiles in fuel pins and
+other solid fuel types, which are physically separate from the coolant.
+
+\Glspl{DNP} flow freely within the primary coolant loop instead of
+being held in place as in solid-fueled reactors. Thus, the delayed neutron
+source distribution varies significantly depending on the flow profile and
+velocity. In addition, the reactor loses some delayed neutrons from out-of-core
+\gls{DNP} decay. These delayed neutrons are considered lost as they are emitted
+in subcritical regions and are unlikely to contribute to further fission
+reactions in the active core. The reduced delayed neutron fraction in the core
+contributes to a greater prompt power spike following a reactivity insertion
+event than solid-fueled reactors, absent any temperature reactivity
+feedback.
+
+Molten-salt flow along various parts of the coolant loop may fall within the turbulent flow
+regime, characterized by chaotic eddies, vortices, and other flow instabilities.
+Turbulent flow effects further complicate multiphysics interactions of flow with the temperature
+and \gls{DNP} distribution. Turbulent flow effects contribute significantly to advection-dominated
+heat and particle transfer in molten salt systems, thereby causing enhanced mixing. Therefore,
+multiphysics software for \gls{MSR} analysis require adequate flow modeling capabilities with
+support for \gls{DNP} drift and some form of turbulence modeling.
+
+\subsection{Moltres for Multiphysics \gls{MSR} Analysis}
+
+Moltres \cite{lindsay_moltres_2017} is an open-source multiphysics reactor simulation software
+explicitly developed considering \gls{MSR} characteristics in mind. Moltres is
+built on the \gls{MOOSE} \cite{permann_moose_2020} open-source finite-element framework,
+which facilitates multiphysics coupling between different
+\gls{MOOSE}-based and \gls{MOOSE}-wrapped applications. The \gls{MOOSE} framework also provides
+Moltres with advanced meshing and numerical solver capabilities through interfacing with libMesh
+\cite{kirk_libmesh_2006} and PETSc \cite{satish_petsc_2019} open-source libraries. Therefore,
+Moltres supports up to 3-D unstructured meshes, scales well on high-performance computing systems,
+and provides a flexible multiphysics coupling system, which can be tailored for different types of
+simulations.
+
+Moltres models coupled neutronics and thermal-hydraulics in reactors. While
+generally applicable to most reactor concepts, much of
+Moltres' development focuses on meeting the needs of \gls{MSR} multiphysics simulations.
+Together with \gls{MOOSE}'s \texttt{Heat}
+\texttt{Conduction} and \texttt{Navier-Stokes} \cite{peterson_overview_2018}
+modules, Moltres solves the multigroup neutron diffusion
+equations for an arbitrary number of energy and precursor groups and
+thermal-hydraulics equations simultaneously on the same mesh (or separately solved and coupled
+through fixed-point iterations if desired).
+
+Lindsay et al. \cite{lindsay_introduction_2018}
+demonstrated Moltres' multiphysics \gls{MSR} modeling capabilities with 1-D salt
+flow modeling in axisymmetric and 3-D models of the \gls{MSRE}. The neutron flux and
+temperature distributions agreed qualitatively with legacy
+\gls{MSRE} data albeit with some minor quantitative discrepancies due to
+simplifications and assumptions in the reactor geometry. I demonstrated Moltres' capabilities for
+1) looping of \gls{DNP} drift back into the reactor core, 2) coupling the \gls{DNP}
+drift to numerically calculated salt flow profiles within the reactor core,
+and 3) a decay heat model to simulate decay heat from fission products, with a 2-D axisymmetric
+design of the \gls{MSFR} in my Master's thesis \cite{park_advancement_2020}.
+
+While the Moltres
+model of the \gls{MSFR} showed good agreement with other studies in most steady-state and transient
+simulation cases, the Moltres model showed significant discrepancies during pump-initiated
+transient scenarios without a proper turbulence model. Instead, the model applied a
+uniform eddy viscosity assumption, which proved inadequate under non-steady flow. In order to
+advance Moltres as a multiphysics simulation software for \gls{MSR} analysis, Moltres requires a
+turbulence modeling capability to capture adequate turbulent flow phenomena and their interactions
+with other physics present in \glspl{MSR}. Of the various classes of turbulence models, a
+\gls{RANS}-based model is most suitable for coupling with Moltres when we consider computational
+efficiency. The \gls{RANS}-based equations are time-averaged fluid flow equations
+derived by separating the flow variable into its time-averaged and fluctuating components.
+\gls{RANS}-based models are also well-validated, representing the most widely used turbulence
+models for engineering applications.
+
+In addition to new features, Moltres would benefit from further \gls{VV} of its existing
+multiphysics capabilities to identify software bugs and ensure reliable results. Accurate modeling
+and simulation of salt flow-induced \gls{DNP} drift and the strong coupling between neutronics and
+thermal-hydraulics are crucial for \gls{MSR} simulation tools. Therefore, the
+proposed work will include relevant \gls{VV} studies for Moltres.
+
+\subsection{Control Rod Modeling in \glspl{MSR}}
+
+Most reactor designs contain control rods to control the fission rate or completely shut down the
+reactor by inserting the rods further into the reactor core. Control rods consist of
+strong neutron absorbers like boron, cadmium, and gadolinium to reduce the number of fission
+neutrons available to contribute to further fission chain reactions. All reactors start operation
+with excess reactivity to ensure enough fissile material to last through to the next scheduled
+refueling. Control rods and burnable poisons allow reactors to operate at a multiplication factor
+of unity by canceling out the excess reactivity. Control rods are also helpful
+for ramping the power up or down during start-up, shut-down, or load-following operations. Most
+importantly, control rods provide a safety mechanism for quickly shutting down a reactor under
+dangerous conditions. Rapid control rod insertion is the primary mechanism of a reactor scram to
+reliably introduce a large negative reactivity insertion in response to an unintended reactivity
+insertion or other events that may threaten the reactor's safe operation. 
+
+Amongst other tasks in reactor modeling, we aim to accurately reproduce control rod worth, which we
+can measure as the relative reduction
+in the neutron multiplication factor $k_{eff}$ due to the presence of the control rod in the
+reactor. We are also interested in the accompanying change in flux shape near the
+control rod. Neutrons entering the control rods are more likely to be absorbed than
+adjacent regions in the reactor core. Therefore, control rods induce highly anisotropic neutron
+angular fluxes and sharp gradients in the neutron flux in their vicinity. Control rods also cause
+shifts in the neutron energy spectrum because their absorption cross sections are much higher in
+the lower neutron energy range; more energetic neutrons generally have a higher probability of
+escaping the control rod region. As a consequence, modeling control rods accurately requires
+high-fidelity computational methods to capture the angular dependence in the neutron
+flux near the highly absorbing medium.
+
+However, neutron transport methods are very computationally expensive and thus are mainly used for
+time-independent neutronic analyses. For time-dependent multiphysics simulations coupling
+neutronics to \gls{TH} and other physics present in nuclear reactors, most reactor analyses
+rely on neutron diffusion theory for modeling neutronics. The issue with applying neutron diffusion
+theory near control rods arises because neutron diffusion theory approximates
+neutron transport theory by integrating over the angular variables. As a result,
+diffusion-based methods perform poorly in reactor systems with control rods.
+
+To tackle the issue of modeling control rods in \glspl{MSR} with the multigroup neutron diffusion
+solver in Moltres, I will develop and implement a novel hybrid method for incorporating neutron
+transport-derived corrections to the neutron diffusion method while largely preserving the
+computational efficiency of the neutron diffusion method over neutron transport methods.
 
 \section{Objectives}
 
-This thesis demonstrates latest capabilities of Moltres
-\cite{lindsay_introduction_2018}.
-In particular, this thesis presents two more recent
-developments in Moltres, namely fully integrating \gls{MOOSE}'s incompressible
-Navier-Stokes module into Moltres, and introducing a
-decay heat model.
-The main objective of this thesis is to verify Moltres'
-latest capabilities in modeling multiphysics, steady-state, and transient
-behavior of fast-spectrum \glspl{MSR} through the study of the \gls{MSFR}
-concept. Code-to-code verification is an important exercise in software
-development for ensuring that the application produces accurate and reliable
-results. This thesis covers the \gls{MSFR} concept mainly because it has been
-studied extensively with readily available data in the literature to verify
-against. The \gls{MSFR} design also features interesting flow
-patterns that greatly affect the steady-state and transient behavior. This
-present work will first present a verification of Moltres' \gls{MSFR}
-diffusion neutronics against the Monte Carlo neutron transport software
-Serpent 2, followed by a verification of
-the coupled neutronics/thermal-hydraulics steady-state and accident transient
-results against two sets of results published by
-Fiorina et al. \cite{fiorina_modelling_2014}. The two sets of results arose
-from a collaborative benchmarking exercise by researchers at Politecnico di
-Milano and Technical University of Delft with two separate \gls{MSR}
-simulation tools. Section \ref{chap:lit} discusses these tools
-in greater detail. The
-secondary objective is to identify areas of improvement in Moltres for future
-development.
+The overarching goal of this work is to improve on Moltres as a reliable, intermediate-fidelity
+simulation tool for multiphysics \gls{MSR} analyses that can not only be run on workstations but
+also scales well on larger computing clusters. Thus, new and existing capabilities in Moltres must
+be accurate within accepted bounds, rigorously verified, computationally efficient, and highly
+scalable. These conditions form the underlying development principles of the proposed work.
+
+The scope of the proposed work can be divided into three main objectives. These objectives are:
+%
+\begin{enumerate}[itemindent=20pt, listparindent=1.5em, label=\textbf{\arabic*}]
+  \item \textbf{Verification and Validation of Existing Multiphysics Coupling Capabilities in
+    Moltres}
+
+    Verify and validate existing multiphysics capabilities in Moltres for modeling and simulating
+    the strong interactions between the neutronics and thermal-hydraulics in \glspl{MSR}. This
+    objective will be met through two separate studies: verifying Moltres against the CNRS
+    benchmark \cite{tiberga_results_2020} for fast-spectrum \gls{MSR} analysis, and modeling the
+    \gls{MSRE} zero-power pump start-up and coast-down experiments. I will perform the second study
+    in collaboration with the developer of QuasiMolto \cite{reynolds_analysis_2023} as a \gls{VV}
+    study with the additional aim of creating a reproducible numerical benchmark of the listed
+    \gls{MSRE} experiments.
+
+  \item \textbf{Implementation of a \gls{RANS}-based Turbulence Model in Moltres}
+
+    Implement a Spalart-Allmaras turbulence model on the \gls{MOOSE} framework for
+    turbulence modeling capability in Moltres to support turbulent flow simulations in \gls{MSR}
+    analyses. This objective addresses the absence of turbulence modeling capability in
+    Moltres and the consequent restriction on Moltres for modeling \gls{MSR} systems with complex
+    turbulent flow.
+
+  \item \textbf{Development of a Novel Hybrid Method to Improve Control Rod Modeling in Moltres}
+
+    Develop a novel Hybrid $S_N$-Diffusion method for improved modeling of \gls{MSR} systems with
+    control rods. The hybrid method uses the discrete ordinates ($S_N$) method for solving the
+    neutron transport equations to generate corrections for the diffusion-approximated streaming
+    term in the neutron diffusion equations. The $S_N$ calculations are high-level
+    calculations on a reduced problem domain containing the control rods to minimize computational
+    expense.
+\end{enumerate}
 
 \section{Outline}
 
-The outline of this thesis is as follows. Chapter 2 discusses the history and
-features of \glspl{MSR}, and a literature review of existing \gls{MSR}
-simulation tools. The chapter also covers the \gls{MSFR} concept in greater
-detail. Chapter 3 details the software and the general modeling
-approach for generating the results in this thesis. Chapter 4 provides a
-neutronics assessment by comparing key neutronics parameters from Moltres'
-eigenvalue calculations to Serpent's Monte Carlo calculations. Chapter 5
-presents steady-state results of coupled neutronics/thermal-hydraulics
-\gls{MSFR} simulations in Moltres. Chapter 6 presents accident transient
-simulation results for unprotected reactivity insertions, unprotected loss of
-heat sink, unprotected loss of flow, and unprotected pump overspeed. Lastly,
-Chapter 7 summarizes the key findings in this thesis
-and posits some potential avenues for future work.
+Chapter 2 presents a literature review of existing multiphysics \gls{MSR} simulation software,
+\gls{VV} studies on \gls{MSR} modeling and simulation, turbulence modeling in \gls{MSR} systems,
+and correction techniques for neutron diffusion methods.
+Chapter 3 describes Moltres and its existing capabilities in the context of previously published
+work.
+Chapter 4 summarizes the findings of the first verification study under the first objective: the
+verification of Moltres for multiphysics \gls{MSR} modeling against the CNRS benchmark.
+Chapter 5 presents the theory and preliminary results of the novel Hybrid $S_N$-Diffusion
+method for the third objective.
+Chapter 6 details the proposed work to fully meet the three objectives.
