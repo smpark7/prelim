@@ -1,8 +1,8 @@
 Section \ref{sec:summary-nts-mtds} highlighted the poor performance of neutron diffusion
 methods for calculating neutron fluxes near control rods. Strong neutron absorption in the control
 rod region produces highly anisotropic neutron flux extending some distance outside the control
-rod. Neutron transport methods, which retain angular dependence of the neutron flux in one way or
-another, generally fare better than neutron diffusion methods with isotropic diffusion
+rod. Neutron transport methods, which retain angular dependence of the neutron flux to various
+extents, generally fare better than neutron diffusion methods with isotropic diffusion
 coefficients. However, neutron transport methods are also generally more computationally expensive,
 given the increased dimensionality of the problem from the angular component. Piling this extra
 dimension on top of the existing geometric and neutron energy group dimensions dramatically
@@ -1002,12 +1002,14 @@ method for the 1-D test cases.
     \toprule
     Parameter & $S_N$ Transport & Neutron Diffusion & Hybrid $S_N$-Diffusion \\
     \midrule
-    $\Delta x$ [cm]        & 0.0125    & 0.0125    & 0.0125 \\
-    \multirow{3}{*}{$tol$} &           &           & Diffusion: $10^{-6}$ \\
-                           & $10^{-7}$ & $10^{-6}$ & $S_N$: $10^{-5}$ \\
-                           &           &           & Outer: $10^{-3}$ \\
-    $N$                    & 8         & N/A       & 8 \\
-    $L$                    & 2         & N/A       & 2 \\
+    Mesh size, $\Delta x$ [cm]        & 0.0125    & 0.0125    & 0.0125 \\[.2cm]
+    \multirow{3}{*}{Convergence tolerance, $tol$}
+                                      &           &           & Diffusion: $10^{-6}$ \\
+                                      & $10^{-7}$ & $10^{-6}$ & $S_N$: $10^{-5}$ \\
+                                      &           &           & Outer: $10^{-3}$ \\[.2cm]
+    Discrete ordinates, $N$           & 8         & N/A       & 8 \\
+    Highest moment of $\Sigma^{g'\rightarrow g}_s$, $L$
+                                      & 2         & N/A       & 2 \\
     \bottomrule
   \end{tabular}
   \label{table:param}

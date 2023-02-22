@@ -3,8 +3,8 @@ simulation software for molten salt reactors.
 Section \ref{sec:moltres-features}
 describes general software features of Moltres, Section
 \ref{sec:moltres-physics} expands on the physics models in Moltres, and Section
-\ref{sec:moltres-previous} describes previous work to illustrate the current
-capabilities in Moltres.
+\ref{sec:moltres-previous} describes previous work on \gls{MSR} analysis with Moltres to illustrate
+its current capabilities and limitations.
 
 \section{General Features} \label{sec:moltres-features}
 
@@ -111,8 +111,10 @@ interface for software development and general ease of use.
 
 This section describes the various physics models available in Moltres to model
 coupled neutronics and thermal-hydraulics in \glspl{MSR}. Section \ref{sec:nts}
-discusses the neutronics model in Moltres, while Section \ref{sec:th} discusses
-the thermal-hydraulics model.
+discusses the neutronics model in Moltres, Section \ref{sec:th} discusses
+the thermal-hydraulics model, and Section \ref{sec:moltres-loop} discusses the
+external loop model for \gls{DNP} looping and heat removal via external heat
+exchangers.
 
 \subsection{Neutronics Model} \label{sec:nts}
 
@@ -190,7 +192,7 @@ multigroup neutron diffusion equations with delayed neutrons for most reactor
 types. The only differences are in the last two terms in Equation
 \ref{eq:precursor}
 which represent the advection and diffusion terms, respectively, to model the
-movement of \gls{DNP} in liquid-fuel \glspl{MSR}.
+movement of \glspl{DNP} in liquid-fuel \glspl{MSR}.
 
 As shown in Equations \ref{eq:neutron} and \ref{eq:precursor}, Moltres requires
 group constant data from dedicated high-fidelity neutronics software such as
@@ -301,7 +303,7 @@ advection-diffusion equation given by:
     \label{eq:temp}
     \shortintertext{and}
     Q_f =& \sum^G_{g=1} \epsilon_g \Sigma_g^f \phi_g \label{eq:heat-source}
-%    \shortintertext{where}
+    \shortintertext{where}
 %    c_p =& \text{ specific heat capacity of molten salt,} \nonumber \\
 %    k =& \text{ effective thermal conductivity of molten salt,} \nonumber \\
 %    Q_f =& \text{ fission heat source,} \nonumber \\
@@ -324,7 +326,7 @@ conditions for the velocity and temperature variables:
     \text{Homogeneous Neumann: }& & \frac{\partial u}{\partial x_i} \
     \left(\text{or } \frac{\partial T}{\partial x_i}\right) =& 0 & \\
     \text{``No boundary condition'' outflow: }& &
-    \mu \left[ \nabla \vec{u} + \left(\nabla \vec{u} \right)^T \right] \cdot
+    \left[ \nabla \vec{u} + \left(\nabla \vec{u} \right)^T \right] \cdot
     \hat{n} =& 0 \ \text{ (velocity)} & \\
     \text{``No boundary condition'' outflow: }& &
     k \nabla T \cdot\hat{n} =& 0 \ \text{ (temperature)} &
@@ -454,8 +456,8 @@ An Application for Simulation of Molten Salt Reactors}
 
 In 2017, Lindsay et al. first introduced
 Moltres to the \gls{MSR} community for multiphysics simulations of \glspl{MSR}.
-Their work showcased Moltres' neutron diffusion model, thermal-hydraulics
-model, and their coupling in the \gls{MOOSE} framework. The authors
+Their work showcased neutron diffusion and thermal-hydraulics coupling
+capabilities in Moltres. The authors
 demonstrated these capabilities by running time-dependent simulations of 2D
 axisymmetric and 3D \gls{MSRE} models until the flux, precursor, and
 temperature distributions reached steady state.
@@ -620,8 +622,8 @@ significant discrepancies in the thermal flux distribution. However, developing 
 modeling capability in Moltres is nontrivial given that neutron diffusion theory performs poorly
 within highly neutron-absorbing regions.
 
-Lastly, the authors recognized two other avenues for future work: more
-rigorous validation and verification of Moltres' capabilities by comparison
+Lastly, the authors recognized two other avenues for future work: further \gls{VV} of Moltres'
+capabilities by comparison
 with more detailed experimental data and other modern \gls{MSR} modeling
 efforts; and the study of transient simulation cases such as control rod
 ejection, single channel blockage, loss of flow, and loss of secondary cooling.
@@ -633,7 +635,7 @@ This section follows my previous work for my Master's degree in \textit{Advancem
 Verification of Moltres for Molten Salt Reactor Safety Analysis} \cite{park_advancement_2020},
 which I shall refer to as ``this work'' in this subsection.
 
-This work represents a continuation of the work by Lindsay et al.
+In many ways, this work represents a continuation of the work by Lindsay et al.
 \cite{lindsay_introduction_2018} in the development of Moltres as an \gls{MSR}
 simulation tool. New features introduced include the coupling of the existing
 neutronics and temperature equations to incompressible Navier-Stokes equations
