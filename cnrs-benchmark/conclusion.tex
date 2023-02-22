@@ -1,8 +1,8 @@
 \section{Summary}
 
-\glspl{MSR} feature significant multiphysics interactions which present
+\glspl{MSR} feature significant multiphysics interactions, presenting
 computational challenges for many existing multiphysics reactor analysis
-software. This chapter presents code-to-code verification of Moltres
+software. This chapter presents code-to-code verification of Moltres'
 capabilities in modeling such multiphysics phenomena in fast-spectrum
 \glspl{MSR} based on the CNRS benchmark \cite{tiberga_results_2020}.
 The CNRS benchmark assesses multiphysics \gls{MSR} simulation
@@ -10,7 +10,7 @@ software through several steps involving single-physics and coupled
 neutronics/thermal-hydraulics problems.
 
 The results showed that Moltres is consistent with the participating software
-presented in the CNRS benchmark paper for the modeling of important phenomena
+presented in the CNRS benchmark paper for modeling important phenomena
 in fast-spectrum \glspl{MSR}. The percentage discrepancies in the various
 neutronics, velocity, and temperature quantities mostly fall below or within
 one standard deviation of the average of the benchmark participants.
@@ -23,20 +23,17 @@ Moltres agree closest with the TUD-S$_2$ software package, which implements the
 $S_2$ discrete ordinates method for
 neutron transport on a uniform structured mesh with a \gls{DFEM}-based solver.
 These features make Moltres the most similar to the TUD-$S_2$ model as compared
-to the other models which employ different neutron transport models,
-non-uniform meshes, and/or finite volume-based solvers.
+to the other models, which employ different neutron transport models,
+non-uniform meshes, or finite volume-based solvers.
 
-This work verifies Moltres' capabilities for future work involving modeling and
+This work verifies Moltres' capabilities for future work involving the modeling and
 simulation of fast-spectrum \glspl{MSR} such as the European \gls{MSFR} and
 TerraPower's \gls{MCFR} \cite{terrapower_terrapower_2021}. Notably, the CNRS
 benchmark does not assess modeling capabilities for complex physics phenomena
-such as turbulent flow in \glspl{MSR}. This worked in favor of verifying
-existing capabilities in Moltres since Moltres does not currently support
-turbulence modeling. However, we expect coolant loops in many \gls{MSR} designs
-will experience turbulent flow under normal operation or accident scenarios.
+such as turbulent flow in \glspl{MSR}. However, we expect coolant loops in many \gls{MSR} designs
+will experience turbulent flow under regular operation or accident scenarios.
 These expectations, alongside the subpar results of pump-initiated accidents
 reported in Section \ref{sec:msfr}, call for the implementation and
-verification of a turbulence model in Moltres for accurate modeling of
-\glspl{MSR}.
+verification of a turbulence model in Moltres to accurately model \glspl{MSR}.
 
 \FloatBarrier

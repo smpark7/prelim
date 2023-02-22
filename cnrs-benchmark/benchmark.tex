@@ -5,17 +5,17 @@ benchmark for multiphysics software dedicated to modeling \glspl{MSR}. It
 consists of three phases and eight steps in total. Each
 step is a well-defined subproblem for systematically assessing the
 capabilities of \gls{MSR} software and pinpointing sources of discrepancies
-between software. Phase 0 consists three single-physics problems in fluid
-dynamics, neutronics, and temperature, respectively. Phase 1 consists
-of four coupled, steady-state problems. Lastly, Phase 2 consists of one
+between software. Phase 0 consists of three single-physics problems in fluid
+dynamics, neutronics, and temperature. Phase 1 consists
+of four coupled steady-state problems. Lastly, Phase 2 consists of one
 coupled, time-dependent problem.
 
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=.6\columnwidth]{cnrs-geometry}
 	\caption{2m$\times$2m 2D domain of the CNRS Benchmark. $U_{lid}$
-	represents the velocity along the top boundary. Various quantities are
-	measured along the centerlines AA' and BB' for comparison. From Tiberga et
+	represents the velocity along the top boundary. For comparison, various quantities are
+	measured along the centerlines AA' and BB'. From Tiberga et
 	al. \cite{tiberga_results_2020}.}
 	\label{fig:cnrs-geometry}
 \end{figure}
@@ -27,9 +27,9 @@ Standard vacuum boundary conditions apply for neutron flux along all
 boundaries whereby outgoing neutrons are considered lost, while homogeneous
 boundary conditions apply for delayed neutron precursors. No-slip boundary
 conditions apply for velocity variables in the cavity, except along the top
-boundary for Steps 0.1, 0.3, 1.1, 1.2, and 1.4 which impose forced flow in the
+boundary for Steps 0.1, 0.3, 1.1, 1.2, and 1.4, which impose forced flow in the
 form of lid-driven
-cavity flow. For the temperature variable, all boundaries are insulated and we
+cavity flow. For the temperature variable, all boundaries are insulated, and we
 simulate salt cooling with the following volumetric heat sink equation:
 %
 \begin{align}
@@ -69,7 +69,7 @@ dependence in the cross sections and the neutron diffusion coefficients:
 
 The benchmark also prescribes incompressible Navier-Stokes flow with the
 Boussinesq approximation for evaluating the salt flow in the
-domain, but does not restrict the type of neutronics model.
+domain but does not restrict the type of neutronics model.
 Table \ref{table:benchmark} lists the relevant input parameters and observables.
 
 \begin{table*}[tp!]

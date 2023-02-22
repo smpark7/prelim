@@ -3,7 +3,7 @@
 In this section, we compare the results from Moltres for each CNRS Benchmark
 step to the results in the benchmark paper \cite{tiberga_results_2020}.
 The software packages from \gls{CNRS} and \gls{TUD}
-each report two sets of results arising from different angular discretizations
+each report two sets of results from different angular discretizations
 in their neutronics models for Steps 0.2, 1.1, 1.2, 1.3, 1.4, and 2.1. These
 sets of results are labeled as CNRS-$SP_1$ and
 CNRS-$SP_3$; and TUD-$S_2$ and TUD-$S_6$, respectively. The
@@ -29,7 +29,7 @@ $\epsilon_c$ and $Q_{avg}$ are calculated as:
     N_c =& \mbox{ number of participating software packages.} \nonumber
 \end{align}
 
-The average discrepancy $\epsilon$ over all software is calculated as:
+The average discrepancy $\epsilon$ across all software is calculated as:
 %
 \begin{align}
     \epsilon =& \frac{1}{N_c}\sum^{N_c}_{c=1} \epsilon_c
@@ -38,11 +38,11 @@ The average discrepancy $\epsilon$ over all software is calculated as:
 We adopted the averaged values $\epsilon$ and $Q_{avg}$ directly from the
 reference work \cite{tiberga_results_2020} without including our results
 in the calculations. We note that the benchmark does not provide a reference
-solution and a significantly erroneous value from one of the software packages
+solution, and a significantly erroneous value from one of the software packages
 could heavily skew the discrepancy values. Nevertheless, the benchmark paper
 reports good agreement among their software packages.
 
-For observables measured along the centerlines AA' and/or BB', Tables
+For observables measured along the centerlines AA' and BB', Tables
 \ref{table:disc0} and \ref{table:disc1} report the discrepancy $\epsilon_c$ of
 each observable from Moltres relative to the average of the benchmark
 participants $Q_{avg}$ alongside the average discrepancy $\epsilon$ of
@@ -55,7 +55,7 @@ the plot curves, these figures omit results from CNRS-$SP_1$ and TUD-$S_2$ to
 reduce cluttering. The full dataset
 of all observable results used in this results analysis is
 available at \cite{park_results_2021}. Lastly, Table
-\ref{table:rho} reports all reactivity and change in reactivity results from
+\ref{table:rho} reports all reactivity and reactivity changes from
 Steps 0.2, 1.1, 1.2, and 1.3.
 
 \begin{figure}[h]
@@ -125,28 +125,28 @@ the benchmark participants
 \cite{tiberga_results_2020}. Moltres performs very well as most discrepancy
 values are either lower than or fall within one \gls{SD} of the benchmark
 average discrepancies. The discrepancy value for $T$ along centerline BB' in
-Step 0.3 is the only exception with its value of 0.164\% being larger than
+Step 0.3 is the only exception, with its value of 0.164\% being larger than
 the benchmark average by 3 \gls{SD}.
 
-We note in Figure \ref{fig:0.3} that the $T$ distribution from Moltres is almost
+Figure \ref{fig:0.3} shows that the $T$ distribution from Moltres is almost
 identical to the corresponding distributions from CNRS-$SP_3$ and TUD-$S_6$
-along most of centerline BB'. However, Figure \ref{fig:0.3-zoom} shows
+along most of centerline BB'. However, Figure \ref{fig:0.3-zoom} shows a
 significant spread in the $T$ distributions along BB' from all software
 packages near the top boundary. At $y = 2.0$ m, Moltres underpredicts the
 temperature at 912.3 K compared to the benchmark participants' values which
 range between 930.3 K and 948.1 K. This point on the top boundary lies directly downstream of
 the velocity boundary condition discontinuity at the top-left corner.
-Corner singularities are generally difficult to approximate with
+Corner singularities are generally tricky to approximate with
 continuous Galerkin methods \cite{kuhlmann_lid-driven_2018}.
 The \gls{SUPG} stabilization scheme dampens numerical oscillations by
-introducing pointwise artificial thermal diffusivity which depends strongly on
+introducing pointwise artificial thermal diffusivity, which depends strongly on
 the inverse of local velocity magnitude \cite{peterson_overview_2018}.
-Therefore, while the \gls{SUPG} scheme was very effective in eliminating
+Therefore, while the \gls{SUPG} scheme effectively eliminates
 spurious numerical oscillations everywhere else, it provides little damping
 along the top boundary due to the relatively large non-zero velocity boundary
 condition. On the other hand, the temperature values in the rest of the domain
 and the average discrepancies of the other variables show that Moltres can
-still accurately reproduce the expected results and the temperature deviations
+still accurately reproduce the expected results, and the temperature deviations
 along the top boundary do not impact the overall integrity of our results.
 
 \begin{figure}[htb]
@@ -159,7 +159,7 @@ along the top boundary do not impact the overall integrity of our results.
 
 Lastly, we observe in table \ref{table:rho} that the reactivity $\rho$ value of
 465.6 pcm from Moltres falls well within the range of $\rho$ values from the
-benchmark which range from 353.7 pcm up to 578.1 pcm. Given that Moltres 
+benchmark, which range from 353.7 pcm up to 578.1 pcm. Given that Moltres 
 adopts the neutron diffusion model, our $\rho$ value agrees closest to the
 results from the software packages which also adopt the neutron diffusion model
 or theoretically-equivalent models such as the $SP_1$ and $S_2$ neutron
@@ -199,7 +199,7 @@ transport models, namely CNRS-$SP_1$, PoliMi, PSI, and TUD-$S_2$.
 
 Table \ref{table:disc1} shows the discrepancy values from Moltres relative to
 the average and \gls{SD} of the benchmark participants for Steps 1.1, 1.2, and
-1.3, and the corresponding average discrepancy values from the benchmark
+1.3 and the corresponding average discrepancy values from the benchmark
 \cite{tiberga_results_2020}. The subsequent subsections discuss the results
 for each benchmark step in Phase 1.
 %
@@ -249,11 +249,11 @@ for each benchmark step in Phase 1.
 Figure \ref{fig:1.1} shows good qualitative agreement in the delayed neutron
 source distribution along BB' among Moltres and the benchmark participants.
 From Table \ref{table:disc1}, Moltres reports discrepancies of 0.603\% and
-0.327\% along the centerlines AA' and BB', respectively. Both values are on the
+0.327\% along the centerlines AA' and BB', respectively. Both values are
 within two and one \gls{SD}, respectively, of the average discrepancies of the
 benchmark participants (0.346\% and 0.294\%).
 In Table \ref{table:rho}, we observe that the change in
-$\rho$ relative to Step 0.2 is $-62.7$ pcm for Moltres and this value is
+$\rho$ relative to Step 0.2 is $-62.7$ pcm for Moltres, and this value is
 consistent with the $-63.0$ to $-62.0$ pcm range that most of the benchmark
 participants' values fall in.
 %
@@ -284,10 +284,10 @@ fission rate density along AA' from Step 1.2. Similar to Step 0.3, the
 temperature distribution from Moltres agrees closest with CNRS-$SP_3$ and
 TUD-$S_2$. Table \ref{table:disc1} reports the same trends we observed in Phase
 0; the average discrepancy in temperature along BB' from Moltres for Step 1.2
-is marginally higher than the benchmark while the average discrepancy in the
+is marginally higher than the benchmark, while the average discrepancy in the
 fission rate density is within one \gls{SD} range to the benchmark average.
 From Table \ref{table:rho}, Moltres also reports a change in $\rho$
-relative to Step 1.1 of $-1142.2$ pcm which
+relative to Step 1.1 of $-1142.2$ pcm, which
 falls within the range of reported benchmark participants' values.
 
 \subsubsection{Step 1.3: Buoyancy}
@@ -297,15 +297,15 @@ delayed neutron source distributions along AA'.
 Moltres reproduces the correct trend in all three physical
 observables. Step 1.3 has a relatively slower buoyancy-driven flow profile with
 no forced flow from the top boundary. Consequently, there are no temperature
-deviations near the top boundary and we observe in Table \ref{table:disc1} that
+deviations near the top boundary, and we observe in Table \ref{table:disc1} that
 the average discrepancy value of 0.070\% for the temperature distribution along
 BB' is in much closer agreement to the benchmark value of 0.080\% compared to
 the corresponding temperature discrepancy values for Step 0.3 and 1.2.
 
-In Table \ref{table:rho}, we observe that the change in $\rho$ from
+Table \ref{table:rho} shows that the change in $\rho$ from
 Moltres (-1207.7 pcm) falls within the range of reported benchmark values and
-matches the software from TUD-$S_2$ (-1208.5 pcm) the closest. This is likely
-by virtue of the similar solvers (diffusion and $S_2$ neutronics models) and
+matches the software from TUD-$S_2$ (-1208.5 pcm) the closest. This observation is likely
+due to the similar solvers (diffusion and $S_2$ neutronics models) and
 methods of solution (finite element method on uniform meshes) employed by our
 respective software.
 %
@@ -332,8 +332,8 @@ values. The change in $\rho$ values from Moltres all fall within the range of
 benchmark values
 for all cases. Furthermore, the $\Delta\rho$ values are all within 1.1 pcm of
 the corresponding values from the TUD-S$_2$ model in the benchmark paper. Given
-that the $S_2$ discrete ordinates method is theoretically equivalent to the
-multigroup neutron diffusion method, this indicates that Moltres is largely
+that the $S_2$ discrete ordinates method with isotropic sources is theoretically equivalent to the
+multigroup neutron diffusion method, Moltres is largely
 consistent with the benchmark participants outside of differences from the
 neutronics models.
 
@@ -403,7 +403,7 @@ neutronics models.
 \subsection{Phase 2 results \& discussion}
 
 Lastly, the following subsection discusses the results for the transient cases
-in Step 2.1 which involve measuring the response in power output to periodic
+in Step 2.1, which involve measuring the response in power output to periodic
 perturbations in the heat transfer coefficient.
 
 \subsubsection{Step 2.1: Forced convection transient}
@@ -414,9 +414,9 @@ values from Table \ref{table:disc2}, the results show that Moltres is
 consistent with the benchmark. The gain data points from all \gls{MSR} software
 agree closely with one another. Moltres reports an average discrepancy value of
 0.496\%, slightly lower than the benchmark average of 0.587\%. On the other
-hand, the phase shift data points show greater spread over the various driving
+hand, the phase shift data points show a greater spread over the various driving
 frequencies. We note the different timestepping schemes and timestep
-sizes among the different software packages which is likely responsible for
+sizes among the different software packages, which is likely responsible for
 the variations in the phase shift. Even with a precision of
 $\pm0.9^\circ$ for each phase shift value, Moltres accurately reproduces the
 correct trend with a lower average discrepancy (1.741\%) than the benchmark
