@@ -1,0 +1,76 @@
+\begin{frame}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Theory}
+  \textbf{Hybrid $S_N$-Diffusion Method}
+
+  I propose a novel hybrid $S_N$-Diffusion neutronics method for improving control rod modeling in
+  neutron diffusion solvers.
+
+  The hybrid method employs the discrete ordinates ($S_N$) method on subdomains (\textit{correction
+  regions}) containing control rods to provide transport corrections to the neutron diffusion
+  method.
+
+  \textbf{Hybrid $S_N$-Diffusion method algorithm}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Theory}
+  \textbf{Spatially Varying Diffusion Coefficients}
+  \vspace{.3cm}
+
+  Transport corrections are in the form of \textit{Spatially Varying Diffusion Coefficients
+  (SVDCs)}, 
+  which are identical to the space-dependent diffusion coefficients
+  proposed by Ronen:
+  %
+  \begin{align}
+    D^s_g(x) &= -J^{tr}_g(x)\bigg/\frac{d\phi^{tr}_g(x)}{dx}. \label{eq:svdc}
+  \end{align}
+  %
+  where $D^s$ is the \glspl{SVDC}, and the $tr$ superscript denotes neutron current and scalar flux
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Theory}
+  \textbf{$S_N$ Subsolver Boundary Conditions}
+  \vspace{.3cm}
+  \begin{itemize}
+    \item In 1-D, the $S_N$ method requires $N/2$ boundary flux parameters per mesh point.
+    \item However, the neutron diffusion method can produce at most one independent parameter per
+      mesh point.
+    %
+    \begin{align}
+      J_{g,\pm} &= \frac{\phi_g}{4} \mp \frac{D_g}{2}\frac{d\phi_g}{dx} \label{eq:p1-j}
+      \shortintertext{where}
+      J_{g,\pm} &= \mbox{ neutron forward/backward current of group }g. \nonumber
+    \end{align}
+    %
+  \end{itemize}
+  \pause
+  $\Rightarrow$ Assume uniformly isotropic transmission of angular flux:
+  %
+  \begin{align}
+    \Psi_g(x,\mu_n) =& J_{g,+}(x)\Bigg/\sum^N_{n=N/2+1}w_n\mu_n && (\mu_n>0) \\
+    \Psi_g(x,\mu_n) =& J_{g,-}(x)\Bigg/\sum^{N/2}_{n=1}w_n\mu_n && (\mu_n<0)
+  \end{align}
+%
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Theory}
+  \textbf{Correction Region and Buffer Zone}
+  \begin{itemize}
+    \item Recall that the full problem domain and the correction region are defined as $\Omega^d_0$
+      and $\Omega^d_1$, where $\Omega^d_1 \subseteq \Omega^d_0$.
+    \item The approximate $S_N$ boundary conditions will generally yield inaccurate flux values
+      since realistic reactor systems invariably do not exhibit perfectly isotropic fluxes..
+    \item However, the influence of boundary conditions on $J$ and $\frac{d\phi}{dx}$ does not
+      extend far from the boundary $\partial\Omega^d_1$ in optically thick media; SVDCs are
+      accurate everywhere except near $\partial\Omega^d_1$
+  \end{itemize}
+  \pause
+  $\Rightarrow$ Define $\Omega^d_1$ such that it is large enough to provide sufficient transport
+  corrections and accommodate inaccurate SVDCs near $\partial\Omega^d_1$. Discard inaccurate SVDCs
+  in favor of the default $P_1$-based diffusion coefficients.
+\end{frame}
+
