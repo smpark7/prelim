@@ -1,5 +1,5 @@
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Control Rods in MSR}
   \begin{itemize}
     \item MSRs contain comparatively fewer control rods than most other reactor types due to:
@@ -23,7 +23,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{The Control Rod Modeling Dilemma}
   \begin{enumerate}
     \item Neutron diffusion, $P_1$, and $SP_N$ methods perform poorly near control rod regions
@@ -34,7 +34,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Control Rod Modeling in MSR Multiphysics Studies}
 
   Common simplifications applied to control rod modeling include:
@@ -54,7 +54,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Transport-Correction Techniques For Neutron Diffusion-Based Solvers}
   \vspace{.3cm}
 
@@ -72,7 +72,27 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
+  \textbf{1-D Discrete Ordinates $S_N$ Equation}
+  \begin{align}
+    \mu_n \frac{d}{dx}\Psi_g(x, \mu_n) + \Sigma_{t,g}(x)&\Psi_g(x, \mu_n) -
+  \sum^G_{g'=1} \sum^N_{n'=1} \sum^L_{l=0} \frac{\left(2l+1\right)}{2}
+  \Sigma^{g'\rightarrow g}_{s,l}(x) P_l(\mu_{n'} - \mu_n)
+  w_{n'}\Psi_{g'}(x,\mu_{n'}) \nonumber \\
+    &= \sum^G_{g'=1} \frac{\chi_g}{2} \frac{\nu\Sigma_{f,g'}(x)}{k} \phi_{g'}(x) + S_g(x,\mu_n)
+    \label{eq:1d-sn}
+  \end{align}
+  \textbf{1-D Neutron Diffusion Equation}
+  \begin{align}
+    -\frac{d}{dx} D_g(x) \frac{d}{dx} \phi_g(x) + \Sigma_{t,g}(x) \phi_g(x) &= \sum^G_{g'=1}\left[
+    \Sigma_s^{g'\rightarrow g}(x)\phi_{g'}(x) + \chi_g\frac{\nu\Sigma_{f,g'}(x)}{k}
+    \phi_{g'}(x)\right] + S_g(x)
+    \label{eq:1d-diff}
+  \end{align}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Absorber Blackness} \\
   Encompasses a broad class of procedures for generating boundary conditions to match approximate
   solutions of low-order methods to more accurate solutions of high-order methods
@@ -93,7 +113,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Method of Equivalent Cross Sections (MECS)}
   \begin{columns}
     \column[t]{7cm}
@@ -126,7 +146,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Response-Based Methods}
   \vspace{.3cm}
 
@@ -146,7 +166,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{The Ronen Method} \\
   Ronen \cite{ronen_accurate_2004} derived transport operators representing accurate, analytical
   relations between neutron current and neutron flux. \\
@@ -169,7 +189,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Transport-Corrected Diffusion Theory}
   \vspace{.2cm}
 
@@ -202,7 +222,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature Review}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \begin{block}{\textbf{Summary}}
     \begin{itemize}
       \item Neutron diffusion methods fare poorly near control rod regions, but neutron transport

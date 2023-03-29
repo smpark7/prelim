@@ -9,7 +9,28 @@
   regions}) containing control rods to provide transport corrections to the neutron diffusion
   method.
 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hybrid $S_N$-Diffusion Method: Theory}
   \textbf{Hybrid $S_N$-Diffusion method algorithm}
+  \begin{enumerate}
+    \item Start with an initial neutron diffusion calculation in $\Omega^d_0$ with conventional
+      $P_1$-based diffusion coefficients and other standard group constants (e.g., neutron cross
+      sections).
+    \item Use the neutron diffusion flux estimates in $\Omega^d_1$ and current estimates along
+      $\partial \Omega^d_1$ as initial and boundary conditions for the $S_N$ sub-solver.
+    \item With the $S_N$ sub-solver, calculate an improved neutron flux solution in $\Omega^d_1$,
+      which contains the control rod region and its immediate vicinity.
+    \item Calculate \glspl{SVDC} using the $S_N$ flux solution and Eq. \ref{eq:svdc}.
+    \item Pass the \glspl{SVDC} to the neutron diffusion solver to replace the conventional
+      $P_1$ diffusion coefficients within the $\Omega^d_1$ while continuing to use $P_1$-based
+      diffusion coefficients in the rest of $\Omega^d_0$.
+    \item Start the next iteration by running neutron diffusion calculation with the \glspl{SVDC}
+      replacing $P_1$ diffusion coefficients in part or all of $\Omega^d_1$.
+    \item Repeat Steps 2-6 until convergence is reached by meeting pre-defined convergence tolerance
+      values.
+  \end{enumerate}
 \end{frame}
 
 \begin{frame}
