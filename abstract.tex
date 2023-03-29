@@ -5,11 +5,11 @@ liquid-fueled \glspl{MSR} requires robust and flexible multiphysics software for
 simulations at reasonable computational costs. Moltres is a multiphysics reactor software designed
 to meet that goal. In my preliminary work, I completed a verification study of Moltres based on a
 numerical benchmark developed at \gls{CNRS} for the verification of \gls{MSR} simulation tools
-designed for fast-spectrum \gls{MSR} modeling. I propose running an additional
-\gls{VV} study based on pump-initiated experiments performed on the \gls{MSRE} in the 1960s.
+designed for fast-spectrum \gls{MSR} modeling. I propose running an additional verification and
+validation study based on pump-initiated experiments performed on the \gls{MSRE} in the 1960s.
 This study will be performed in collaboration with the developer of another \gls{MSR} simulation
-tool, QuasiMolto, for code-to-code verification. Beyond the \gls{VV} of Moltres’ existing
-capabilities, I propose implementing a turbulent flow modeling
+tool, QuasiMolto, for code-to-code verification. Beyond the verification and validation of Moltres’
+existing capabilities, I propose implementing a turbulent flow modeling
 capability in Moltres. Various \gls{MSR} designs exhibit turbulent flow in high Reynolds number
 flow regions. Instead of high-fidelity turbulence models whose high computational costs are at odds
 with the intermediate-fidelity simulations with Moltres, I propose implementing the
@@ -26,5 +26,5 @@ modeling capabilities. Therefore, I propose to develop a novel hybrid neutronics
 neutron diffusion calculations within and near highly absorbing regions. The hybrid method explores
 using discrete ordinates ($S_N$) neutron transport sub-solvers to generate spatially-dependent
 diffusion coefficients within/near highly absorbing regions for the global neutron diffusion
-solver. In this preliminary report, I will present several 1D test cases to demonstrate the
+solver. In this preliminary report, I present several 1D test cases to demonstrate the
 implementation and performance of the hybrid method.
