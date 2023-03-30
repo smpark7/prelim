@@ -23,7 +23,7 @@ the $S_N$ discrete ordinates neutron transport method on subregions containing t
 obtain diffusion coefficients which provide pointwise corrections for the diffusion method on the
 entire problem domain.
 
-Section \ref{sec:hybrid-theory} discusses the theoretical background for the Hybrid $S_N$-Diffusion
+Section \ref{sec:hybrid-theory} discusses the theoretical background for the hybrid $S_N$-diffusion
 method. Section \ref{sec:implementation} provides numerical implementation details of
 the hybrid method and its components. Sections \ref{sec:test-case} and \ref{sec:sim-param} describe
 the 1-D test cases and several simulation parameters in that context. Section
@@ -33,7 +33,7 @@ Section \ref{sec:hybrid-summary} summarizes the key findings in this chapter.
 
 \section{Theory} \label{sec:hybrid-theory}
 
-The proposed Hybrid $S_N$-Diffusion method is a two-level, iterative method to improve the
+The proposed hybrid $S_N$-diffusion method is a two-level, iterative method to improve the
 accuracy of neutron diffusion solutions in reactor systems with highly neutron-absorbing control
 rod regions. In this discussion, I focus on the 1-D, $k$-eigenvalue implementation of the
 hybrid method.
@@ -115,7 +115,7 @@ anisotropic scattering and small flux gradients. These conditions do not hold in
 interfaces of neighboring materials with highly dissimilar neutronic properties, and in materials
 with significant scattering contributions from light nuclei.
 
-In the Hybrid $S_N$-Diffusion method, I propose replacing the conventional $P_1$-based
+In the hybrid $S_N$-diffusion method, I propose replacing the conventional $P_1$-based
 diffusion coefficients with an alternate formulation that incorporates pointwise corrections
 to the neutron diffusion flux solution from the $S_N$-derived flux solution as follows:
 %
@@ -313,13 +313,13 @@ solution for this issue in implementing \glspl{SVDC} in the proposed work.
 
 In order to reduce the computational cost of the high-level $S_N$ calculation, I propose reducing
 the problem domain of the $S_N$ method to a \textit{correction region} containing the control rod
-and its vicinity. Consequently, the Hybrid $S_N$-Diffusion method can retain accurate neutron flux
+and its vicinity. Consequently, the hybrid $S_N$-diffusion method can retain accurate neutron flux
 and current estimates around the control rod region from the $S_N$ method while making significant
 computational cost savings by treating most of the reactor geometry with the neutron diffusion
 method alone. Henceforth, I will refer to the $S_N$ calculation on the correction
 region as the $S_N$ \textit{subproblem} or \textit{sub-solver}. I define the entire problem
 domain and the correction region as $\Omega^d_0$ and $\Omega^d_1$, respectively, where
-$\Omega^d_1\subseteq\Omega^d_0$. The algorithm for the Hybrid $S_N$-Diffusion method is as follows:
+$\Omega^d_1\subseteq\Omega^d_0$. The algorithm for the hybrid $S_N$-diffusion method is as follows:
 %
 \begin{enumerate}
   \item Start with an initial neutron diffusion calculation in $\Omega^d_0$ with conventional
@@ -412,7 +412,7 @@ neutron diffusion calculation.
 \subsubsection{Hybrid Method Verification with Case 0}
 
 In this subsection, I revisit Case 0
-(Figure \ref{fig:case-0-geom}) to test my hypothesis and demonstrate the Hybrid $S_N$-Diffusion
+(Figure \ref{fig:case-0-geom}) to test my hypothesis and demonstrate the hybrid $S_N$-diffusion
 method. Once more, I defer general numerical implementation details to
 Section \ref{sec:implementation}.
 
@@ -456,7 +456,7 @@ the second and third outer iterations is approximately $10^{-7}$.
 
 Refer to Figures \ref{fig:c0g1hd} and \ref{fig:c0g2hd} for a qualitative comparison of group 1 and
 2 $P_1$-based diffusion coefficients, \glspl{SVDC} derived from the reference $S_8$ calculation as
-demonstrated in Section \ref{sec:svdc}, and \glspl{SVDC} derived from the Hybrid $S_N$-Diffusion
+demonstrated in Section \ref{sec:svdc}, and \glspl{SVDC} derived from the hybrid $S_N$-diffusion
 method discussed here. The \glspl{SVDC} from the hybrid method agree well with the reference
 \glspl{SVDC} in the control rod region and for most of the fuel-graphite region up to around
 $x=15$ cm. Both sets of \glspl{SVDC} approximately coincide with the $P_1$ diffusion coefficient
@@ -522,7 +522,7 @@ hybrid method is 0.62774, which is only 0.00024 higher than the Diffusion-\gls{S
 In Case 0, $\Omega^d_1$ covers more than half of $\Omega^d_0$ due to the control rod region being
 the only significant source of influence on the neutron flux distribution in the
 otherwise homogeneous system with reflective boundary conditions. I chose Case 0 as a simple test
-case to aid in introducing the Hybrid $S_N$-Diffusion method. In Section \ref{sec:prelim-results},
+case to aid in introducing the hybrid $S_N$-diffusion method. In Section \ref{sec:prelim-results},
 I present more results with the hybrid method on more complicated geometries containing neutron
 reflector, air, and heterogeneous fuel-graphite lattice regions and vacuum boundary conditions. In
 these other test cases, the hybrid method yields smaller $\Omega^d_1$-to-$\Omega^d_0$ ratios,
@@ -532,12 +532,12 @@ region.
 \section{Numerical Implementation} \label{sec:implementation}
 
 Before going into the results, this section presents numerical implementation details of group
-constant data processing and the neutron diffusion, $S_N$ neutron transport, and Hybrid
-$S_N$-Diffusion solvers. I implemented all numerical solvers and analysis scripts in the Python
+constant data processing and the neutron diffusion, $S_N$ neutron transport, and hybrid
+$S_N$-diffusion solvers. I implemented all numerical solvers and analysis scripts in the Python
 programming language. First, I will discuss the material group constant data generation and
 postprocessing steps. Next, I present the implementation details of the neutron
-diffusion and $S_N$ numerical methods. Lastly, I present how they are coupled to form the Hybrid
-$S_N$-Diffusion method.
+diffusion and $S_N$ numerical methods. Lastly, I present how they are coupled to form the hybrid
+$S_N$-diffusion method.
 
 \subsection{Group Constant Data Generation}
 
@@ -860,7 +860,7 @@ as follows
 %applying the first conditional as $|\frac{1}{\phi_g}\frac{d\phi_g}{dx}|<5\times 10^{-2}$ was
 %sufficient for this task.
 
-The Hybrid $S_N$-Diffusion algorithm is as follows
+The hybrid $S_N$-diffusion algorithm is as follows
 %
 \begin{align}
   \shortintertext{1. Initialize $k^0$ and $\phi^0$ with an initial neutron diffusion calculation on
@@ -892,7 +892,7 @@ source term in the $S_N$ sub-solver.
 
 \section{Description of 1-D Test Cases} \label{sec:test-case}
 
-I designed ten 1-D test cases with increasing complexity to test the performance of the Hybrid
+I designed ten 1-D test cases with increasing complexity to test the performance of the hybrid
 $S_N$-Diffusion method in response to various geometrical features. The latter cases resemble the
 reference \gls{MSRE} design \cite{robertson_msre_1965}, which has centrally located control rods
 and air-filled rod guide tubes. Figure \ref{fig:case-geom} shows the geometries of Cases 0 to
@@ -972,11 +972,11 @@ section simplifications. Each Monte Carlo simulation ran on 25 inactive and 125 
   \centering
   \footnotesize
   \caption{Variable handling in OpenMC under continuous-energy (OpenMC-CE) and multigroup
-  (OpenMC-MG) modes, and in the $S_N$ neutron transport, neutron diffusion, and Hybrid
-  $S_N$-Diffusion methods. }
+  (OpenMC-MG) modes, and in the $S_N$ neutron transport, neutron diffusion, and hybrid
+  $S_N$-diffusion methods. }
   \begin{tabular}{c c c c c c}
     \toprule
-    Variable & OpenMC-CE & OpenMC-MG & $S_N$ Transport & Diffusion & Hybrid \\
+    Variable & OpenMC-CE & OpenMC-MG & $S_N$ Transport & Diffusion & hybrid \\
     \midrule
     Position, $\bm{r}$ & Continuous & Continuous & Discrete & Discrete & Discrete \\
     Direction of travel, $\bm{\hat{\Omega}}$ & Continuous & Continuous & Discrete & N/A & N/A \\
@@ -999,8 +999,8 @@ method for the 1-D test cases.
 \begin{table}[tb!]
   \centering
   \footnotesize
-  \caption{Simulation parameters applied to the neutron diffusion, $S_N$, and Hybrid
-  $S_N$-Diffusion methods.}
+  \caption{Simulation parameters applied to the neutron diffusion, $S_N$, and hybrid
+  $S_N$-diffusion methods.}
   \begin{tabular}{c c c c}
     \toprule
     Parameter & $S_N$ Transport & Neutron Diffusion & Hybrid $S_N$-Diffusion \\
@@ -1044,7 +1044,7 @@ $10^{-5}$ by the 3rd and 4th iterations.
   \centering
   \footnotesize
   \caption{Relative error norm, $\epsilon$, values for $k$ and $\phi$ after each outer iteration in
-    the Hybrid $S_N$-Diffusion method for Case 5a.}
+    the hybrid $S_N$-diffusion method for Case 5a.}
   \begin{tabular}{c S[table-format=1.1e+1] S[table-format=1.1e+1]}
     \toprule
     Iteration   & {$\epsilon_k$}    & {$\epsilon_\phi$} \\
@@ -1085,7 +1085,7 @@ section, I compare the $k$ estimates of the deterministic methods with OpenMC-MG
   \centering
   \footnotesize
   \caption{Multiplication factor $k$ estimates for Cases 1a, 1b, 2a, 2b, 3a, and 3b from the
-    OpenMC-CE, OpenMC-MG, $S_8$ neutron transport, neutron diffusion, and Hybrid $S_N$-Diffusion
+    OpenMC-CE, OpenMC-MG, $S_8$ neutron transport, neutron diffusion, and hybrid $S_N$-diffusion
     methods.}
   \begin{tabular}{c S[table-format=1.5(2)] S[table-format=1.5(2)] S[table-format=1.5(2)]
   S[table-format=1.5(2)] S[table-format=1.5(2)] S[table-format=1.5(2)]}
@@ -1110,7 +1110,7 @@ section, I compare the $k$ estimates of the deterministic methods with OpenMC-MG
   \centering
   \footnotesize
   \caption{Multiplication factor $k$ estimates for Cases 4a, 4b, 5a, and 5b from the OpenMC-CE,
-    OpenMC-MG, $S_8$ neutron transport, neutron diffusion, and Hybrid $S_N$-Diffusion methods.}
+    OpenMC-MG, $S_8$ neutron transport, neutron diffusion, and hybrid $S_N$-diffusion methods.}
   \begin{tabular}{c S[table-format=1.5(2)] S[table-format=1.5(2)] S[table-format=1.5(2)]
     S[table-format=1.5(2)]}
     \toprule
@@ -1134,7 +1134,7 @@ section, I compare the $k$ estimates of the deterministic methods with OpenMC-MG
   \centering
   \footnotesize
   \caption{Differences in $k$ estimates for Cases 1a, 1b, 2a, 2b, 3a, and 3b for the $S_8$ neutron
-    transport, neutron diffusion, and Hybrid $S_N$-Diffusion methods relative to OpenMC-MG.}
+    transport, neutron diffusion, and hybrid $S_N$-diffusion methods relative to OpenMC-MG.}
   \begin{tabular}{c S[table-format=+1.5(2)] S[table-format=+1.5(2)] S[table-format=+1.5(2)]
       S[table-format=+1.5(2)] S[table-format=+1.5(2)] S[table-format=+1.5(2)]}
     \toprule
@@ -1155,7 +1155,7 @@ section, I compare the $k$ estimates of the deterministic methods with OpenMC-MG
   \centering
   \footnotesize
   \caption{Differences in $k$ estimates for Cases 4a, 4b, 5a, and 5b for the $S_8$ neutron
-    transport, neutron diffusion, and Hybrid $S_N$-Diffusion methods relative to OpenMC-MG.}
+    transport, neutron diffusion, and hybrid $S_N$-diffusion methods relative to OpenMC-MG.}
   \begin{tabular}{c S[table-format=+1.5(2)] S[table-format=+1.5(2)] S[table-format=+1.5(2)]
     S[table-format=+1.5(2)]}
     \toprule
@@ -1177,7 +1177,7 @@ section, I compare the $k$ estimates of the deterministic methods with OpenMC-MG
   \footnotesize
   \caption{Control rod worths calculated as changes in the reactivity between Case 5a and 5b for
     the OpenMC continuous-energy and multigroup mode calculations, and the $S_8$ neutron transport,
-  neutron diffusion, and Hybrid $S_N$-Diffusion methods.}
+  neutron diffusion, and hybrid $S_N$-diffusion methods.}
   \begin{tabular}{c S}
     \toprule
     \multirow{2}{*}{\textbf{Method}} & {\textbf{Control rod worth}} \\
@@ -1455,7 +1455,7 @@ interface between the fuel and reflector regions beyond $x=40$ cm.
 In this section, I compare the $P_1$-based diffusion coefficients, reference \glspl{SVDC}, and
 hybrid \glspl{SVDC} for Cases 3b and 5a. As in Section \ref{sec:hybrid-method}, the reference
 \glspl{SVDC} are derived from the $S_8$ flux solution, while the hybrid \glspl{SVDC} are derived
-from the $S_8$ sub-solver flux solution within the Hybrid $S_N$-Diffusion method.
+from the $S_8$ sub-solver flux solution within the hybrid $S_N$-diffusion method.
 
 Figure \ref{fig:c3bdiffcoef} shows the various diffusion coefficient distributions for Case 3b
 between $x=0$ cm and $x=30$ cm. The figures omit the large diffusion coefficient values in the
@@ -1583,7 +1583,7 @@ increases in dimensionality for 2-D and 3-D systems.
 
 \section{Summary} \label{sec:hybrid-summary}
 
-In this chapter, I presented the theoretical basis for the Hybrid $S_N$-Diffusion method, a novel
+In this chapter, I presented the theoretical basis for the hybrid $S_N$-Diffusion method, a novel
 two-level method for improving the neutron diffusion method for neutronics simulations of reactor
 systems containing highly neutron-absorbing regions. The hybrid method relies on \glspl{SVDC}
 derived from reference flux solutions of $S_N$ calculations to provide transport
@@ -1595,7 +1595,7 @@ observed to converge faster than the neutron fluxes in $S_N$ calculations.
 I established a framework for the hybrid method for coupling an $S_N$ sub-solver and a neutron
 diffusion solver through outer iterations by taking advantage of the weak dependence of the $S_N$
 flux solution on the approximate boundary conditions determined from the neutron diffusion flux
-solution. This novel framework could be extended to improve multischeme methods, which
+solution. This framework could be extended to improve multischeme methods, which
 divide a problem domain into subdomains where different neutronics methods are applied. For
 instance, in an $S_N$-diffusion multischeme method, the $S_N$ method is applied in subdomains with
 significant transport effects while other subdomains are treated with the neutron diffusion method
