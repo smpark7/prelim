@@ -1,12 +1,13 @@
 Section \ref{sec:summary-nts-mtds} highlighted the poor performance of neutron diffusion
 methods for calculating neutron fluxes near control rods. Strong neutron absorption in the control
-rod region produces highly anisotropic neutron flux extending some distance outside the control
+rod region produces a highly anisotropic neutron flux extending some distance outside the control
 rod. Neutron transport methods, which retain angular dependence of the neutron flux to various
-extents, generally fare better than neutron diffusion methods with isotropic diffusion
+extents, generally fare better than neutron diffusion methods, which have isotropic diffusion
 coefficients. However, neutron transport methods are also generally more computationally expensive,
-given the increased dimensionality of the problem from the angular component. Piling this extra
-dimension on top of the existing geometric and neutron energy group dimensions dramatically
-increases the number of unknowns to be solved in a system. Many past efforts have tried introducing
+given the increased dimensionality of the problem from the angular component. Adding an angular
+dimension to the existing geometric and neutron energy group dimensions dramatically
+increases the problem size and the computational resources necessary to solve the system. Many past
+efforts have tried introducing
 transport correction techniques to improve neutron flux and multiplication factor estimates in
 diffusion-based methods. Other than control rod regions, these techniques may also correct
 homogenization errors introduced by spatial homogenization of fuel assemblies and other
@@ -23,7 +24,7 @@ the $S_N$ discrete ordinates neutron transport method on subregions containing t
 obtain diffusion coefficients which provide pointwise corrections for the diffusion method on the
 entire problem domain.
 
-Section \ref{sec:hybrid-theory} discusses the theoretical background for the hybrid $S_N$-diffusion
+Section \ref{sec:theory} discusses the theoretical background for the hybrid $S_N$-diffusion
 method. Section \ref{sec:implementation} provides numerical implementation details of
 the hybrid method and its components. Sections \ref{sec:test-case} and \ref{sec:sim-param} describe
 the 1-D test cases and several simulation parameters in that context. Section
@@ -31,12 +32,12 @@ the 1-D test cases and several simulation parameters in that context. Section
 with comparisons to higher-fidelity Monte Carlo and $S_N$ neutron transport methods. Lastly,
 Section \ref{sec:hybrid-summary} summarizes the key findings in this chapter.
 
-\section{Theory} \label{sec:hybrid-theory}
+\section{Theory} \label{sec:theory}
 
-The proposed hybrid $S_N$-diffusion method is a two-level, iterative method to improve the
-accuracy of neutron diffusion solutions in reactor systems with highly neutron-absorbing control
-rod regions. In this discussion, I focus on the 1-D, $k$-eigenvalue implementation of the
-hybrid method.
+The proposed hybrid $S_N$-diffusion method is an iterative method to improve the
+accuracy of neutron diffusion solutions in reactor systems with highly anisotropic flux regions
+which I will use to model control rods. In this discussion, I focus on the 1-D, $k$-eigenvalue
+implementation of the hybrid method. However, my work will extend beyond 1-D in the proposed work.
 
 The discrete ordinates ($S_N$) method for solving the multigroup neutron transport equation
 (Eq. \ref{eq:mg-bte}) discretizes the continuous angular directional phase space into a finite
@@ -44,8 +45,8 @@ number of discrete angular intervals (ordinates). The set of distinct direction 
 $\hat{\Omega}_n$ representing the discrete ordinates is typically chosen in conjunction with a
 compatible quadrature set to replace integrals across continuous solid angles
 $\hat{\Omega}$ with quadrature approximations. The multigroup, discrete ordinates ($S_N$
-approximation) form of the 1-D, $k$-eigenvalue neutron transport equation with the Gauss-Legendre
-quadrature set is:
+approximation) form of the Cartesian 1-D, $k$-eigenvalue neutron transport equation with the
+Gauss-Legendre quadrature set is:
 %
 \begin{align}
   \mu_n \frac{d}{dx}\Psi_g(x, \mu_n) + \Sigma_{t,g}(x)&\Psi_g(x, \mu_n) -
@@ -59,9 +60,9 @@ w_{n'}\Psi_{g'}(x,\mu_{n'}) \nonumber \\
   \Psi_g(x,\mu_n) &= \mbox{ neutron angular flux along $\mu_n$ in group $g$,} \nonumber \\
 %  g &= \mbox{ neutron energy group index, ranging from 1 to G,} \nonumber \\
 %  \Sigma_{t,g}(x) &= \mbox{ macroscopic total cross section of neutrons in group $g$,} \nonumber \\
-%  G &= \mbox{ total number of energy groups,} \nonumber \\
+  G &= \mbox{ total number of energy groups,} \nonumber \\
 %  n &= \mbox{ discrete ordinate index,} \nonumber \\
-%  N &= \mbox{ total number of discrete ordinates,} \nonumber \\
+  N &= \mbox{ total number of discrete ordinates,} \nonumber \\
   l &= \mbox{ Legendre expansion order,} \nonumber \\
   L &= \mbox{ highest Legendre expansion order,} \nonumber \\
   \Sigma^{g'\rightarrow g}_{s,l}(x) &= \mbox{ $l$-th Legendre moment of the macroscopic
@@ -79,7 +80,7 @@ scattering} \nonumber \\
 \end{align}
 %
 We can retrieve the neutron scalar flux and current by calculating the 0th and 1st Legendre
-moments as follows:
+moments, respectively, as follows:
 %
 \begin{align}
   \phi_g(x) &= \frac{1}{2} \int^1_{-1} d\mu\ \Psi_g(x,\mu) = \frac{1}{2} \sum^N_{n=1} w_n
@@ -98,22 +99,22 @@ is:
   \phi_{g'}(x)\right] + S_g(x)
   \label{eq:1d-diff}
   \shortintertext{where}
-    D_g(x) &= \frac{1}{3 \Sigma_{tr}(x)} = \mbox{ neutron diffusion coefficient for group }g.
-  \nonumber
+    D_g(x) &= \frac{1}{3 \Sigma_{tr}(x)} \nonumber \\
+           &= \mbox{ isotropic neutron diffusion coefficient for group }g. \nonumber
 \end{align}
 
 \subsection{Spatially Varying Diffusion Coefficients} \label{sec:svdc}
 
 The conventional approach for determining diffusion coefficients for each subregion involves
-running a high-fidelity neutron transport to tally region-wide estimates of the neutron transport
-cross section. The transport cross section formulation is derived from the $P_1$ approximation of
-the neutron transport equation with isotropic sources \cite{bell_nuclear_1970}. Essentially, each
-defined subregion has a constant diffusion coefficient value. However, as discussed in Section
-\ref{sec:summary-nts-mtds}, the neutron diffusion
+running a high-fidelity neutron transport simulation to tally region-wide estimates of the neutron
+transport cross section. The transport cross section formulation is derived from the $P_1$
+approximation of the neutron transport equation with isotropic sources \cite{bell_nuclear_1970}.
+Essentially, each defined subregion has a constant diffusion coefficient value. However, as
+discussed in Section \ref{sec:summary-nts-mtds}, the neutron diffusion
 equation is only valid in regions of high scattering-to-removal ratios with, at most, linearly
-anisotropic scattering and small flux gradients. These conditions do not hold in control rods, near
-interfaces of neighboring materials with highly dissimilar neutronic properties, and in materials
-with significant scattering contributions from light nuclei.
+anisotropic scattering and small flux gradients. These conditions do not hold near or within
+control rods, near interfaces of neighboring materials with highly dissimilar neutronic properties,
+and in materials with significant scattering contributions from light nuclei.
 
 In the hybrid $S_N$-diffusion method, I propose replacing the conventional $P_1$-based
 diffusion coefficients with an alternate formulation that incorporates pointwise corrections
@@ -123,21 +124,31 @@ to the neutron diffusion flux solution from the $S_N$-derived flux solution as f
   D^s_g(x) &= -J^{tr}_g(x)\bigg/\frac{d\phi^{tr}_g(x)}{dx}. \label{eq:svdc}
 \end{align}
 %
-where $D^s$ is the \glspl{SVDC}, and the $tr$ superscript denotes neutron current and scalar flux
-solutions from the $S_N$ method.
+where $D^s$ is the \glspl{SVDC}, and the $tr$ superscript denotes the transport-computed neutron
+current and scalar flux solutions from the $S_N$ method.
 The basic form of this equation is Fick's first law of diffusion. The result is a diffusion
-coefficient variable that varies in space, even within a subdomain. \glspl{SVDC} provide pointwise
-corrections to closely match the diffusion flux solution to the $S_N$ flux solution.
+coefficient variable that continuously varies in space from point to point except at dissimilar
+material interfaces. \glspl{SVDC} provide pointwise corrections to closely match the diffusion flux
+solution to the $S_N$ flux solution.
 
+Eq. \ref{eq:svdc} is identical to Ronen's \cite{ronen_accurate_2004} and Pounders \& Rahnema's
+\cite{pounders_diffusion_2009} formulations for space-dependent diffusion coefficients in Eq.
+\ref{eq:ronen} and Eq. \ref{eq:emp}, respectively. In comparison with
+the Ronen method, our approaches differ in how $\phi_{tr}$ and $J_{tr}$ are obtained. Starting with
+a standard neutron diffusion calculation, the Ronen method applies an analytically derived
+transport operator on every iteration to calculate a new estimate of $J_{tr}$ using the $\phi$
+solution from the previous iteration. The main difficulty for the Ronen method lies in deriving the
+transport operators which has been achieved for only simple 1-D geometries thus far.
+
+For the \textit{empirical method} by Pounders \$ Rahnema, their diffusion coefficients are
+piecewise-constant and they assumed a priori knowledge of the reference flux solution.
 Pounders \& Rahnema \cite{pounders_diffusion_2009} demonstrated the effectiveness of applying
 pointwise corrections derived from analytical or Monte Carlo reference flux solutions. Compared
 with conventional $P_1$-based out-scatter and flux-limited approximations of the diffusion
-coefficient, their \textit{high-order empirical diffusion coefficient} showed superior agreement
-with the reference flux solutions. Their formulation for these piecewise-constant empirical
-diffusion coefficients in Eq. \ref{eq:emp} is similar to the formulation for \glspl{SVDC} in Eq.
-\ref{eq:svdc}. They recognized that volume averaging within each mesh element for
-piecewise-constant coefficients introduces some truncation error if the flux is
-non-linear within each mesh element. This design choice may be due to an intention to retain the
+coefficient, their diffusion coefficients showed superior agreement
+with the reference flux solutions. They recognized that volume averaging within each mesh element
+for piecewise-constant diffusion coefficients introduces some truncation error if the flux is
+non-linear within the mesh element. This design choice may be due to an intention to retain the
 diffusion coefficient as a constant in the $\frac{d}{dx}D\frac{d\phi}{dx}$ term of the neutron
 diffusion equation (Eq. \ref{eq:1d-diff}).
 
@@ -152,30 +163,35 @@ differential term with no derivatives of the diffusion coefficient. Refer to Sec
 \ref{sec:implementation} for key numerical implementation details of a finite difference neutron
 diffusion solver with support for handling \glspl{SVDC}.
 
+For the rest of Section \ref{sec:svdc}, I will show how the \glspl{SVDC} may differ from the
+conventional $P_1$-based diffusion coefficient before presenting further details of the hybrid
+$S_N$-diffusion method in Section \ref{sec:theory}.
+
 \begin{figure}[htb!]
   \centering
   \includegraphics[width=.7\columnwidth]{case-0-geometry}
-  \caption{A 1-D, two-region system containing a 0.5-cm thick control rod and a 24.5-cm thick
-    homogeneous mixture of molten fuel salt and graphite moderator. Reflective boundary conditions
-    apply on both ends.}
+  \caption{Case 0: A 1-D, two-region system containing a 0.5-cm thick control rod and a 24.5-cm
+    thick homogeneous mixture of molten fuel salt and graphite moderator. Reflective boundary
+    conditions apply on both ends.}
   \label{fig:case-0-geom}
 \end{figure}
 
-\subsubsection{\gls{SVDC} Verification with Case 0}
+\subsubsection{\gls{SVDC} Demonstration with Case 0}
 
 To facilitate the following demonstration of a neutron diffusion calculation with \glspl{SVDC},
-consider a 1-D, two-region system (Case 0) consisting of a highly neutron-absorbing material and a
+consider a 1-D, two-region system (which I will refer to as Case 0 moving forward) consisting of a
+highly neutron-absorbing material and a
 neutron-multiplying region with reflective boundary conditions on both ends (Figure
 \ref{fig:case-0-geom}). I defined the material specifications of the control rod, molten fuel salt,
 and graphite moderator based on the material compositions of the \gls{MSRE}
 \cite{robertson_msre_1965}. The
 homogenized molten fuel salt and graphite regions minimize discrepancies arising from geometrical
 heterogeneity. The group constant input data for the diffusion and $S_N$ solvers (e.g., $P_1$-based
-diffusion coefficients, cross
-sections, fission spectra) were sampled at 900 K and generated using the OpenMC Monte Carlo
-neutronics software \cite{romano_openmc:_2015}. OpenMC uses the flux-limited approximation method
-to calculate diffusion coefficients \cite{pomraning_flux-limited_1984}. The condensed
-neutron energy spectrum forms two discrete groups bounded at $10^{-5}$, $10^0$, and $10^8$ eV.
+diffusion coefficients, cross sections, fission spectra) were sampled at 900 K and generated using
+the OpenMC Monte Carlo neutronics software \cite{romano_openmc:_2015}. OpenMC uses the flux-limited
+approximation method, developed by Pomraning \cite{pomraning_flux-limited_1984}, to calculate
+diffusion coefficients. The condensed
+neutron energy spectrum forms two energy groups bounded between $10^{-5}$, $10^0$, and $10^8$ eV.
 
 I solved for the neutron flux in this system using the following set of numerical solvers:
 %
@@ -248,7 +264,7 @@ $S_8$ solver than the diffusion-$P_1$ solver.
   diffusion-\gls{SVDC} solvers and the absolute difference relative to the $S_8$ estimate.}
   \begin{tabular}{l S S}
     \toprule
-    Solver type & {$k$} & {$k-k_{S8}$} \\
+    Solver type & {$k$} & {$k-k_{S_8}$} \\
     \midrule
     $S_8$ & 0.62736 & {-} \\
     Diffusion-$P_1$ & 0.60890 & -0.01846 \\
@@ -282,22 +298,20 @@ analytical flux solution or a highly accurate numerical solution calculated usin
 transport methods. While existing workflows for diffusion-based methods already require
 computationally intensive neutron transport simulations for group constant generation, this
 preprocessing step incurs a fixed computational cost through
-a fixed number of neutron transport simulations. Compared to \glspl{SVDC}, $P_1$-based diffusion
+a series of neutron transport simulations. Compared to \glspl{SVDC}, $P_1$-based diffusion
 coefficients behave much more like intrinsic material properties as their definitions are largely
 tied to material cross sections. Variations in $P_1$-based diffusion coefficients primarily arise
 from changes in the neutron energy spectrum with no direct contribution from proximity to material
 interfaces (geometrical heterogeneity). $P_1$-based diffusion coefficients may be generated at
-various reactor temperatures and interpolated to model the temperature dependence.
-
-On the other
-hand, the nature of \glspl{SVDC} as empirical, pointwise corrections for the diffusion equation
+various reactor temperatures and interpolated to model the temperature dependence. Conversely, the
+nature of \glspl{SVDC} as empirical, pointwise corrections for the diffusion equation
 makes it highly dependent on the neutron flux gradient and susceptible to more significant
 variations than region-wide estimates for $P_1$-based diffusion coefficients. \glspl{SVDC} will
 likely need to be dynamically generated at every timestep, such as with a two-level iterative
-scheme consisting of a high-level $S_N$ neutron transport calculation and a low-level neutron
+scheme consisting of a $S_N$ neutron transport calculation and a neutron
 diffusion calculation. In this case, the required number of neutron transport simulations scales
 with the number of reactor simulations. Therefore, \gls{SVDC} generation cannot be adopted as a
-one-off preprocessing step.
+one-off preprocessing step. 
 
 Another significant challenge of \glspl{SVDC} and the high-order empirical diffusion coefficients
 involves their resolution near neutron flux peaks. The neutron current and flux gradient values in
@@ -306,8 +320,8 @@ resulting in diffusion coefficient values tending to positive or negative infini
 flux gradient is close to zero. Pounders \& Rahnema avoided this issue by using
 larger mesh sizes to calculate their empirical diffusion coefficients. However, their
 remedy contradicts mesh convergence requirements and would worsen flux accuracy in regions with
-steep, non-linear fluxes, such as near control rods. I plan to investigate and find an alternative
-solution for this issue in implementing \glspl{SVDC} in the proposed work.
+steep, non-linear fluxes, such as near control rods. I will discuss my approach for investigating
+and finding an alternative solution for this issue in Section \ref{sec:devel-hybrid}.
 
 \subsection{Hybrid $S_N$-Diffusion Method} \label{sec:hybrid-method}
 
@@ -317,38 +331,49 @@ and its vicinity. Consequently, the hybrid $S_N$-diffusion method can retain acc
 and current estimates around the control rod region from the $S_N$ method while making significant
 computational cost savings by treating most of the reactor geometry with the neutron diffusion
 method alone. Henceforth, I will refer to the $S_N$ calculation on the correction
-region as the $S_N$ \textit{subproblem} or \textit{sub-solver}. I define the entire problem
-domain and the correction region as $\Omega^d_0$ and $\Omega^d_1$, respectively, where
-$\Omega^d_1\subseteq\Omega^d_0$. The algorithm for the hybrid $S_N$-diffusion method is as follows:
+region as the $S_N$ \textit{subproblem} or \textit{sub-solver}. I define the full problem
+domain and the correction region as $V_0$ and $V_1$, respectively, where
+$V_1\subseteq V_0$. The algorithm for the hybrid $S_N$-diffusion method is as follows:
 %
 \begin{enumerate}
-  \item Start with an initial neutron diffusion calculation in $\Omega^d_0$ with conventional
+  \item Start with an initial neutron diffusion calculation in $V_0$ with conventional
     $P_1$-based diffusion coefficients and other standard group constants (e.g., neutron cross
     sections).
-  \item Use the neutron diffusion flux estimates in $\Omega^d_1$ and current estimates along
-    $\partial \Omega^d_1$ as initial and boundary conditions for the $S_N$ sub-solver.
-  \item With the $S_N$ sub-solver, calculate an improved neutron flux solution in $\Omega^d_1$,
+  \item Use the neutron diffusion flux estimates in $V_1$ and current estimates along
+    $\partial V_1$ as initial and boundary conditions for the $S_N$ sub-solver.
+  \item With the $S_N$ sub-solver, calculate an improved neutron flux solution in $V_1$,
     which contains the control rod region and its immediate vicinity.
   \item Calculate \glspl{SVDC} using the $S_N$ flux solution and Eq. \ref{eq:svdc}.
   \item Pass the \glspl{SVDC} to the neutron diffusion solver to replace the conventional
-    $P_1$ diffusion coefficients within the $\Omega^d_1$ while continuing to use $P_1$-based
-    diffusion coefficients in the rest of $\Omega^d_0$.
+    $P_1$ diffusion coefficients within the $V_1$ while continuing to use $P_1$-based
+    diffusion coefficients in the rest of $V_0$.
   \item Start the next iteration by running neutron diffusion calculation with the \glspl{SVDC}
-    replacing $P_1$ diffusion coefficients in part or all of $\Omega^d_1$.
+    replacing $P_1$ diffusion coefficients in part or all of $V_1$.
   \item Repeat Steps 2-6 until convergence is reached by meeting pre-defined convergence tolerance
     values.
 \end{enumerate}
 
+%\begin{figure}[htb!]
+%  \tikzstyle{every node}=[font=\small]
+%  \centering
+%  \begin{tikzpicture}
+%    \node (1) [process] {\textbf{Initial neutron diffusion calculation in $V_0$}};
+%    \node (2) [object, below of=1] {$\phi_0$, $J_0$};
+%    \node (3) [process] 
+%  \end{tikzpicture}
+%\end{figure}
+
 \subsubsection{$S_N$ Subsolver Boundary Conditions \& Buffer Zone}
 
 The main challenge lies in determining appropriate boundary conditions for the $S_N$ subproblem.
-Given that we want to limit the coverage of $\Omega^d_1$ to the control rod region and its
-immediate vicinity, $\Omega^d_1$ should be small, and the boundaries $\partial\Omega^d_1$ should
-lie well within $\Omega^d_0$. Crucially, there is currently no feasible method of generating
+Given that we want to limit the coverage of $V_1$ to the control rod region and its
+immediate vicinity, $V_1$ should be sufficiently smaller than $V_0$, but large enough to capture
+anisotropies in the flux due to the control rod. As a consequence, the boundaries $\partial V_1$ 
+lie well within $V_0$. Crucially, there is currently no feasible method of generating
 accurate boundary fluxes for an $S_N$ solver from a neutron diffusion flux solution. In 1-D, the
 standard one-group $S_N$ method requires N/2
 incoming boundary flux parameters per boundary mesh point for the N/2 neutron angular fluxes
-flowing into $\Omega^d_1$. The neutron diffusion method can produce at most one independent
+flowing into $V_1$. The neutron diffusion method can produce at most one independent
 incoming flux parameter per mesh point; this parameter is the neutron forward/backward current in
 the $P_1$ approximation defined as:
 %
@@ -360,7 +385,9 @@ the $P_1$ approximation defined as:
 %
 Without additional information, the next best estimate is a uniformly
 isotropic transmission of angular flux, i.e., all N/2 incoming angular fluxes $\Psi$ are equal in
-magnitude. This concept is similar to the white boundary condition, which describes the uniformly
+magnitude. This is a good assumption far from the control rod, but will not produce accurate
+fluxes if the boundary is too close to the control rod. This type of boundary condition is similar
+to the white boundary condition, which describes the uniformly
 isotropic reflection of particles at a boundary, except this case involves transmission rather than
 reflection. Isotropic flux transmission at $x$ can be expressed mathematically for forward angular
 fluxes as:
@@ -381,33 +408,34 @@ and backward angular fluxes as:
   \Psi(x,\mu_n) =& J_{-}(x)\Bigg/\sum^{N/2}_{n=1}w_n\mu_n \label{eq:sn-psi-j}
 \end{align}
 %
-These boundary conditions for the $S_N$ sub-solver will generally yield inaccurate flux
-$\phi$ distributions since realistic reactor systems invariably do not exhibit perfectly isotropic
-neutron fluxes. However, the influence of boundary conditions on $J$ and $\frac{d\phi}{dx}$ does
-not extend far from the boundaries in optically thick media. By taking the ratio of $J$
-to $\frac{d\phi}{dx}$ to calculate \glspl{SVDC}, I eliminate any errors from $\phi$ since both
-$J$ and $\frac{d\phi}{dx}$ scale approximately linearly with $\phi$. The \glspl{SVDC}
-generated with the $S_N$ sub-solver within $\Omega^d_1$ will be accurate everywhere except near
-$\partial\Omega^d_1$. $\Omega^d_1$ must be large enough to provide transport corrections
+These boundary conditions for the $S_N$ sub-solver will generally yield some deviations in the
+$\phi$ distributions since neutron fluxes in realistic reactor systems are at least slightly
+anisotropic in most of the domain. However, in my preliminary investigations, the influence of
+boundary conditions on the ratio $J$ and $\frac{d\phi}{dx}$ does not extend far from the boundaries
+in optically thick media due to the strong scattering (e.g., graphite or molten salt) or
+absorption effects (e.g., control rod). In the bulk regions far from the boundaries, the
+scattering and absorption effects have the most significant influence on the flux. I observed that
+the \glspl{SVDC} generated with the $S_N$ sub-solver within $V_1$ were accurate everywhere except
+near $\partial V_1$. Therefore, $V_1$ must be large enough to provide transport corrections
 through the \glspl{SVDC} and accommodate inaccurate \glspl{SVDC} near
-$\partial\Omega^d_1$. The inaccurate \glspl{SVDC} should then be discarded in favor of using
-$P_1$-based diffusion coefficients as in the rest of $\Omega^d_0$ not covered by $\Omega^d_0$. The
+$\partial V_1$. The inaccurate \glspl{SVDC} should then be discarded in favor of using
+$P_1$-based diffusion coefficients as in the rest of $V_0$ not covered by $V_0$. The
 subsequent neutron diffusion calculation with this mix of \glspl{SVDC} and $P_1$-based diffusion
 coefficients should provide more accurate $\phi$ and $k$ estimates than a conventional
 neutron diffusion calculation.
 
 %To resolve this issue, I posit the following hypothesis: \textit{If there exists a highly
-%neutron-absorbing control rod region within the $S_N$ subproblem domain $\Omega^d_1$ and the $S_N$
-%subproblem boundary $\partial\Omega^d_1$ lies several neutron mean free paths away from this
+%neutron-absorbing control rod region within the $S_N$ subproblem domain $V_1$ and the $S_N$
+%subproblem boundary $\partial V_1$ lies several neutron mean free paths away from this
 %region, the \gls{SVDC} values calculated near the control rod region (using the $S_N$ sub-solver
 %with isotropic hemisphere boundary conditions) will tend to the actual flux gradient solution
-%(using a reference $S_N$ calculation across the entire problem domain $\Omega^d$).} In other words,
+%(using a reference $S_N$ calculation across the entire problem domain $V$).} In other words,
 %suboptimal boundary conditions may induce inaccurate \gls{SVDC} values near the $\partial
-%\Omega^d_1$ subdomain boundaries, but the \gls{SVDC} values further from $\partial\Omega^d_1$ are
+%V_1$ subdomain boundaries, but the \gls{SVDC} values further from $\partial V_1$ are
 %accurate and very weakly dependent on the boundary conditions. These inaccurate \gls{SVDC} values
-%close to $\Omega^d_1$ may be discarded in favor of the default $P_1$-based diffusion coefficients.
+%close to $V_1$ may be discarded in favor of the default $P_1$-based diffusion coefficients.
 %I will refer to the region containing these discarded values as the \textit{dead zone} or
-%$\Omega^d_2$, where $\Omega^d_2 \subset \Omega^d_1 \subseteq \Omega^d_0$.
+%$V_2$, where $V_2 \subset V_1 \subseteq V_0$.
 
 \subsubsection{Hybrid Method Verification with Case 0}
 
@@ -420,12 +448,12 @@ In Section \ref{sec:svdc}, the \gls{SVDC} generated from the reference $S_8$ cal
 significant spatial variations attributed to the presence of the control rod, as shown in Fig
 \ref{fig:c0diffcoef}. The group 1 and 2 \gls{SVDC} values approach asymptotic values near the
 corresponding group 1 and 2 $P_1$-based diffusion coefficient values near $x=15$ cm and $x=5$ cm,
-respectively. Therefore, the $\Omega^d_1$ should, at minimum, cover the domain between $x=0$ cm and
-$x=15$ cm. Allowing for a buffer region for inaccurate \glspl{SVDC} near $\partial\Omega^d_1$, I
-defined $\Omega^d_1$ to span from $x=0$ cm to $x=17.5$ cm.
+respectively. Therefore, the $V_1$ should, at minimum, cover the domain between $x=0$ cm and
+$x=15$ cm. Allowing for a buffer region for inaccurate \glspl{SVDC} near $\partial V_1$, I
+defined $V_1$ to span from $x=0$ cm to $x=17.5$ cm.
 
 I set up the hybrid method to automatically determine the cutoff point, beyond which \glspl{SVDC}
-in $\Omega^d_1$ are discarded, based on the \gls{SVDC} distribution generated in every iteration.
+in $V_1$ are discarded, based on the \gls{SVDC} distribution generated in every iteration.
 Starting from the interface between the control rod and fuel-graphite region, the algorithm sweeps
 rightward for the point at which the group-wise \gls{SVDC} distribution approaches within 1\% of
 the $P_1$-based diffusion coefficient value. This point serves as the cutoff point. The hybrid
@@ -466,12 +494,12 @@ group 1 and $x=3.390$ cm to $x=17.500$ cm for group 2, in which the hybrid metho
 $P_1$-based diffusion coefficients. Given that the reference \gls{SVDC} values will generally not
 be known in real-world problems, the hybrid method relies on finding the intersection point of the
 \gls{SVDC} and $P_1$ diffusion coefficient values to determine the buffer region cutoff point. The
-size of $\Omega^d_1$ will also have to be based on where this intersection point lies.
+size of $V_1$ will also have to be based on where this intersection point lies.
 Another important consideration is the fact that the neutron flux gradient will be discontinuous if
 the \gls{SVDC} and $P_1$ diffusion coefficient values are too far apart in magnitude at the buffer
 region cutoff point. A flux gradient discontinuity in a homogeneous bulk region is non-physical and
 unacceptable. In Section \ref{sec:prelim-results}, I study \gls{SVDC} distribution trends
-in more heterogeneous systems and their implications on determining the size of $\Omega^d_1$ and
+in more heterogeneous systems and their implications on determining the size of $V_1$ and
 the cutoff point.
 %
 \begin{figure}[htb!]
@@ -519,19 +547,21 @@ matches the $S_8$ and Diffusion-\gls{SVDC} flux distributions well. The $k$ esti
 hybrid method is 0.62774, which is only 0.00024 higher than the Diffusion-\gls{SVDC} method, and
 0.00038 higher than the $S_8$ method.
 
-In Case 0, $\Omega^d_1$ covers more than half of $\Omega^d_0$ due to the control rod region being
+In Case 0, $V_1$ covers more than half of $V_0$ due to the control rod region being
 the only significant source of influence on the neutron flux distribution in the
 otherwise homogeneous system with reflective boundary conditions. I chose Case 0 as a simple test
 case to aid in introducing the hybrid $S_N$-diffusion method. In Section \ref{sec:prelim-results},
 I present more results with the hybrid method on more complicated geometries containing neutron
 reflector, air, and heterogeneous fuel-graphite lattice regions and vacuum boundary conditions. In
-these other test cases, the hybrid method yields smaller $\Omega^d_1$-to-$\Omega^d_0$ ratios,
+these other test cases, the hybrid method yields smaller $V_1$-to-$V_0$ ratios,
 reducing computational costs from running $S_N$ calculations over a relatively smaller
 region.
 
 \section{Numerical Implementation} \label{sec:implementation}
 
-Before going into the results, this section presents numerical implementation details of group
+In Section \ref{sec:hybrid-theory}, I presented the theoretical basis for the hybrid
+$S_N$-diffusion method and demonstrated the method on a simple problem. Now I will discuss
+numerical implementation details of group
 constant data processing and the neutron diffusion, $S_N$ neutron transport, and hybrid
 $S_N$-diffusion solvers. I implemented all numerical solvers and analysis scripts in the Python
 programming language. First, I will discuss the material group constant data generation and
@@ -542,20 +572,20 @@ $S_N$-diffusion method.
 \subsection{Group Constant Data Generation}
 
 The group constants required by either or both neutron diffusion and $S_N$ neutron transport
-methods are
+methods are:
 %
 \begin{itemize}
-  \item $\Sigma_{t,g}$: Macroscopic total cross section in group $g$
-  \item $\Sigma_{r,g}$: Macroscopic removal cross section in group $g$
-  \item $\Sigma_s^{g'\rightarrow g}$: Macroscopic group-to-group scattering cross section matrix
+  \item $\Sigma_{t,g}$: Macroscopic total cross section in group $g$,
+  \item $\Sigma_{r,g}$: Macroscopic removal cross section in group $g$,
+  \item $\Sigma_s^{g'\rightarrow g}$: Macroscopic group-to-group scattering cross section matrix,
   \item $\Sigma_{s,l}^{g'\rightarrow g}$: $l$-th Legendre moment of the macroscopic
-    group-to-group scattering cross section matrix
+    group-to-group scattering cross section matrix,
   \item $\Sigma_{sp,l}^{g'\rightarrow g}$: $l$-th Legendre moment of the macroscopic
-    group-to-group scattering production cross section matrix
-  \item $D_g$: $P_1$-based diffusion coefficient in group $g$
+    group-to-group scattering production cross section matrix,
+  \item $D_g$: $P_1$-based diffusion coefficient in group $g$,
   \item $\nu\Sigma_{f,g}$: Product of the average number of neutrons produced per fission and the
-    macroscopic fission cross section in group $g$
-  \item $\chi_g$: Neutron fission spectrum in group $g$
+    macroscopic fission cross section in group $g$,
+  \item $\chi_g$: Neutron fission spectrum in group $g$.
 \end{itemize}
 %
 These group constants are generated using OpenMC's multigroup cross section generation capability
@@ -583,15 +613,15 @@ OpenMC uses the $P_1$ flux-limited formulation \cite{pomraning_flux-limited_1984
 $D_g$ as follows
 %
 \begin{align}
-  D_g =& \frac{1}{3\Sigma_{tr,g}}
+  D_g =& \frac{1}{3\Sigma_{tr,g}},
   \shortintertext{where}
   \Sigma_{tr,g} =& \frac{\langle\Sigma_{t,g}\phi_g\rangle-\langle\Sigma_{s1,g}\phi_g\rangle}
-  {\langle\phi_g\rangle} \nonumber \\
+  {\langle\phi_g\rangle}, \nonumber \\
   \langle\Sigma_{t,g}\phi_g\rangle =& \int_{r\in V}dr \int_{4\pi}d\Omega\int^{E_{g-1}}_{E_g}dE\
-  \Sigma_{t,g}(r,E)\Psi(r,E,\Omega) \nonumber \\
+  \Sigma_{t,g}(r,E)\Psi(r,E,\Omega), \nonumber \\
   \langle\Sigma_{s1,g}\phi_g\rangle =& \int_{r\in V}dr \int_{4\pi}d\Omega\int^{E_{g-1}}_{E_g}dE
   \int_{4\pi}d\Omega'\int^{\infty}_0dE'\int^1_{-1}d\mu\ \mu\Sigma_s(r,E'\rightarrow E,\Omega'\cdot
-  \Omega)\phi(r,E',\Omega') \nonumber \\
+  \Omega)\phi(r,E',\Omega'), \nonumber \\
   \langle \phi \rangle =& \int_{r\in V}dr\int_{4\pi}d\Omega\int^{E_{g-1}}_{E_g}dE\ \Psi(r,E,\Omega)
   .\nonumber
 \end{align}
@@ -698,15 +728,16 @@ $k^m$ and $\overline{\phi}^m$ denote estimates of $k$ and $\overline{\phi}$ afte
 iteration. Matrix $\bm{A}$ is a primarily tridiagonal matrix with at most $G-1$ off-diagonal terms
 from the fourth term in Eq. \ref{eq:diff-fd}. Thus, $\bm{A}$ is initialized as a sparse matrix to
 take advantage of the computationally efficient sparse matrix solver functions from the
-\texttt{sparse} class of the \texttt{SciPy} Python library for scientific and technical computing.
-Matrix $\bm{B}$
+\texttt{sparse} class of the \texttt{SciPy} \cite{virtanen_scipy_2020} Python library for
+scientific and technical computing. Matrix $\bm{B}$
 is never initialized explicitly as a matrix. Instead, the vector $\bm{b}=\bm{B\overline{\phi}}$ is
 updated directly in every iteration. In this system of equations, $|\bm{b}|$ corresponds to the
 total number of fission neutrons produced in the system for a given $\bm{\overline{\phi}}$. This
 quantity is calculated using the \texttt{trapezoid} numerical integration function from
-\texttt{SciPy} to estimate the integral value of $\nu\Sigma_{g,f}\phi_{g}$ in $x$ from the discrete
-flux values in $\bm{x}$. Finally, the final $\phi_{g,i}$ is normalized by a factor of $|\bm{b}|/k$
-(no. of source neutrons) to obtain the neutron scalar flux per source neutron.
+\texttt{SciPy} to estimate the integral value of the source term, $\nu\Sigma_{g,f}\phi_{g}$, in $x$
+from the discrete flux values in $\bm{x}$. Finally, the final $\phi_{g,i}$ is normalized by a
+factor of $|\bm{b}|/k$ (no. of source neutrons) to obtain the neutron scalar flux per source
+neutron.
 
 \subsection{$S_N$ Neutron Transport Method}
 
@@ -812,8 +843,9 @@ pair of indexes $g$ and $n$.
 \subsection{Hybrid $S_N$-Diffusion Method}
 
 Without loss of generality, consider a 1-D system symmetric about the left boundary at $x_0=0$ cm.
-Like Case 0, the control rod region is the left-most region, followed by other regions. The $S_N$
-subproblem domain $\Omega^d_1$ is bounded by $x_0$ and $x_j$ for some $x_j$
+In this case, as with Case 0, the control rod region is the left-most region, followed by other
+regions. The $S_N$ subproblem domain $V_1$, containing the control rod and some region beyond it,
+is bounded by $x_0$ and $x_j$ for some $x_j$
 located several mean free paths to the right of the control rod region as governed by the relevant
 discussion in Section \ref{sec:hybrid-method}.
 
@@ -821,8 +853,8 @@ Excluding the initial neutron diffusion calculation to initialize $k^0$ and $\ph
 iteration in the hybrid method consists of one $S_N$ neutron transport calculation and one neutron
 diffusion calculation. The $\phi$ estimates from these $S_N$ transport and neutron diffusion
 calculations are labeled as $\phi^{m+\sfrac{1}{2}}$ and $\phi^{m+1}$ during the
-$(m+1)$-th outer iteration. $\phi^{m+\sfrac{1}{2}}$ spans $\Omega^d_1$ while $\phi^{m+1}$ spans
-the entire domain $\Omega^d_0$.
+$(m+1)$-th outer iteration. $\phi^{m+\sfrac{1}{2}}$ spans $V_1$ while $\phi^{m+1}$ spans
+the entire domain $V_0$.
 
 For the $S_N$ subproblem boundary conditions, we discretize Eqs. \ref{eq:p1-j} and
 \ref{eq:sn-psi-j} as follows
@@ -864,15 +896,15 @@ The hybrid $S_N$-diffusion algorithm is as follows
 %
 \begin{align}
   \shortintertext{1. Initialize $k^0$ and $\phi^0$ with an initial neutron diffusion calculation on
-  $\Omega^d_0$}
+  $V_0$}
   \shortintertext{2. Generate estimates for $\Psi_{g,j,n}$ at $x_j$ for the $S_N$ transport
   calculation boundary conditions using Eq. \ref{eq:sn-bc}}
   \shortintertext{3. Calculate $\phi^{m+\sfrac{1}{2}}$ with the $S_N$ transport sub-solver on
-  $\Omega^d_1$}
+  $V_1$}
   \shortintertext{4. Generate \glspl{SVDC} with $\phi^{m+\sfrac{1}{2}}$ and $J^{m+\sfrac{1}{2}}$
   using Eq. \ref{eq:svdc-num}}
   \shortintertext{5. Calculate $\phi^{m+1}$ with the newly generated \glspl{SVDC} and the neutron
-  diffusion solver on $\Omega^d_0$}
+  diffusion solver on $V_0$}
   \shortintertext{6. Check whether convergence is reached}
   \frac{|\bm{\overline{\phi}}^m-\bm{\overline{\phi}}^{m-1}|}{|\bm{\overline{\phi}}^m|} <& \
   tol_{\bm{\overline{\phi}}} \\
@@ -886,14 +918,14 @@ $\phi^m$ from the neutron diffusion calculation as initial conditions for the $S
 calculation in the $(m+1)$-th iteration helps to reduce the number of transport
 sweeps required significantly.
 
-The $S_N$ sub-solver only covers $\Omega^d_1$, so it does not calculate an independent $k$
+The $S_N$ sub-solver only covers $V_1$, so it does not calculate an independent $k$
 estimate. Instead, the $k^m$ from the neutron diffusion calculation scales the fission neutron
 source term in the $S_N$ sub-solver.
 
 \section{Description of 1-D Test Cases} \label{sec:test-case}
 
 I designed ten 1-D test cases with increasing complexity to test the performance of the hybrid
-$S_N$-Diffusion method in response to various geometrical features. The latter cases resemble the
+$S_N$-diffusion method in response to various geometrical features. The last two cases resemble the
 reference \gls{MSRE} design \cite{robertson_msre_1965}, which has centrally located control rods
 and air-filled rod guide tubes. Figure \ref{fig:case-geom} shows the geometries of Cases 0 to
 5b. All geometries have reflective boundary conditions at $x=0$ cm to reduce computational costs by
@@ -911,6 +943,11 @@ homogeneous fuel-graphite mixture in Cases 1a and 2b with explicit fuel-graphite
 in Figure \ref{fig:case-geom}. Case 5a introduces an air gap between the control rod and the
 fuel-graphite lattice regions. Lastly, Case 5b replaces the control rod region with an extended
 air gap region to provide a base case for the control rod worth calculations relative to Case 5a.
+
+The cases that do not contain control rod regions (1a, 1b, 4a, 4b, and 5b) serve as reference cases
+to quantify other sources of discrepancies in the neutron diffusion solution (e.g., geometrical
+heterogeneities, vacuum boundary condition approximation for neutron diffusion) and highlight how
+much the neutron diffusion method underperforms when the problem includes control rod regions.
 
 \begin{figure}[htb!]
   \centering
@@ -955,8 +992,9 @@ air gap region to provide a base case for the control rod worth calculations rel
 %  \label{table:c0k}
 %\end{table}
 
-I ran all cases with four neutron energy groups bounded at $E=10^{-5}, 10^0, 10^2, 10^5, 10^8$
-eV. Figures \ref{fig:spectrum} and \ref{fig:reaction} show how this energy group structure
+I ran all cases with four neutron energy groups. The list of energy group bounds are:
+$E=[10^{-5}, 10^0, 10^2, 10^5, 10^8]$ eV. Figures \ref{fig:spectrum} and \ref{fig:reaction} show
+how this energy group structure
 partitions the neutron flux energy spectrum and neutron reaction rates. For this preliminary work,
 the four-group structure is sufficient for showing different scattering and absorption trends of
 slow, intermediate, and fast neutrons. I also ran all cases on OpenMC to generate the required
@@ -1037,7 +1075,7 @@ The outer iterations
 converge rapidly, so a $tol$ value of $10^{-3}$ is sufficient for convergence. The $\phi$ and $k$
 relative error norms ($\epsilon$) in all test cases decreased by two orders of magnitude on
 every outer iteration. For instance, Table \ref{table:epsilon} shows the $\epsilon$ values from the
-hybrid method after every outer iteration for Case 5a. The $epsilon$ values fall below
+hybrid method after every outer iteration for Case 5a. The $\epsilon$ values fall below
 $10^{-5}$ by the 3rd and 4th iterations.
 
 \begin{table}[tb!]
@@ -1061,16 +1099,17 @@ $10^{-5}$ by the 3rd and 4th iterations.
 
 \section{Results \& Discussion} \label{sec:prelim-results}
 
-In this section, I will compare neutronics parameters for all test cases calculated from
+In this section, I compare neutronics parameters for all test cases calculated from
 the OpenMC and deterministic methods. I refer to the OpenMC calculations under continuous-energy
-and multigroup modes as OpenMC-CE and OpenMC-MG, respectively.
+and multigroup modes as OpenMC-CE and OpenMC-MG, respectively. I did not apply the hybrid method to
+Cases 1a, 1b, 4a, 4b, and 5b, which serve as reference cases for how much the neutron diffusion
+method underperforms when control rod regions are present in the other cases.
 
 \subsection{Comparison of Multiplication factors, $k$}
 
 Tables \ref{table:ck1} and \ref{table:ck2} show all test case $k$ estimates from the OpenMC and
 deterministic methods. The tables also include statistical uncertainties for the OpenMC
-$k$ estimates. I did not apply the hybrid method for cases that do not contain control rod
-regions. 
+$k$ estimates.
 
 All five methods generally show reasonable agreement within each test case. The differences between
 the OpenMC-CE and OpenMC-MG $k$ estimates vary significantly from 0.00018 in Case 1a to 0.01622 in
@@ -1209,8 +1248,7 @@ effectively improves the $k$ estimate to -0.00162 of the
 OpenMC-MG method for Case 3b. The hybrid method also appreciably improved the accuracy in all
 other applied cases.
 
-The control rod worth is the most crucial parameter for assessing the suitability of the
-hybrid method for modeling control rods. In a time-dependent multiphysics simulation involving rod
+In a time-dependent multiphysics simulation involving rod
 insertion or withdrawal, the control rod worth determines the change in reactivity and the
 subsequent effects on the neutron flux and temperature distribution. I calculated the control rod
 worth by taking the change in reactivity $\rho$ between Case 5a and 5b for all five methods, as
@@ -1583,8 +1621,8 @@ increases in dimensionality for 2-D and 3-D systems.
 
 \section{Summary} \label{sec:hybrid-summary}
 
-In this chapter, I presented the theoretical basis for the hybrid $S_N$-Diffusion method, a novel
-two-level method for improving the neutron diffusion method for neutronics simulations of reactor
+In this chapter, I presented the theoretical basis for a hybrid $S_N$-diffusion method, a novel
+method for improving the neutron diffusion method for neutronics simulations of reactor
 systems containing highly neutron-absorbing regions. The hybrid method relies on \glspl{SVDC}
 derived from reference flux solutions of $S_N$ calculations to provide transport
 corrections to the neutron diffusion method. The hybrid method is less computationally intensive
@@ -1610,4 +1648,3 @@ hybrid method had better accuracy in more homogeneous systems largely due to the
 transport correction regions through \glspl{SVDC}. Further work
 is needed to extend and verify the hybrid method to 2-D and 3-D neutronics simulations and to
 create a robust solution for determining \glspl{SVDC} around neutron flux peaks and troughs. 
-
