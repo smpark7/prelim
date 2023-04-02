@@ -353,15 +353,33 @@ $V_1\subseteq V_0$. The algorithm for the hybrid $S_N$-diffusion method is as fo
     values.
 \end{enumerate}
 
-%\begin{figure}[htb!]
-%  \tikzstyle{every node}=[font=\small]
-%  \centering
-%  \begin{tikzpicture}
-%    \node (1) [process] {\textbf{Initial neutron diffusion calculation in $V_0$}};
-%    \node (2) [object, below of=1] {$\phi_0$, $J_0$};
-%    \node (3) [process] 
-%  \end{tikzpicture}
-%\end{figure}
+\begin{figure}[htb!]
+  \tikzstyle{every node}=[font=\small]
+  \centering
+  \begin{tikzpicture}
+    \node (1) [object] {\textbf{Perform initial neutron\\diffusion calculation in $\bm{V_0}$}};
+    \node (2) [process, below of=1, yshift=-1.8cm]
+      {\textbf{Calculate incident flux boundary conditions along\\$\bm{\partial V_1}$ for $S_N$ calculation}};
+    \node (3) [process, below of=2, yshift=-1.5cm]
+      {\textbf{Perform $\bm{S_N}$ calculation\\in $\bm{V_1}$ for $\bm{\phi^{tr}_i}$ \& $\bm{J^{tr}_i}$}};
+    \node (4) [process, below of=3, yshift=-1.5cm]
+      {\textbf{Calculate $\bm{D^s_i}$ using Eq. \ref{eq:svdc}}};
+    \node (5) [process, below of=4, yshift = -1.5cm]
+      {\textbf{Perform neutron diffusion\\calculation in $\bm{V_0}$ using $\bm{D^s_i}$ in $\bm{V_1}$}};
+    \node (6) [decision, below of=5, yshift = -1.8cm]
+      {\textbf{Convergence\\check}};
+    \node (7) [object, below of=6, yshift = -2cm]
+      {\textbf{Final $\bm{\phi}$ and $\bm{k}$\\solutions obtained}};
+    \draw [arrow] (1) -- node[anchor=east] {$\bm{\phi_0, J_0}$} (2);
+    \draw [arrow] (2) -- node[anchor=east] {$\bm{\Psi^-}$ \textbf{along} $\bm{\partial V_1}$} (3);
+    \draw [arrow] (3) -- node[anchor=east] {$\bm{\phi^{tr}_i, J^{tr}_i}$} (4);
+    \draw [arrow] (4) -- node[anchor=east] {$\bm{D^s_i}$} (5);
+    \draw [arrow] (5) -- node[anchor=east] {$\bm{\phi_i, J_i$}} (6);
+    \draw [arrow] (6) -- node[anchor=east] {\textbf{Yes}} (7);
+    \draw [arrow] (6) -- ([shift={(2cm,0cm)}]6.east)-- node[anchor=west] {\textbf{No}} ([shift={(0.5cm,0cm)}]2.east)--(2);
+  \end{tikzpicture}
+  \caption{Algorithm flowchart for the hybrid $S_N$-diffusion method.}
+\end{figure}
 
 \subsubsection{$S_N$ Subsolver Boundary Conditions \& Buffer Zone}
 
@@ -1014,7 +1032,7 @@ section simplifications. Each Monte Carlo simulation ran on 25 inactive and 125 
   $S_N$-diffusion methods. }
   \begin{tabular}{c c c c c c}
     \toprule
-    Variable & OpenMC-CE & OpenMC-MG & $S_N$ Transport & Diffusion & hybrid \\
+    Variable & OpenMC-CE & OpenMC-MG & $S_N$ Transport & Diffusion & Hybrid \\
     \midrule
     Position, $\bm{r}$ & Continuous & Continuous & Discrete & Discrete & Discrete \\
     Direction of travel, $\bm{\hat{\Omega}}$ & Continuous & Continuous & Discrete & N/A & N/A \\
