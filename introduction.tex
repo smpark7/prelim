@@ -11,12 +11,12 @@ moderators (e.g., graphite, heavy water, or molten sodium hydroxide).
 	\centering
 	\includegraphics[width=.7\columnwidth]{msr}
 	\caption{Schematic diagram of the \gls{MSR} concept. Retrieved from
-	\cite{doe_technology_2002}.}
+	\cite{u.s._doe_nuclear_energy_research_advisory_committee_technology_2002}.}
 	\label{fig:msr}
 \end{figure}
 
-The \gls{MSR} is one of six advanced reactor designs selected at the \gls{GIF} for improved safety,
-sustainability, efficiency, and cost over the current generation of predominantly \glspl{LWR}.
+The \gls{MSR} is one of six advanced reactor designs selected for improved safety, sustainability,
+efficiency, and cost over the current generation of predominantly \glspl{LWR} at the \gls{GIF}.
 Due to the high thermal expansion coefficient, \glspl{MSR} possess an inherently robust
 safety feature in the strong negative fuel temperature coefficient of
 reactivity \cite{elsheikh_safety_2013}. This reactivity coefficient limits the
@@ -35,15 +35,15 @@ Some \glspl{MSR}, like the \gls{MSBR} or the \gls{MSFR}, can
 incorporate the thorium fuel cycle for improved sustainability arising from the
 use of abundant natural thorium resources and reduced transuranic waste
 \cite{heuer_towards_2014}. The latter consequence also reduces costs
-associated with long-term nuclear waste storage. In addition, operating
-near atmospheric pressures eliminates the need for a thick pressure
-vessel and drives down construction costs, while online fuel reprocessing
-reduces reactor downtime during reactor operation \cite{dolan_1_2017}.
-We can make further economic arguments supporting \glspl{MSR} in the context of the
+associated with long-term nuclear waste storage. Online fuel reprocessing raises the capacity
+factor by reducing reactor downtime during reactor operation \cite{dolan_1_2017}.
+Molten salt coolant loops can operate at near atmospheric pressures which eliminates the need for a
+thick pressure vessel and drives down construction costs. We can make further economic arguments
+supporting \glspl{MSR} in the context of the
 carbon-constrained future envisioned in the \gls{IEA}'s \gls{NZE} roadmap
 \cite{iea_net_2021}. The roadmap for minimizing carbon emissions requires solar photovoltaic- and
-wind-dominated energy markets, which can generate highly variable electricity generation. The
-resulting volatility in electricity prices
+wind-dominated energy markets, which can results in highly variable and non-dispatchable
+electricity generation. The resulting volatility in electricity prices
 encourages the construction of heat storage and peak power
 production plants. At the same time, demand for carbon-neutral
 fuel will rise as electrification is economically unfeasible
@@ -52,10 +52,13 @@ energy-dense fuels for propulsion. As described by Forsberg
 \cite{forsberg_market_2020}, the most cost-efficient options for heat storage, peak power
 production, and carbon-neutral fuel production all require high-temperature heat.
 This requirement favors \glspl{MSR} which can deliver heat at higher average
-temperatures than \glspl{LWR} and other high-temperature advanced reactors.
-\glspl{MSR} may also possess an edge over other high-temperature advanced reactors from the
-synergistic benefits of siting molten salt heat storage facilities near \gls{MSR} power generation
-facilities.
+temperatures than \glspl{LWR} and \glspl{SFR}.
+
+Significant hurdles still stand in the way of commercial \gls{MSR} deployment \cite{dolan_27_2017}.
+Major technological challenges include the need for further research on \gls{MSR} safety analysis,
+irradiation and corrosion behavior of \gls{MSR} structural components, fission product tracking
+and processing, \gls{MSR} nuclear safeguards measures, and the development of \gls{MSR} hydraulic
+and heat exchanger components.
 
 \subsection{Past \& Present \gls{MSR} Research \& Development}
 
@@ -71,7 +74,7 @@ graphite channels and a LiF-BeF$_2$-ZrF$_4$-UF$_4$ fuel salt mixture
 \cite{haubenreich_experience_1970}. In addition to other operational achievements, the
 \gls{MSRE} became the first reactor to run on $^{233}$U fuel bred from $^{232}$Th. Building on
 their experience with the \gls{MSRE}, \gls{ORNL} proposed a new program for constructing and
-operating a demonstration reactor based on the \gls{MSBR} concept they had developed
+operating a demonstration reactor based on the \gls{MSBR} concept, which they had also developed
 \cite{macpherson_molten_1985}. The \gls{MSBR} is a thermal-spectrum \gls{MSR} with fertile
 $^{232}$Th isotopes mixed directly into the \gls{FLiBe} molten salt for $^{233}$U breeding. The
 \gls{MSBR} was to rely on continuous online reprocessing to add fertile
@@ -89,8 +92,8 @@ development, licensing, or demonstration, include the \gls{MSFR} \cite{merle_opt
 \cite{leblanc_18_2017}. The \gls{MSFR} is a fast-spectrum breeder reactor developed through
 collaboration among European institutes with funding support from the
 European Union. Figure \ref{fig:msfr} shows a schematic diagram of the \gls{MSFR}. As opposed to
-the multi-channel design of the \gls{MSRE} and \gls{MSBR}, the
-\gls{MSFR} core consists of a large molten salt pool without graphite moderators to avoid
+the multi-channel design of the \gls{MSRE} and \gls{MSBR}, the \gls{MSFR} is a pool-type design and
+the reactor core consists of a large molten salt pool without graphite moderators to avoid
 frequent graphite replacements and positive graphite temperature reactivity feedback. The
 \gls{MCFR} is a similar pool-type reactor under active development at TerraPower. TerraPower and
 Southern Company embarked on a joint project to design, construct, and operate a prototype
@@ -101,6 +104,13 @@ liquid-fueled prototype, in August 2021 and received approval for reactor commis
 2022. Lastly, Canada-based Terrestrial Energy is also developing its \gls{IMSR}, a small modular
 \gls{MSR} based on the \gls{MSRE}. It passed a joint technical review by the
 Canadian and US nuclear regulators in July 2022.
+
+Developing \gls{MSR} simulation software plays a vital role in supporting \gls{MSR}
+development. Accurate reactor modeling capabilities are vital because they
+accelerate reactor design and optimization by enabling quicker iteration through numerous design
+changes. \gls{MSR} simulation software are also essential tools in reactor safety analysis and
+licensing efforts since reactor developers must demonstrate and verify that the \gls{MSR} systems
+perform as designed and remain safe under various accident scenarios. 
 %
 \begin{figure}[htb!]
 	\centering
@@ -112,13 +122,6 @@ Canadian and US nuclear regulators in July 2022.
 
 \subsection{Challenges in Multiphysics \gls{MSR} Modeling \& Simulation}
 
-Developing \gls{MSR} simulation software plays a vital role in supporting \gls{MSR}
-development. Accurate reactor modeling capabilities are vital because they
-accelerate reactor design and optimization by enabling quicker iteration through numerous design
-changes. \gls{MSR} simulation software are also essential tools in reactor safety analysis and
-licensing efforts since reactor developers must demonstrate and verify that the \gls{MSR} systems
-perform as designed and remain safe under various accident scenarios.
-
 While modeling \glspl{MSR} is not necessarily more difficult than modeling
 solid-fueled reactors, we must adapt our software tools to accurately model the
 unique phenomena found in these circulating-fuel reactors. The differences in
@@ -126,8 +129,8 @@ the challenges of simulating \glspl{MSR} compared to solid-fueled reactors stem
 mainly from the liquid fuel form of the fuel salt \cite{diamond_phenomena_2018,
 huff_identifying_2019}.
 
-Liquids generally exhibit greater thermal
-expansion per unit increase in temperature than solids. A decrease in fuel density
+Liquids generally exhibit greater thermal expansion per unit increase in temperature than solids.
+The decreased fuel salt density due to thermal expansion
 increases the likelihood of neutrons escaping the fuel region
 and being absorbed by non-fissile material elsewhere in the reactor.
 Consequently, combined with the temperature-dependent Doppler broadening of
@@ -135,8 +138,8 @@ resonance capture cross sections, \glspl{MSR} possess stronger negative fuel
 temperature reactivity feedback than their solid-fueled counterparts
 \cite{elsheikh_safety_2013}. These
 phenomena ultimately result in strong interactions between the neutron fluxes
-and core temperatures, given that neutron fluxes affect core temperatures
-through fission heat generation and core temperatures affect neutron
+and the fuel salt temperatures, given that neutron fluxes affect fuel salt temperatures
+through fission heat generation and fuel salt temperatures affect neutron
 fluxes through the mechanisms described previously.
 
 With the fuel salt also providing cooling in the core through advective heat
@@ -150,7 +153,7 @@ other solid fuel types, which are physically separate from the coolant.
 \Glspl{DNP} flow freely within the primary coolant loop instead of
 being held in place as in solid-fueled reactors. Thus, the delayed neutron
 source distribution varies significantly depending on the flow profile and
-velocity. In addition, the reactor loses some delayed neutrons from out-of-core
+velocity of the salt. In addition, the reactor loses some delayed neutrons from out-of-core
 \gls{DNP} decay. These delayed neutrons are considered lost as they are emitted
 in subcritical regions and are unlikely to contribute to further fission
 reactions in the active core. The reduced delayed neutron fraction in the core
@@ -165,6 +168,13 @@ and \gls{DNP} distribution. Turbulent flow effects contribute significantly to a
 heat and particle transfer in molten salt systems, thereby causing enhanced mixing. Therefore,
 multiphysics software for \gls{MSR} analysis require adequate flow modeling capabilities with
 support for \gls{DNP} drift and some form of turbulence modeling.
+
+We require
+\gls{MSR} simulation tools that possess transient modeling capabilities to simulate transient
+accident scenarios. Furthermore, several transient scenarios involve control rods, either as active
+safety mechanisms or as accident initiators through unintended control rod ejection. Therefore, we
+also require \gls{MSR} simulation tools with accurate control rod modeling capabilities to run
+numerical analyses of accident scenarios involving control rods.
 
 \subsection{Moltres for Multiphysics \gls{MSR} Analysis}
 
@@ -222,13 +232,13 @@ proposed work will include relevant \gls{VV} studies for Moltres.
 
 \subsection{Control Rod Modeling in \glspl{MSR}}
 
-Most reactor designs contain control rods to control the fission rate or completely shut down the
-reactor by inserting the rods further into the reactor core. Control rods consist of
-strong neutron absorbers like boron, cadmium, and gadolinium to reduce the number of fission
+Most reactor designs include control rods as a means to control the fission rate. Control rods
+consist of strong
+neutron absorbers like boron, cadmium, and gadolinium to absorb and thus reduce the number of
 neutrons available to contribute to further fission chain reactions. All reactors start operation
-with excess reactivity to ensure enough fissile material to last through to the next scheduled
-refueling. Control rods and burnable poisons allow reactors to operate at a multiplication factor
-of unity by canceling out the excess reactivity. Control rods are also helpful
+with excess reactivity to ensure enough fissile material is available to last through to the next
+scheduled refueling. Control rods and burnable poisons allow reactors to operate at a safe
+multiplication factor by canceling out the excess reactivity. Control rods are also helpful
 for ramping the power up or down during start-up, shut-down, or load-following operations. Most
 importantly, control rods provide a safety mechanism for quickly shutting down a reactor under
 dangerous conditions. Rapid control rod insertion is the primary mechanism of a reactor scram to
@@ -246,33 +256,41 @@ shifts in the neutron energy spectrum because their absorption cross sections ar
 the lower neutron energy range; more energetic neutrons generally have a higher probability of
 escaping the control rod region. As a consequence, modeling control rods accurately requires
 high-fidelity computational methods to capture the angular dependence in the neutron
-flux near the highly absorbing medium.
+flux near the highly absorbing medium. Existing reactor analysis workflows often rely on Monte
+Carlo methods for high-fidelity neutron transport calculations.
 
-However, neutron transport methods are very computationally expensive and thus are mainly used for
-time-independent neutronic analyses. For time-dependent multiphysics simulations coupling
-neutronics to \gls{TH} and other physics present in nuclear reactors, most reactor analyses
-rely on neutron diffusion theory for modeling neutronics. The issue with applying neutron diffusion
-theory near control rods arises because neutron diffusion theory approximates
-neutron transport theory by integrating over the angular variables. As a result,
-diffusion-based methods perform poorly in reactor systems with control rods.
+However, neutron transport methods, like Monte Carlo, are very computationally expensive
+and thus are mainly used for time-independent neutronic analyses. For solid-fueled reactors,
+static control rod analyses can be justified due to the relatively static temperature distribution
+shape in the fuel and disparate timescales of heat transfer from the fuel to
+the coolant (seconds) and neutron flux changes (microseconds to milliseconds). In
+\glspl{MSR}, this distinction blurs due to molten salt serving the dual role of fuel and
+coolant and the strong fuel temperature reactivity feedback. For time-dependent multiphysics
+simulations coupling neutronics to \gls{TH} and other physics present in nuclear reactors, most
+reactor analyses rely on neutron diffusion theory for modeling neutronics. The issue with applying
+neutron diffusion theory near control rods arises because neutron diffusion theory approximates
+neutron transport theory by integrating over the angular variables. As a result, diffusion-based
+methods perform poorly in reactor systems with control rods.
 
 To tackle the issue of modeling control rods in \glspl{MSR} with the multigroup neutron diffusion
 solver in Moltres, I will develop and implement a novel hybrid method for incorporating neutron
 transport-derived corrections to the neutron diffusion method while largely preserving the
-computational efficiency of the neutron diffusion method over neutron transport methods.
+computational efficiency of the neutron diffusion method over neutron transport methods. This will
+allow for computationally feasible transient analysis of \glspl{MSR} that incorporate thermal and
+neutronic feedback on variable timescales.
 
 \section{Objectives}
 
 The overarching goal of this work is to improve on Moltres as a reliable, intermediate-fidelity
-simulation tool for multiphysics \gls{MSR} analyses that can not only be run on workstations but
-also scales well on larger computing clusters. Thus, new and existing capabilities in Moltres must
+simulation tool for multiphysics \gls{MSR} analysis that can be run on workstations as well as on
+larger computing clusters. Thus, new and existing capabilities in Moltres must
 be accurate within accepted bounds, rigorously verified, computationally efficient, and highly
 scalable. These conditions form the underlying development principles of the proposed work.
 
 The scope of the proposed work can be divided into three main objectives. These objectives are:
 %
 \begin{enumerate}[itemindent=20pt, listparindent=1.5em, label=\textbf{\arabic*}]
-  \item \textbf{Verification and Validation of Existing Multiphysics Coupling Capabilities in
+  \item \textbf{verification and validation of existing multiphysics coupling capabilities in
     Moltres}
 
     Verify and validate existing multiphysics capabilities in Moltres for modeling and simulating
@@ -284,17 +302,16 @@ The scope of the proposed work can be divided into three main objectives. These 
     study with the additional aim of creating a reproducible numerical benchmark of the listed
     \gls{MSRE} experiments.
 
-  \item \textbf{Implementation of a \gls{RANS}-based Turbulence Model in Moltres}
+  \item \textbf{implementation of a \gls{RANS}-based turbulence model in Moltres, and}
 
-    Implement a Spalart-Allmaras turbulence model on the \gls{MOOSE} framework for
-    turbulence modeling capability in Moltres to support turbulent flow simulations in \gls{MSR}
-    analyses. This objective addresses the absence of turbulence modeling capability in
-    Moltres and the consequent restriction on Moltres for modeling \gls{MSR} systems with complex
-    turbulent flow.
+    Implement a Spalart-Allmaras turbulence model in Moltres to support turbulent flow simulations
+    in \gls{MSR} analyses. This objective addresses the absence of turbulence modeling capability
+    in Moltres and the consequent restriction on Moltres for modeling \gls{MSR} systems with
+    complex turbulent flow.
 
-  \item \textbf{Development of a Novel Hybrid Method to Improve Control Rod Modeling in Moltres}
+  \item \textbf{development of a novel hybrid method to improve control rod modeling in Moltres}
 
-    Develop a novel Hybrid $S_N$-Diffusion method for improved modeling of \gls{MSR} systems with
+    Develop a novel hybrid $S_N$-diffusion method for improved modeling of \gls{MSR} systems with
     control rods. The hybrid method uses the discrete ordinates ($S_N$) method for solving the
     neutron transport equations to generate corrections for the diffusion-approximated streaming
     term in the neutron diffusion equations. The $S_N$ calculations are high-level
@@ -311,6 +328,6 @@ Chapter 3 describes Moltres and its existing capabilities in the context of prev
 work.
 Chapter 4 summarizes the findings of the first verification study under the first objective: the
 verification of Moltres for multiphysics \gls{MSR} modeling against the CNRS benchmark.
-Chapter 5 presents the theory and preliminary results of the novel Hybrid $S_N$-Diffusion
+Chapter 5 presents the theory and preliminary results of the novel hybrid $S_N$-diffusion
 method for the third objective.
 Chapter 6 details the proposed work to fully meet the three objectives.

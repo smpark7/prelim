@@ -47,7 +47,18 @@
 \usepackage{datatool}
 \usepackage[numbers]{natbib}
 \usepackage{notoccite}
+
 \usepackage{tikz}
+\usepackage{tkz-euclide}
+\usetikzlibrary{positioning, arrows, decorations, shapes}
+\usetikzlibrary{shapes.geometric,arrows}
+\definecolor{illiniblue}{HTML}{B1C6E2}
+\definecolor{illiniorange}{HTML}{f8c2a2}
+\definecolor{green}{HTML}{c2e2b1}
+\tikzstyle{process} = [rectangle, rounded corners, thick, minimum width=7cm, minimum height=1cm, text centered, draw=black, fill=illiniblue, text width=18em]
+\tikzstyle{object} = [ellipse, minimum width=2cm, thick, minimum height=2.2cm, text centered, draw=black, fill=illiniorange, text width=12em]
+\tikzstyle{decision} = [diamond, thick, aspect=2, minimum width=2cm, minimum height=2cm, text centered, draw=black, fill=green, text width=6em]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
 \usepackage[ruled,linesnumbered,lined]{algorithm2e}
 \SetArgSty{textrm}
@@ -115,41 +126,41 @@ nogroupskip=true]
 \mainmatter
 \glsresetall
 
-\chapter{Introduction}
-\label{chap:intro}
-\input{introduction}
-\glsresetall
-
-\chapter{Molten Salt Reactor Multiphysics Modeling}
-\label{chap:lit}
-\input{lit}
-\glsresetall
-
-\chapter{Description of Moltres and Assessment of its Current Capabilities}
-\label{chap:moltres}
-\input{moltres}
-\glsresetall
-
-\chapter{Verification of Moltres for Multiphysics Molten Salt
-Reactor Modeling}
-\label{chap:benchmark}
-\input{benchmark}
-\glsresetall
-
+%\chapter{Introduction}
+%\label{chap:intro}
+%\input{introduction}
+%\glsresetall
+%
+%\chapter{Molten Salt Reactor Modeling}
+%\label{chap:lit}
+%\input{lit}
+%\glsresetall
+%
+%\chapter{Description of Moltres and Assessment of its Current Capabilities}
+%\label{chap:moltres}
+%\input{moltres}
+%\glsresetall
+%
+%\chapter{Verification of Moltres for Multiphysics Molten Salt
+%Reactor Modeling}
+%\label{chap:benchmark}
+%\input{benchmark}
+%\glsresetall
+%
 \chapter{Hybrid S$_\text{N}$-Diffusion Method for Improved Control Rod Modeling
 in Neutron Diffusion Methods}
 \label{chap:hybrid}
 \input{hybrid}
 \glsresetall
-
-\chapter{Proposed Work}
-\label{chap:proposedwork}
-\input{proposed-work}
-\glsresetall
+%
+%\chapter{Proposed Work}
+%\label{chap:proposedwork}
+%\input{proposed-work}
+%\glsresetall
 
 \backmatter
 
-\bibliographystyle{ieeetr}
+\bibliographystyle{IEEEtran}
 \bibliography{bibliography}
 
 \end{document}

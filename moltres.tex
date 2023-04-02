@@ -458,20 +458,20 @@ In 2017, Lindsay et al. introduced
 Moltres to the \gls{MSR} community for multiphysics simulations of \glspl{MSR}.
 Their work showcased neutron diffusion and thermal-hydraulics coupling
 capabilities in Moltres. The authors
-demonstrated these capabilities by running time-dependent simulations of 2D
-axisymmetric and 3D \gls{MSRE} models until the flux, precursor, and
+demonstrated these capabilities by running time-dependent simulations of 2-D
+axisymmetric and 3-D \gls{MSRE} models until the flux, precursor, and
 temperature distributions reached a steady state.
 
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=.45\columnwidth]{msre-geometry}
-	\caption{Schematic diagram of the 2D axisymmetric \gls{MSRE} geometry
+	\caption{Schematic diagram of the 2-D axisymmetric \gls{MSRE} geometry
 	adopted by Lindsay et al. \cite{lindsay_introduction_2018}.}
 	\label{fig:msre-geometry}
 \end{figure}
 
 Figure \ref{fig:msre-geometry} shows the fuel channels and moderator regions of
-the 2D \gls{MSRE} geometry that Lindsay et al. adopted for their study.
+the 2-D \gls{MSRE} geometry that Lindsay et al. adopted for their study.
 They ran a two-group neutron diffusion model with six precursor groups and
 vacuum boundary conditions on the outer boundaries governed by Equations
 \ref{eq:neutron}, \ref{eq:precursor}, and \ref{eq:vacuum} shown in Section
@@ -490,7 +490,7 @@ expected between the neutronics and temperature.
 	\centering
 	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_group1}
 	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_group2}
-	\caption{Neutron group 1 and 2 fluxes in the 2D axisymmetric \gls{MSRE}
+	\caption{Neutron group 1 and 2 fluxes in the 2-D axisymmetric \gls{MSRE}
 	model from Lindsay et al. \cite{lindsay_introduction_2018}.}
 	\label{fig:msre-flux}
 \end{figure}
@@ -500,7 +500,7 @@ expected between the neutronics and temperature.
 	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_pre1_scaled}
 	\includegraphics[width=.45\columnwidth]{2d_gamma_heating_pre6_scaled}
 	\caption{Longest- and shortest-lived precursor concentrations ($\lambda =
-	1.24\times 10^{-2}$s$^{-1}$ and $3.07$s${-1}$, respectively) in the 2D
+	1.24\times 10^{-2}$s$^{-1}$ and $3.07$s${-1}$, respectively) in the 2-D
 	axisymmetric \gls{MSRE} model from Lindsay et al.
 	\cite{lindsay_introduction_2018}.}
 	\label{fig:msre-precursor}
@@ -510,7 +510,7 @@ expected between the neutronics and temperature.
 	\centering
 	\begin{minipage}[b]{0.45\columnwidth}
 	    \includegraphics[width=\columnwidth]{2d_gamma_heating_temp}
-	    \caption{Temperature distribution in the 2D
+	    \caption{Temperature distribution in the 2-D
 	    axisymmetric \gls{MSRE} model from Lindsay et al.
 	    \cite{lindsay_introduction_2018}.}
 	    \label{fig:msre-temp}
@@ -526,7 +526,7 @@ expected between the neutronics and temperature.
 \end{figure}
 
 Figure \ref{fig:msre-flux} shows the fast and thermal neutron fluxes
-corresponding to group 1 and 2 in the 2D \gls{MSRE} model. As expected, the
+corresponding to group 1 and 2 in the 2-D \gls{MSRE} model. As expected, the
 fluxes exhibit general cosine shapes in the axial and radial directions. We
 also observe minor oscillations in the radial direction coinciding with the
 regular fuel and moderator lattice. The fuel regions favor the fast flux, while
@@ -541,7 +541,7 @@ concentration closely follows the neutron fluxes' cosine shape, which
 dictate where the precursors are born.
 
 Finally, Figure \ref{fig:msre-temp}
-shows the temperature distribution in the 2D \gls{MSRE} model. The temperature
+shows the temperature distribution in the 2-D \gls{MSRE} model. The temperature
 naturally peaks near the outlet due to upward advection. The moderator regions
 experience hotter temperatures than the fuel regions due to radiative heating
 and the relative inefficiency of heat conduction in the graphite compared to
@@ -565,9 +565,9 @@ advection in the fuel salt.
 	design calculations \cite{briggs_molten-salt_1964}.}
 \end{figure}
 
-The corresponding neutronics and thermal-hydraulics results from their 3D model
-show good qualitative agreement with the 2D results. Given the lack of
-\gls{MSR} experimental data, they compared their 2D model results with
+The corresponding neutronics and thermal-hydraulics results from their 3-D model
+show good qualitative agreement with the 2-D results. Given the lack of
+\gls{MSR} experimental data, they compared their 2-D model results with
 \gls{MSRE} design calculations performed using legacy software in 1963-1964 at
 \gls{ORNL}. Their neutron flux and temperature distribution results showed good
 qualitative agreement with \gls{ORNL} data. The authors attributed
@@ -641,14 +641,14 @@ simulation tool. New features introduced include coupling the existing
 neutronics and temperature equations to incompressible Navier-Stokes equations
 to model flow dynamics, the precursor loop system, and the decay heat model.
 I later demonstrated these features through steady-state and transient
-simulations of a 2D axisymmetric \gls{MSFR} model.
+simulations of a 2-D axisymmetric \gls{MSFR} model.
 
 Moltres couples natively with the \texttt{Navier-Stokes} module in \gls{MOOSE} for
 incompressible flow modeling capabilities. Section \ref{sec:th} describes the governing equations
 for incompressible flow and temperature advection-diffusion.
 The precursor loop model was developed to model
 precursor recirculation into the core. The precursor loop system leverages
-the \texttt{MultiApp} system in \gls{MOOSE} to couple a 1D pipe model to the
+the \texttt{MultiApp} system in \gls{MOOSE} to couple a 1-D pipe model to the
 core to simulate precursor flow outside the core. The core and the pipe models
 are coupled via inlet and outlet boundary conditions, as detailed in Section
 \ref{sec:moltres-loop}. The loop system can also accommodate a pointwise heat
@@ -675,7 +675,7 @@ for up to 300 seconds after shutdown with a relative error of less than 2\%.
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=.55\columnwidth]{central-core-legend}
-	\caption{Schematic diagram of the 2D axisymmetric \gls{MSFR} model with
+	\caption{Schematic diagram of the 2-D axisymmetric \gls{MSFR} model with
 	the core region enclosed by the red box \cite{park_advancement_2020}.}
 	\label{fig:msfr-geometry}
 \end{figure}
@@ -688,9 +688,9 @@ by Fiorina et al. \cite{fiorina_modelling_2014} and Aufiero et al.
 refer to two sets of results published by Fiorina et al. I compensated for
 the lack of a turbulence model in Moltres by imposing a fixed turbulent
 viscosity of 40 Pa$\cdot$s in addition to the molecular viscosity $\mu$ in
-Equation \ref{eq:momemtum}. Figure \ref{fig:msfr-geometry} shows the 2D
+Equation \ref{eq:momemtum}. Figure \ref{fig:msfr-geometry} shows the 2-D
 axisymmetric \gls{MSFR} model with the core region indicated with the red box,
-while the rest of the fuel region was modeled with the 1D loop system. Fuel
+while the rest of the fuel region was modeled with the 1-D loop system. Fuel
 salt flows into the core region from the inlet at the bottom-right corner and
 out through the outlet at the top-right corner.
 
@@ -788,23 +788,23 @@ approximately $-6.5$ pcm$\cdot$K$^{-1}$ for the PoliMi and TU Delft models.
 
 \begin{figure}[htb!]
     \centering
-    \begin{subfigure}[b]{.49\textwidth}
+    \begin{minipage}[b]{.49\textwidth}
       \centering
       \includegraphics[width=\textwidth]{200pcm-heat}
       \caption{Power output following a 200 pcm step-wise unprotected reactivity
         insertion in the Moltres, PoliMi, and
         TU Delft models \cite{fiorina_modelling_2014}.}
       \label{fig:200pcmheat}
-    \end{subfigure}
+    \end{minipage}
     \hfill
-    \begin{subfigure}[b]{.49\textwidth}
+    \begin{minipage}[b]{.49\textwidth}
       \centering
       \includegraphics[width=\textwidth]{lohs-heat}
       \caption{Power output during
         an unprotected loss of heat sink transient in the Moltres, PoliMi, and
         TU Delft models \cite{fiorina_modelling_2014} without decay heat.}
       \label{fig:lohsheat}
-    \end{subfigure}
+    \end{minipage}
 \end{figure}
 
 The loss-of-heat-sink transients were performed with and without the decay heat
@@ -891,7 +891,7 @@ Given the inherent and unique characteristics of \glspl{MSR}, the new
 capabilities introduced in this work---coupling to incompressible Navier-Stokes
 equations, precursor loop system, and decay heat model---are essential for
 accurate \gls{MSR} modeling and simulation. This work demonstrated these
-capabilities through steady-state and transient studies of a 2D axisymmetric
+capabilities through steady-state and transient studies of a 2-D axisymmetric
 \gls{MSFR} model similar to models by Fiorina et al.
 \cite{fiorina_modelling_2014} and Aufiero et al.
 \cite{aufiero_development_2014}. The Moltres model showed good agreement with
