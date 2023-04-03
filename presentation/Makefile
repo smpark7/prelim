@@ -1,4 +1,4 @@
-manuscript = arfc-pres
+manuscript = park-prelim-pres
 references = $(wildcard *.bib)
 latexopt   = -halt-on-error -file-line-error -shell-escape
 

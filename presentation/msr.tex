@@ -1,7 +1,7 @@
 \begin{frame}
   \frametitle{What is a Molten Salt Reactor (MSR)?}
 	\begin{itemize}
-	  \item An advanced nuclear reactor fueled by fissile
+	  \item Advanced nuclear reactor fueled by fissile
 		material dissolved in a molten salt mixture
 	  \item In most MSR designs, the fuel salt mixture doubles as the primary coolant for the
         reactor
@@ -19,70 +19,28 @@
   \frametitle{What is a Molten Salt Reactor (MSR)?}
   \textbf{Advantages of MSRs over other reactor types}
   \begin{itemize}
-    \item Robust passive safety due to strong temperature feedback and large thermal margin to
-      boiling
-    \item Fuel salt can be drained under emergency situations through a freeze plug
+    \item Robust passive safety
+      \begin{itemize}
+        \item strong temperature feedback
+        \item large thermal margin to boiling
+      \end{itemize}
+    \item Freeze plugs drains fuel salt into containment tanks under emergency situations
     \item Online refueling and reprocessing can:
       \begin{itemize}
         \item reduce reactor downtime
-        \item reduce fissile inventory in reactor at any given time
+        \item reduce required fissile inventory in reactor at any given time
         \item reduce transuranic waste produced
         \item allow for $^{233}$U breeding from $^{232}$Th
       \end{itemize}
-    \item Can run as a fast-spectrum breeder/burner reactor
+    \item Viable as fast-spectrum breeder/burner reactor
     \item Can provide high-temperature heat for industrial heat applications
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Molten Salt Reactor Designs}
-  \begin{columns}
-    \column{3cm}
-    \begin{figure}
-      \centering
-      \footnotesize
-      \includegraphics[width=\textwidth]{./images/msre-photo}
-      \caption{Graphite assembly for the Molten Salt Reactor Experiment
-      \cite{noauthor_measurements_nodate}.}
-    \end{figure}
-    \column{7cm}
-    \begin{table}
-      \footnotesize
-      \centering
-      \caption{Thermal-spectrum MSR designs under active development.}
-      \begin{tabular}{l l}
-        \toprule
-        Reactor & Organization \\
-        \midrule
-        Integral Molten Salt Reactor & Terrestrial Energy \\
-        TMSR-LF & CAS (China) \\
-        Compact Molten Salt Reactor & Seaborg Technologies \\
-        Copenhagen Atomics Waste Burner & Copenhagen Atomics \\
-        \bottomrule
-      \end{tabular}
-    \end{table}
-    \begin{table}
-      \footnotesize
-      \centering
-      \caption{Fast-spectrum MSR designs under active development.}
-      \begin{tabular}{l l}
-        \toprule
-        Reactor & Organization \\
-        \midrule
-        Molten Chloride Fast Reactor & TerraPower \\
-        Molten Salt Fast Reactor & CNRS (France) \\
-        Stable Salt Reactor - Wasteburner & Moltex Energy \\
-        Molten Chloride Salt Fast Reactor & Elysium Industries \\
-        \bottomrule
-      \end{tabular}
-    \end{table}
-  \end{columns}
-\end{frame}
-
-\begin{frame}
   \frametitle{Molten Salt Reactor Modeling \& Simulation}
-  While modeling MSRs is not necessarily more difficult than modeling solid-fueled reactors, we
-  must adapt our software tools to accurately model phenomena unique to MSRs.\\
+  \textbf{While modeling MSRs is not necessarily more difficult than modeling solid-fueled
+  reactors, we must adapt our software tools to accurately model phenomena unique to MSRs.}\\
 
   \textbf{Phenomena which pose challenges for MSR modeling}
   \begin{itemize}
@@ -91,7 +49,7 @@
 	  \begin{itemize}
 		\item Strong temperature feedback due to thermal expansion of liquid fuel salt
 		\item Movement of \gls{DNP} along primary coolant loop
-        \item Advection-dominated heat transfer as opposed to conduction in solid-fueled reactors
+        \item Advection-dominated heat transfer
 	  \end{itemize}
     \item Loss of delayed neutrons to out-of-core decay
     \item Complex turbulent flow effects in MSRs with wide flow channels

@@ -580,20 +580,20 @@
 
 \begin{frame}
   \frametitle{Hybrid $S_N$-Diffusion Method: Preliminary Results}
-  \textbf{Summary}
-  \vspace{.3cm}
-  \begin{itemize}
-    \item The hybrid $S_N$-Diffusion method improves the multiplication factor and neutron flux
-      estimates from the neutron diffusion method by introducing transport corrections from the
-      $S_N$ method.
-    \item The $S_N$ subsolver runs on a smaller subdomain around the control rod to reduce
-      computational costs.
-    \item In the $S_N$ subsolver, the SVDCs converge faster than the neutron flux.
-    \item Additional work is required on:
-      \begin{itemize}
-        \item how to handle infinite diffusion coefficient values wherever the flux gradient
-          approaches zero
-        \item determining correction region and buffer zone sizes with minimal preprocessing work
-      \end{itemize}
-  \end{itemize}
+  \begin{block}{\textbf{Summary}}
+    \begin{itemize}
+      \item The hybrid $S_N$-Diffusion method improves the multiplication factor and neutron flux
+        estimates from the neutron diffusion method by introducing transport corrections from the
+        $S_N$ method.
+      \item The $S_N$ subsolver runs on a smaller subdomain around the control rod to reduce
+        computational costs.
+      \item In the $S_N$ subsolver, the SVDCs converge faster than the neutron flux.
+      \item Additional work is required on:
+        \begin{itemize}
+          \item how to handle infinite diffusion coefficient values wherever the flux gradient
+            approaches zero
+          \item determining correction region and buffer zone sizes with minimal preprocessing work
+        \end{itemize}
+    \end{itemize}
+  \end{block}
 \end{frame}

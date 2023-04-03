@@ -19,7 +19,7 @@
   \begin{columns}
     \hfill
     \column[t]{4cm}
-      \textbf{MSRE \cite{lindsay_moltres_2017}}
+      \textbf{\gls{MSRE} \cite{lindsay_moltres_2017}}
       \vfill
       \begin{figure}
         \centering
@@ -31,7 +31,7 @@
       \end{figure}
     \hfill
     \column[t]{3.5cm}
-      \textbf{MSFR \cite{park_advancement_2020}}
+      \textbf{\gls{MSFR} \cite{park_advancement_2020}}
       \vfill
       \begin{figure}
         \centering
@@ -41,7 +41,7 @@
       \end{figure}
     \hfill
     \column[t]{3.5cm}
-      \textbf{TAP MSR \cite{lee_neutronics_2020}}
+      \textbf{\gls{TAP} MSR \cite{lee_neutronics_2020}}
       \vfill
       \begin{figure}
         \centering
@@ -57,10 +57,9 @@
   \begin{block}{\textbf{Software Capabilities for MSR Modeling}}
     \begin{itemize}
   	  \item Multigroup neutron diffusion solver
-      \item Support for modeling temperature-dependence with group
-        constants\footnote{Group constants refer to neutron cross section data and other
-        neutronics-related material properties} generated
-        from high-fidelity neutronics simulations (e.g., OpenMC)
+      \item Support for modeling temperature feedback by interpolating temperature-dependent group
+        constant data\footnote{Group constants refer to neutron cross section data and other
+        neutronics-related material properties}
       \item Support for coupling \gls{DNP} drift with fuel salt flow
       \item Support for out-of-core \gls{DNP} decay modeling
       \item Internal coupling with MOOSE modules for thermal-hydraulics modeling
@@ -93,7 +92,6 @@
     \item Limited to single-physics verification (e.g., neutronics)
     \item Significant disparities in fidelity between numerical solvers (e.g, Monte Carlo vs
       neutron diffusion)
-    \item Overly complex multiphysics systems (e.g., MSFR)
     \item No validation studies yet, partly due to the lack of MSR experimental data
   \end{itemize}}
 \end{frame}
