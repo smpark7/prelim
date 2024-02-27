@@ -1,60 +1,5 @@
 \begin{frame}
   \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
-  \textbf{Control Rods in MSR}
-  \begin{itemize}
-    \item MSRs contain comparatively fewer control rods than most other reactor types due to:
-      \begin{itemize}
-        \item Uniform liquid fuel burnup
-        \item Strong passive safety of the liquid fuel form
-        \item Low excess reactivity of fuel inventory
-        \item Availability of other control mechanisms:
-        \begin{itemize}
-          \item Varying pump speeds
-          \item Varying heat removal rates at the heat exchangers
-          \item Online refueling and salt processing
-        \end{itemize}
-      \end{itemize}
-    \item Many MSR designs include control rods to facilitate reactor start-up or shut-down rather
-      than reactivity control during power operation.
-  \end{itemize}
-  \pause
-  \textbf{Nevertheless, it is important to characterize control rod effects in all relevant
-  transient scenarios.}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
-  \textbf{The Control Rod Modeling Dilemma}
-  \begin{enumerate}
-    \item Neutron diffusion, $P_1$, and $SP_N$ methods perform poorly near control rod regions
-      due to the highly anisotropic neutron fluxes and steep flux gradients.
-    \item High-fidelity neutron transport methods remain too computationally expensive for routine
-      time-dependent multiphysics simulations.
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
-  \textbf{Control Rod Modeling in MSR Multiphysics Studies}
-
-  Common simplifications applied to control rod modeling include:
-  \begin{itemize}
-    \item Homogenized geometries containing static control rods with albedo neutron flux boundary
-      conditions \cite{kophazi_development_2009} or transport-corrected cross sections
-      \cite{cui_development_2021, jaradat_development_2021, yang_development_2022}
-    \item Scaling the neutron source term to simulate moving control rods
-      \cite{delpech_benchmark_2003, krepel_dyn3d-msr_2007, jaradat_development_2021,
-      yang_development_2022}
-  \end{itemize}
-
-  \begin{block}{\textbf{Technical Gap}}
-    \textbf{There are no existing MSR simulation tools or studies involving moving control rods
-    which are explicitly modeled.}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
   \textbf{Transport-Correction Techniques For Neutron Diffusion-Based Solvers}
   \vspace{.3cm}
 
@@ -69,63 +14,68 @@
     \item General Equivalence Theory (GET)
     \item Superhomogenization Method (SPH)
   \end{itemize}
+  \pause
+  \textbf{In this presentation, I will cover the Ronen method and the transport-corrected diffusion
+  theory because they are the most similar to my approach.}
 \end{frame}
 
 \begin{frame}
   \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
-  \begin{block}{\textbf{The Ronen Method \cite{ronen_accurate_2004}}}
-    Starting with an initial neutron diffusion flux solution, a transport
-    expression is used to iteratively improve the flux solution by updating the
-    diffusion coefficients:
-    %
-    \begin{align}
-      D(\vec{r},E) =& -\frac{J_{tr}(\vec{r},E)}{\nabla \phi(\vec{r},E)}
-      \label{eq:ronen}
-      \shortintertext{where}
-      J_{tr} =& \mbox{ transport-derived neutron current.} \nonumber
-    \end{align}
-    %
-    In 1-D slab geometry, the integral expression for calculating the current is:
-    %
-    \begin{align}
-      J(x,E) = \frac{1}{2}\int^a_0 dx'\ &E_2[\tau(x',x,E)sgn(x-x')q_0(x',E) \nonumber \\
-      &+\frac{3}{2}\int^a_0dx' \ E_3[\tau(x',x,E)]q_1(x',E)
-    \end{align}
-    \textbf{Limitation: Demonstrated for 1-D geometries only.}
-  \end{block}
+  \textbf{The Ronen Method \cite{ronen_accurate_2004}}
+  \vspace{.2cm}
+
+  Starting with an initial neutron diffusion flux solution, a transport
+  expression is used to iteratively improve the flux solution by updating the
+  diffusion coefficients:
+  %
+  \begin{align}
+    D(\vec{r},E) =& -\frac{J_{tr}(\vec{r},E)}{\nabla \phi(\vec{r},E)}
+    \label{eq:ronen}
+    \shortintertext{where}
+    J_{tr} =& \mbox{ transport-derived neutron current.} \nonumber
+  \end{align}
+  %
+  In 1-D slab geometry, the integral expression for calculating the current is:
+  %
+  \begin{align}
+    J(x,E) = \frac{1}{2}\int^a_0 dx'\ &E_2[\tau(x',x,E)sgn(x-x')q_0(x',E) \nonumber \\
+    &+\frac{3}{2}\int^a_0dx' \ E_3[\tau(x',x,E)]q_1(x',E)
+  \end{align}
+  \textbf{Limitation: Demonstrated for 1-D geometries only.}
 \end{frame}
 
 \begin{frame}
   \frametitle{Hybrid $S_N$-Diffusion Method: Literature Review}
-  \begin{block}{\textbf{Transport-Corrected Diffusion Theory \cite{pounders_diffusion_2009}}}
-    Pounders \& Rahnema developed two separate methods which also
-    generate space-dependent diffusion coefficients for transport corrections.
-    \vspace{.1cm}
-    \begin{columns}
-      \column[t]{.5\textwidth}
-      \textbf{1) Averaged Eddington Factor Diffusion Theory}
-      %
-      \begin{align}
-        \small
-        E_g(z) =& \frac{\int^1_{-1} \mu^2\psi(z,\mu)d\mu}{\int^1_{-1} \psi(z,\mu)d\mu}
-      \end{align}
-      %
-      \begin{align}
-        \small
-        D^{AEF}_g(z) =& E^i_g\left[\hat{\Sigma}_{t,g}-\sum^G_{g'=1}\hat{\Sigma}^{g'\rightarrow g}_{s1}
-        \frac{\hat{J}_{g'}}{\hat{J}_g}\right]^{-1}
-      \end{align}
-      \hfill
-      \column[t]{.5\textwidth}
-      \textbf{2) High-Order Empirical Diffusion Coefficients}
-      \begin{align}
-        D^i_g =& -\frac{\left(z_{i+1}-z_i\right) \bar{J}_g}{\left[\phi_g(z_{i+1})-\phi_g(z_i)\right]}
-        \label{eq:emp}
-      \end{align}
-    \end{columns}
-    \textbf{Limitation: Both methods require a priori knowledge of the neutron flux and current
-    solution.}
-  \end{block}
+  \textbf{Transport-Corrected Diffusion Theory \cite{pounders_diffusion_2009}}
+  \vspace{.2cm}
+  
+  Pounders \& Rahnema developed two separate methods which also
+  generate space-dependent diffusion coefficients for transport corrections.
+  \vspace{.1cm}
+  \begin{columns}
+    \column[t]{.5\textwidth}
+    \textbf{1) Averaged Eddington Factor Diffusion Theory}
+    %
+    \begin{align}
+      \small
+      E_g(z) =& \frac{\int^1_{-1} \mu^2\psi(z,\mu)d\mu}{\int^1_{-1} \psi(z,\mu)d\mu}
+    \end{align}
+    %
+    \begin{align}
+      \small
+      D^{AEF}_g(z) =& E^i_g\left[\hat{\Sigma}_{t,g}-\sum^G_{g'=1}\hat{\Sigma}^{g'\rightarrow g}_{s1}
+      \frac{\hat{J}_{g'}}{\hat{J}_g}\right]^{-1}
+    \end{align}
+    \hfill
+    \column[t]{.5\textwidth}
+    \textbf{2) High-Order Empirical Diffusion Coefficients}
+    \begin{align}
+      D^i_g =& -\frac{\left(z_{i+1}-z_i\right) \bar{J}_g}{\left[\phi_g(z_{i+1})-\phi_g(z_i)\right]}
+      \label{eq:emp}
+    \end{align}
+  \end{columns}
+  \textbf{Limitation: Both methods require a priori knowledge of the neutron flux and current
+  solution.}
 \end{frame}
 
 \begin{frame}
