@@ -140,7 +140,7 @@ transport operator on every iteration to calculate a new estimate of $J_{tr}$ us
 solution from the previous iteration. The main difficulty for the Ronen method lies in deriving the
 transport operators which has been achieved for only simple 1-D geometries thus far.
 
-For the \textit{empirical method} by Pounders \$ Rahnema, their diffusion coefficients are
+For the \textit{empirical method} by Pounders \& Rahnema, their diffusion coefficients are
 piecewise-constant and they assumed a priori knowledge of the reference flux solution.
 Pounders \& Rahnema \cite{pounders_diffusion_2009} demonstrated the effectiveness of applying
 pointwise corrections derived from analytical or Monte Carlo reference flux solutions. Compared
@@ -352,8 +352,10 @@ $V_1\subseteq V_0$. The algorithm for the hybrid $S_N$-diffusion method is as fo
   \item Repeat Steps 2-6 until convergence is reached by meeting pre-defined convergence tolerance
     values.
 \end{enumerate}
+%
+Figure \ref{fig:algorithm} shows a visual flowchart of the same hybrid method algorithm.
 
-\begin{figure}[htb!]
+\begin{figure}[b!]
   \tikzstyle{every node}=[font=\small]
   \centering
   \begin{tikzpicture}
@@ -379,6 +381,7 @@ $V_1\subseteq V_0$. The algorithm for the hybrid $S_N$-diffusion method is as fo
     \draw [arrow] (6) -- ([shift={(2cm,0cm)}]6.east)-- node[anchor=west] {\textbf{No}} ([shift={(0.5cm,0cm)}]2.east)--(2);
   \end{tikzpicture}
   \caption{Algorithm flowchart for the hybrid $S_N$-diffusion method.}
+  \label{fig:algorithm}
 \end{figure}
 
 \subsubsection{$S_N$ Subsolver Boundary Conditions \& Buffer Zone}
@@ -398,7 +401,7 @@ the $P_1$ approximation defined as:
 \begin{align}
   J_{g,\pm} &= \frac{\phi_g}{4} \mp \frac{D_g}{2}\frac{d\phi_g}{dx} \label{eq:p1-j}
   \shortintertext{where}
-  J_{g,\pm} &= \mbox{ neutron forward/backward current of group }g. \nonumber \\
+  J_{g,\pm} &= \mbox{ neutron forward/backward current of group }g. \nonumber
 \end{align}
 %
 Without additional information, the next best estimate is a uniformly
@@ -577,7 +580,7 @@ region.
 
 \section{Numerical Implementation} \label{sec:implementation}
 
-In Section \ref{sec:hybrid-theory}, I presented the theoretical basis for the hybrid
+In Section \ref{sec:theory}, I presented the theoretical basis for the hybrid
 $S_N$-diffusion method and demonstrated the method on a simple problem. Now I will discuss
 numerical implementation details of group
 constant data processing and the neutron diffusion, $S_N$ neutron transport, and hybrid
